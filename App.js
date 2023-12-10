@@ -7,6 +7,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "./Client/Screens/User/HomeScreen";
 import HistoryScreen from "./Client/Screens/User/HistoryScreen";
 import ProfileScreen from "./Client/Screens/User/ProfileScreen";
+import MyWork from "./Client/Screens/User/Admin/MyWork";
+import CheckIn from "./Client/Screens/User/Admin/CheckInScreen";
+import ManageUser from "./Client/Screens/User/Admin/ManageUser";
+import ManageDiscount from "./Client/Screens/User/Admin/ManageDiscount";
+import PassengerList from "./Client/Screens/User/Admin/PassengersList";
+import StatisticsScreen from "./Client/Screens/User/Admin/StatisticsScreen";
 import GlobalColors from "./Client/Color/colors";
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -46,19 +52,22 @@ export default function App() {
     //If user
 
     return (
-      <BottomTab.Navigator
+      <Drawer.Navigator
         screenOptions={{
-          tabBarStyle: {
+          drawerStyle: {
             backgroundColor: GlobalColors.background,
           },
-          tabBarActiveTintColor: GlobalColors.button,
-          tabBarInactiveTintColor: GlobalColors.second_background,
+          drawerActiveTintColor: GlobalColors.button,
+          drawerInactiveTintColor: GlobalColors.second_background,
         }}
       >
-        <BottomTab.Screen name="Home" component={HomeScreen} />
-        <BottomTab.Screen name="Ticket History" component={HistoryScreen} />
-        <BottomTab.Screen name="Profile" component={ProfileScreen} />
-      </BottomTab.Navigator>
+        <Drawer.Screen name="Home" component={HomeScreen} />
+        <Drawer.Screen name="Ticket History" component={MyWork} />
+
+        <Drawer.Screen name="Manage discount" component={ManageDiscount} />
+        <Drawer.Screen name="Manage User" component={ManageUser} />
+        <Drawer.Screen name="Statistics" component={StatisticsScreen} />
+      </Drawer.Navigator>
     );
 
     //Staff
