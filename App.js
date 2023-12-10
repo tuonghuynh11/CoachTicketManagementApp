@@ -7,6 +7,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "./Client/Screens/User/HomeScreen";
 import HistoryScreen from "./Client/Screens/User/HistoryScreen";
 import ProfileScreen from "./Client/Screens/User/ProfileScreen";
+import MyWork from "./Client/Screens/User/Admin/MyWork";
+import CheckIn from "./Client/Screens/User/Admin/CheckInScreen";
+import ManageUser from "./Client/Screens/User/Admin/ManageUser";
+import ManageDiscount from "./Client/Screens/User/Admin/ManageDiscount";
+import PassengerList from "./Client/Screens/User/Admin/PassengersList";
+import StatisticsScreen from "./Client/Screens/User/Admin/StatisticsScreen";
 import GlobalColors from "./Client/Color/colors";
 
 import LoginScreen from "./Client/Screens/Login_Register/LoginScreen";
@@ -175,6 +181,7 @@ export default function App() {
                 headerTintColor: "white",
               }}
             />
+
 
             <Stack.Screen
               name="SelectPointScreen"
@@ -462,6 +469,26 @@ export default function App() {
     }
     //Staff
     else if (roleId == 2) {
+      
+
+//     return (
+//       <Drawer.Navigator
+//         screenOptions={{
+//           drawerStyle: {
+//             backgroundColor: GlobalColors.background,
+//           },
+//           drawerActiveTintColor: GlobalColors.button,
+//           drawerInactiveTintColor: GlobalColors.second_background,
+//         }}
+//       >
+//         <Drawer.Screen name="Home" component={HomeScreen} />
+//         <Drawer.Screen name="Ticket History" component={MyWork} />
+
+//         <Drawer.Screen name="Manage discount" component={ManageDiscount} />
+//         <Drawer.Screen name="Manage User" component={ManageUser} />
+//         <Drawer.Screen name="Statistics" component={StatisticsScreen} />
+//       </Drawer.Navigator>
+//     );
     }
     //Admin
     else {
