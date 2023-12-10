@@ -8,6 +8,25 @@ import HomeScreen from "./Client/Screens/User/HomeScreen";
 import HistoryScreen from "./Client/Screens/User/HistoryScreen";
 import ProfileScreen from "./Client/Screens/User/ProfileScreen";
 import GlobalColors from "./Client/Color/colors";
+import ManageCoach from "./Client/Screens/Manager/ManageCoach";
+import ManageStaff from "./Client/Screens/Manager/ManageStaff";
+import ManageUserTicket from "./Client/Screens/Manager/ManageUserTicket";
+import ManageSchedule from "./Client/Screens/Manager/ManageSchedule";
+import AddCoach from "./Client/Screens/Manager/AddCoach";
+import AddStaff from "./Client/Screens/Manager/AddStaff"
+import AddSchedule from "./Client/Screens/Manager/AddSchedule"
+import EditStaff from "./Client/Screens/Manager/EditStaff"
+import EditSchedule from "./Client/Screens/Manager/EditSchedule"
+import TicketConfirmList from "./Client/Screens/Manager/TicketConfirmList";
+import StaffWorkingList from "./Client/Screens/Manager/StaffWorkingList";
+import TripInformation from "./Client/Screens/Manager/TripInformation";
+import DetailSchedule from "./Client/Screens/Manager/DetailSchedule";
+import DrawerManager from "./Client/Screens/Manager/Drawer";
+import Tracking from "./Client/Screens/Manager/Tracking";
+import ManageRoute from "./Client/Screens/Manager/ManageRoute";
+import CoachStackNavigate from "./Client/Screens/Manager/CoachStackNavigate";
+import RouteStackNavigate from "./Client/Screens/Manager/RouteStackNavigate";
+
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -95,7 +114,8 @@ export default function App() {
   return (
     <>
       <StatusBar style="auto" />
-      <Root />
+
+      {/* <DrawerManager /> */}
     </>
   );
 }
