@@ -8,6 +8,7 @@ import HomeScreen from "./Client/Screens/User/HomeScreen";
 import HistoryScreen from "./Client/Screens/User/HistoryScreen";
 import ProfileScreen from "./Client/Screens/User/ProfileScreen";
 import GlobalColors from "./Client/Color/colors";
+
 import LoginScreen from "./Client/Screens/Login_Register/LoginScreen";
 import RegisterScreen from "./Client/Screens/Login_Register/RegisterScreen";
 import AuthContextProvider, { AuthContext } from "./Client/Store/authContex";
@@ -41,6 +42,12 @@ import ShuttleTrackingScreen from "./Client/Screens/User/ShuttleTrackingScreen";
 import { ResetToken } from "./Client/util/databaseAPI";
 import LoadingAnimation from "./Client/Componets/UI/LoadingAnimation";
 import HistoryScreenOldTicket from "./Client/Screens/User/HistoryScreenOldTicket";
+
+
+import DrawerManager from "./Client/Screens/Manager/Drawer";
+
+
+
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -533,6 +540,7 @@ export default function App() {
       <AuthContextProvider>
         <Root />
       </AuthContextProvider>
+       {/* <DrawerManager /> */}
     </>
   );
 }
