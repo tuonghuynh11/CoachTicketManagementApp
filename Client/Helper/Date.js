@@ -41,3 +41,8 @@ export function calculateTimeDifference(date1, date2) {
   if (minutes === 0) return `${hours}h`;
   return `${hours}h${minutes}m`;
 }
+
+export function addDotsToNumber(number) {
+  if (!number || number.toString() === "0") return "0";
+  if (number) return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}

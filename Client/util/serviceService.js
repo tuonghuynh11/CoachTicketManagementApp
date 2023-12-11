@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const baseURL = "https://coach-ticket-management-api.onrender.com";
@@ -8,9 +9,10 @@ const serviceService = axios.create({
 
 serviceService.interceptors.request.use(
   async (config) => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIwMjQ3MjMsImV4cCI6MTcwMjAyODMyM30._sG9TAXOA2qaDQPRrUewcx0r3V9GTwb_1C4BQ_02Opw";
+    const token = await AsyncStorage.getItem("token");
+
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `${token}`;
     }
     return config;
   },

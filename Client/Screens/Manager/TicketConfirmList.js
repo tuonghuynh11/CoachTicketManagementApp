@@ -30,7 +30,7 @@ function Tab2() {
   return <Text>tab2</Text>;
 }
 
-function MyTabs({id}) {
+function MyTabs({ id }) {
   return (
     <Tab.Navigator
       initialRouteName="Current"
@@ -50,24 +50,24 @@ function MyTabs({id}) {
         name="Current"
         component={TicketCurrentList}
         options={{ tabBarLabel: "Current" }}
-        initialParams={{id}}
+        initialParams={{ id }}
       />
       <Tab.Screen
         name="History"
         component={TicketHistoryList}
         options={{ tabBarLabel: "History" }}
-        initialParams={{id}}
+        initialParams={{ id }}
       />
     </Tab.Navigator>
   );
 }
 
-export default function TicketConfirmList({route, navigation}) {
+export default function TicketConfirmList({ route, navigation }) {
   const pressHandler = () => {
     navigation.goBack();
-  }
+  };
 
-  const {id} = route.params;
+  const { id } = route.params;
 
   // const [ticketList, setTicketList] = useState([]);
   // const [userListData, setUserListData] = useState([]);
@@ -91,29 +91,27 @@ export default function TicketConfirmList({route, navigation}) {
   //   fetchUsers();
   // }, [isFocused]);
 
-  
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Pressable style={({ pressed }) => [
+          <Pressable
+            style={({ pressed }) => [
               styles.backIcon,
               pressed && { opacity: 0.85 },
-            ]} onPress={pressHandler}>
-
+            ]}
+            onPress={pressHandler}
+          >
             <Ionicons
               name="ios-arrow-back-circle-sharp"
               size={38}
               color="#283663"
-              
             />
           </Pressable>
           <Text style={styles.headerText}>List Of Tickets</Text>
         </View>
         <View style={styles.body}>
-          
-            <MyTabs id={id}/>
-          
+          <MyTabs id={id} />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -130,6 +128,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 5,
   },
   backIcon: {
     position: "absolute",

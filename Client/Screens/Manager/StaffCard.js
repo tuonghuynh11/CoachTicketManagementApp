@@ -9,37 +9,44 @@ import {
 } from "react-native";
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 import placeholder from "../../../assets/peopleIcon.jpg";
 
 export default function StaffCard({ item, navigation }) {
   const pressHandler = () => {
-    navigation.navigate('EditStaff', item);
-  }
-
+    navigation.navigate("EditStaff", item);
+  };
 
   let position = "";
-  if(item.positionId == '2'){
-    position = 'Driver'
-  }
-  else if(item.positionId == '3'){
-    position = "Coach Assistant"
-  }
-  else if(item.positionId == '4'){
+  if (item.positionId == "2") {
+    position = "Driver";
+  } else if (item.positionId == "3") {
+    position = "Coach Assistant";
+  } else if (item.positionId == "4") {
     position = "Manager";
   }
   return (
     <View style={styles.container}>
       {/*status*/}
-      <View>
-        <Text style={item.status?styles.statusText:styles.statusTextArr}>{item.status?"Ready":"Arriving"}</Text>
+      <View
+        style={{
+          borderRadius: 10,
+        }}
+      >
+        <Text style={item.status ? styles.statusText : styles.statusTextArr}>
+          {item.status ? "Ready" : "Arriving"}
+        </Text>
       </View>
       <View style={styles.contentView}>
         {/**Image of coach */}
 
         <Image
           style={styles.imageStaff}
-          source={(item.UserAccountData.avatar!=undefined)?{uri: item.UserAccountData.avatar}:placeholder}
+          source={
+            item.UserAccountData.avatar != undefined
+              ? { uri: item.UserAccountData.avatar }
+              : placeholder
+          }
         />
 
         <View style={styles.info}>
@@ -112,7 +119,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     borderRadius: 10,
     marginBottom: 10,
-    marginTop: 20
+    marginTop: 20,
   },
   info: {
     flex: 7,

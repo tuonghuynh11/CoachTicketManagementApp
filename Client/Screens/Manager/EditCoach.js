@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   Keyboard,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -37,7 +37,7 @@ export default function EditCoach({ route, navigation }) {
     setVisible(false);
   };
 
-  const contentC = "Are you sure to delete?"
+  const contentC = "Are you sure to delete?";
 
   const [itemid, setItemid] = useState();
 
@@ -52,8 +52,8 @@ export default function EditCoach({ route, navigation }) {
   const confirm = () => {
     const updatedArray = serviceList.filter((item) => item.id !== itemid);
     setServiceList(updatedArray);
-    hideC()
-  }
+    hideC();
+  };
 
   const { coachNumber } = route.params;
   const { idCoachType } = route.params;
@@ -64,8 +64,7 @@ export default function EditCoach({ route, navigation }) {
   const { lng } = route.params;
   const { image } = route.params;
   const { CoachTypeData } = route.params;
-  const {ServiceData} = route.params;
-  
+  const { ServiceData } = route.params;
 
   const [imageCoach, setImageCoach] = useState(image);
   const uploadImage = async (mode) => {
@@ -110,7 +109,6 @@ export default function EditCoach({ route, navigation }) {
   const pressHandler = () => {
     navigation.goBack();
   };
-  
 
   const [visibleSuccess, setVisibleSuccess] = useState(false);
   const showSuccess = () => {
@@ -140,6 +138,7 @@ export default function EditCoach({ route, navigation }) {
   const itemsCapa = [
     { label: "15", value: "15" },
     { label: "30", value: "30" },
+    { label: "36", value: "36" },
     { label: "55", value: "55" },
   ];
 
@@ -149,6 +148,7 @@ export default function EditCoach({ route, navigation }) {
   const itemsType = [
     { label: "VIP", value: "VIP" },
     { label: "Normal", value: "normal" },
+    { label: "Sleeper", value: "Sleeper" },
   ];
 
   const [isOpenService, setIsOpenService] = useState(false);
@@ -167,9 +167,9 @@ export default function EditCoach({ route, navigation }) {
   ];
 
   const ServiceList = ServiceData.map((item) => ({
-    id: itemsService.find(items => items.label === item).value,
+    id: itemsService.find((items) => items.label === item).value,
     name: item,
-  })); 
+  }));
 
   const [serviceList, setServiceList] = useState(ServiceList);
   const [validateService, setValidateService] = useState(true);
@@ -212,7 +212,7 @@ export default function EditCoach({ route, navigation }) {
           imageCoach: imageCoach,
           idCoachType: parseInt(coachtype),
           capacity: parseInt(currentValueCapa),
-          services: serviceList.map((item) => item.id.toString())
+          services: serviceList.map((item) => item.id.toString()),
         };
         const patchedCoach = await updateCoachWithImage(updatedCoachData);
         console.log("Patched Coach:", patchedCoach);
@@ -243,10 +243,10 @@ export default function EditCoach({ route, navigation }) {
   };
 
   const addServiceHandler = (currentValueService) => {
-    
     const newSer = {
       id: currentValueService,
-      name: itemsService.find(item => item.value === currentValueService).label,
+      name: itemsService.find((item) => item.value === currentValueService)
+        .label,
     };
     setServiceList([newSer, ...serviceList]);
   };
@@ -259,7 +259,11 @@ export default function EditCoach({ route, navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-      <ActivityIndicator style={styles.indicator} size={"large"} animating={indicator}/>
+        <ActivityIndicator
+          style={styles.indicator}
+          size={"large"}
+          animating={indicator}
+        />
         <ModalSuccess
           visible={visibleSuccess}
           hide={hideSuccess}
@@ -270,7 +274,12 @@ export default function EditCoach({ route, navigation }) {
           hide={hideFail}
           content={contentFail}
         />
-        <ModalConfirm visible={visibleC} hide={hideC} content={contentC} confirm={confirm}/>
+        <ModalConfirm
+          visible={visibleC}
+          hide={hideC}
+          content={contentC}
+          confirm={confirm}
+        />
         <View style={styles.header}>
           <Pressable
             style={({ pressed }) => [
@@ -383,7 +392,7 @@ export default function EditCoach({ route, navigation }) {
           <View>
             {/* 2 textinput, row flatlist */}
             <Text style={styles.textLabel}>Service Name</Text>
-            <View style={styles.dropDownStyle}>
+            <View style={[styles.dropDownStyle, { zIndex: 100 }]}>
               <DropDownPicker
                 items={itemsService}
                 open={isOpenService}
@@ -406,24 +415,28 @@ export default function EditCoach({ route, navigation }) {
             style={({ pressed }) => [
               styles.addButton,
               pressed && { opacity: 0.85 },
+              { zIndex: -1 },
             ]}
             onPress={addHandler}
           >
             <Text style={styles.addText}>Add Service</Text>
           </Pressable>
-          <View style={styles.listService}>
+          <View style={[styles.listService, { zIndex: -1 }]}>
             <FlatList
               showsHorizontalScrollIndicator={false}
               nestedScrollEnabled={true}
               horizontal={true}
               data={serviceList}
-              renderItem={({ item }) => <Pressable onLongPress={() => {
-                showC();
-                setItemid(item.id);
-              }}>
-
-                <ServiceCard item={item}></ServiceCard>
-              </Pressable>}
+              renderItem={({ item }) => (
+                <Pressable
+                  onLongPress={() => {
+                    showC();
+                    setItemid(item.id);
+                  }}
+                >
+                  <ServiceCard item={item}></ServiceCard>
+                </Pressable>
+              )}
               keyExtractor={(item) => item.id}
             />
           </View>
@@ -614,7 +627,7 @@ const styles = StyleSheet.create({
   indicator: {
     position: "absolute",
     zIndex: 1000,
-    right: '46%',
-    top: "50%"
-  }
+    right: "46%",
+    top: "50%",
+  },
 });

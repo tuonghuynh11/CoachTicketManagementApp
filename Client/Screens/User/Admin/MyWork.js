@@ -3,10 +3,14 @@ import { images } from "../../../../assets/Assets";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CheckScreen from "./CheckInScreen";
 import Passengers from "./PassengersList";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useIsFocused,
+  useRoute,
+} from "@react-navigation/native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { AntDesign } from "@expo/vector-icons";
 import {
@@ -22,6 +26,8 @@ import {
 } from "react-native";
 import { Audio } from "expo-av";
 import axios from "axios";
+import { AuthContext } from "../../../Store/authContex";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const config = {
   headers: {
     Authorization: "Bearer " + images.adminToken,
@@ -34,26 +40,40 @@ let trips = [];
 
 const getData = async () => {
   try {
+    const token = await AsyncStorage.getItem("token");
     config.params.page = 1;
     trips = [];
     let flag = true;
     do {
-      const response = await axios.get(
-        "https://coach-ticket-management-api.onrender.com/api/trips",
-        config
-      );
-      console;
+      const response = await axios
+        .get("https://coach-ticket-management-api.onrender.com/api/trips", {
+          headers: {
+            Authorization: token,
+          },
+          params: {
+            page: config.params.page,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       if (response.data.data.rows.length == 0) {
         flag = false;
       }
       trips = trips.concat(response.data.data.rows);
+      console.log("Get Trip", trips);
+
       config.params.page++;
     } while (flag);
+    return trips;
   } catch (error) {
     if (error.response) {
-      console.log(error.response.data);
+      console.log("getData My Work Err:", error.response.data);
     } else if (error.request) {
-      console.log(error.request.data);
+      console.log("getData My Work Err:", error.request.data);
+    } else {
+      console.log("getData My Work Err:", error);
     }
   }
 };
@@ -63,10 +83,18 @@ const getTickets = async () => {
     config.params.page = 1;
     tickets = [];
     let flag = true;
+    const token = await AsyncStorage.getItem("token");
     do {
       const response = await axios.get(
         "https://coach-ticket-management-api.onrender.com/api/tickets",
-        config
+        {
+          headers: {
+            Authorization: token,
+          },
+          params: {
+            page: config.params.page,
+          },
+        }
       );
       if (response.data.data.length == 0) {
         flag = false;
@@ -99,46 +127,57 @@ const Stack = createNativeStackNavigator();
 function App({ navigation }) {
   const [current, setCurrent] = useState(currentTrips);
   useEffect(() => {
-    getData().then(() => {
-      trips.forEach((sche) => {
-        const currentDate = new Date().getTime();
-        const departureTime = new Date(sche.departureTime).getTime();
-        if (departureTime > currentDate) {
-          currentTrips = currentTrips.concat(sche);
-          console.log("Current: " + currentTrips.length);
-        } else {
-          historyTrips = historyTrips.concat(sche);
-          console.log("Histpry: " + historyTrips.length);
-        }
-      });
-      currentTrips.forEach((trip) => {
-        trip.ticketList = [];
-      });
-      historyTrips.forEach((trip) => {
-        trip.ticketList = [];
-      });
-      getTickets().then(() => {
-        currentTrips.forEach((trip) => {
-          tickets.forEach((ticket) => {
-            //id trip = id schedule cua ve
-            if (trip.id == ticket.ScheduleData.id) {
-              trip.ticketList.push(ticket);
-            }
-          });
+    getData()
+      .then(async () => {
+        // console.log("getAllData", trips);
 
-          console.log(trip);
+        trips.forEach((sche) => {
+          const currentDate = new Date().getTime();
+          const departureTime = new Date(sche.departureTime).getTime();
+          if (departureTime > currentDate) {
+            currentTrips = currentTrips.concat(sche);
+            console.log("Current: " + currentTrips.length);
+          } else {
+            historyTrips = historyTrips.concat(sche);
+            console.log("Histpry: " + historyTrips.length);
+          }
+        });
+        currentTrips.forEach((trip) => {
+          trip.ticketList = [];
         });
         historyTrips.forEach((trip) => {
-          tickets.forEach((ticket) => {
-            //id trip = id schedule cua ve
-            if (trip.id == ticket.ScheduleData.id) {
-              trip.ticketList.push(ticket);
-            }
+          trip.ticketList = [];
+        });
+        await getTickets().then(() => {
+          currentTrips.forEach((trip) => {
+            tickets.forEach((ticket) => {
+              //id trip = id schedule cua ve
+              if (trip.id == ticket.ScheduleData.id) {
+                trip.ticketList.push(ticket);
+              }
+            });
+
+            // console.log("trip:", trip);
+          });
+
+          historyTrips.forEach((trip) => {
+            tickets.forEach((ticket) => {
+              //id trip = id schedule cua ve
+              if (trip.id == ticket.ScheduleData.id) {
+                trip.ticketList.push(ticket);
+              }
+            });
           });
         });
+        setCurrent(currentTrips);
+      })
+      .catch((error) => {
+        console.log("My work err:", error);
       });
-      setCurrent(currentTrips);
-    });
+    // async function getAllData() {
+
+    // }
+    // getAllData();
   }, []);
 
   return (
@@ -176,12 +215,13 @@ function App({ navigation }) {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.item}
-              onPress={() =>
+              onPress={() => {
+                console.log("Press");
                 navigation.navigate("Passenger List", {
                   ticketList: item.ticketList,
                   tripId: item.id,
-                })
-              }
+                });
+              }}
             >
               <Text>{item.id}</Text>
               <View style={styles.avatarContainer}>
@@ -330,6 +370,8 @@ function ScanBarcode({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [text, setText] = useState("Not yet scanned");
   const [sound, setSound] = useState();
+  const authCtx = useContext(AuthContext);
+
   const askForCameraPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -362,7 +404,7 @@ function ScanBarcode({ navigation }) {
           console.log(ticket.reservationId[i], ticket.status);
           const configScan = {
             headers: {
-              Authorization: "Bearer " + images.adminToken,
+              Authorization: authCtx.token,
             },
           };
           const scanData = {
@@ -461,8 +503,28 @@ const Tabs = function () {
 const Navigation = function () {
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="Tabs">
-        <Stack.Screen name="Tabs" component={Tabs} />
+      <Stack.Navigator
+        initialRouteName="Tabs"
+        screenOptions={{
+          headerShown: true,
+          // title: "My Work",
+          headerStyle: {
+            backgroundColor: GlobalColors.headerColor,
+          },
+          headerShadowVisible: false,
+          headerTitleStyle: {
+            color: "white",
+          },
+          headerShown: true,
+        }}
+      >
+        <Stack.Screen
+          name="Tabs"
+          component={Tabs}
+          options={{
+            title: "My Work",
+          }}
+        />
         <Stack.Screen name="History" component={History} />
         <Stack.Screen name="My Work" component={App} />
         <Stack.Screen name="Passenger List" component={Passengers} />

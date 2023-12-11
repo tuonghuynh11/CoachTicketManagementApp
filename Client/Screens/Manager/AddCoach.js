@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   Keyboard,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -38,10 +38,9 @@ export default function AddCoach({ navigation }) {
     setVisible(false);
   };
 
-  
   const [itemid, setItemid] = useState();
-  
-  const contentC = "Are you sure to delete?"
+
+  const contentC = "Are you sure to delete?";
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -53,8 +52,8 @@ export default function AddCoach({ navigation }) {
   const confirm = () => {
     const updatedArray = serviceList.filter((item) => item.id !== itemid);
     setServiceList(updatedArray);
-    hideC()
-  }
+    hideC();
+  };
 
   const [image, setImage] = useState();
   const uploadImage = async (mode) => {
@@ -102,22 +101,24 @@ export default function AddCoach({ navigation }) {
   const [serviceList, setServiceList] = useState([]);
 
   const [isOpenCapa, setIsOpenCapa] = useState(false);
-  const [currentValueCapa, setCurrentValueCapa] = useState('');
+  const [currentValueCapa, setCurrentValueCapa] = useState("");
   const itemsCapa = [
     { label: "15", value: "15" },
     { label: "30", value: "30" },
+    { label: "36", value: "36" },
     { label: "55", value: "55" },
   ];
 
   const [isOpenType, setIsOpenType] = useState(false);
-  const [currentValueType, setCurrentValueType] = useState('');
+  const [currentValueType, setCurrentValueType] = useState("");
   const itemsType = [
     { label: "VIP", value: "VIP" },
     { label: "Normal", value: "normal" },
+    { label: "Sleeper", value: "Sleeper" },
   ];
-  
+
   const [isOpenService, setIsOpenService] = useState(false);
-  const [currentValueService, setCurrentValueService] = useState('');
+  const [currentValueService, setCurrentValueService] = useState("");
   const itemsService = [
     { label: "Air Conditioner", value: "1" },
     { label: "Wifi", value: "2" },
@@ -176,31 +177,30 @@ export default function AddCoach({ navigation }) {
       setValidateCapa(true);
     }
 
-    if(coachNum != '' && currentValueType != '' && currentValueCapa != ''){
-      try{
+    if (coachNum != "" && currentValueType != "" && currentValueCapa != "") {
+      try {
         setIndicator(true);
         let coachtype = 1;
-        if(currentValueType == 'VIP'){
+        if (currentValueType == "VIP") {
           coachtype = 2;
         }
-        if(currentValueType == 'normal'){
+        if (currentValueType == "normal") {
           coachtype = 1;
         }
         //console.log(serviceList.map((item) => item.id.toString()))
-        
+
         const newCoachData = {
           coachNumber: coachNum,
           image: image,
           idCoachType: parseInt(coachtype),
           capacity: parseInt(currentValueCapa),
-          services: serviceList.map((item) => item.id.toString())
+          services: serviceList.map((item) => item.id.toString()),
         };
         const createdCoach = await createCoachWithImage(newCoachData);
-        console.log(createdCoach); 
+        console.log(createdCoach);
         setIndicator(false);
         showSuccess();
-      }
-      catch(error){
+      } catch (error) {
         console.log(error);
         showFail();
       }
@@ -214,8 +214,8 @@ export default function AddCoach({ navigation }) {
       setValidateService(true);
     }
 
-    if(currentValueService != ''){
-      addServiceHandler(currentValueService)
+    if (currentValueService != "") {
+      addServiceHandler(currentValueService);
     }
   };
 
@@ -225,13 +225,13 @@ export default function AddCoach({ navigation }) {
   };
 
   const addServiceHandler = (currentValueService) => {
-    
     const newSer = {
       id: currentValueService,
-      name: itemsService.find(item => item.value === currentValueService).label,
+      name: itemsService.find((item) => item.value === currentValueService)
+        .label,
     };
     setServiceList([newSer, ...serviceList]);
-  }
+  };
 
   const content = "Add New Coach Successfully!";
   const contentFail = "Add New Coach Fail!";
@@ -241,10 +241,27 @@ export default function AddCoach({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator style={styles.indicator} size={"large"} animating={indicator}/>
-        <ModalSuccess visible={visibleSuccess} hide={hideSuccess} content={content}/>
-        <ModalFail visible={visibleFail} hide={hideFail} content={contentFail} />
-        <ModalConfirm visible={visibleC} hide={hideC} content={contentC} confirm={confirm}/>
+        <ActivityIndicator
+          style={styles.indicator}
+          size={"large"}
+          animating={indicator}
+        />
+        <ModalSuccess
+          visible={visibleSuccess}
+          hide={hideSuccess}
+          content={content}
+        />
+        <ModalFail
+          visible={visibleFail}
+          hide={hideFail}
+          content={contentFail}
+        />
+        <ModalConfirm
+          visible={visibleC}
+          hide={hideC}
+          content={contentC}
+          confirm={confirm}
+        />
         <View style={styles.header}>
           <Pressable
             style={({ pressed }) => [
@@ -373,7 +390,6 @@ export default function AddCoach({ navigation }) {
             {!validateService && (
               <Text style={styles.validateText}>Please choose service</Text>
             )}
-            
           </View>
           <Pressable
             style={({ pressed }) => [
@@ -390,15 +406,16 @@ export default function AddCoach({ navigation }) {
               // nestedScrollEnabled={true}
               horizontal={true}
               data={serviceList}
-              renderItem={({ item }) => 
-              <Pressable onLongPress={() => {
-                showC();
-                setItemid(item.id);
-              }}>
-
-                <ServiceCard item={item}></ServiceCard>
-              </Pressable>
-            }
+              renderItem={({ item }) => (
+                <Pressable
+                  onLongPress={() => {
+                    showC();
+                    setItemid(item.id);
+                  }}
+                >
+                  <ServiceCard item={item}></ServiceCard>
+                </Pressable>
+              )}
               keyExtractor={(item, index) => index}
             />
           </View>
@@ -557,7 +574,7 @@ const styles = StyleSheet.create({
     height: 120,
     borderColor: "#283663",
     borderWidth: 1,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   saveButton: {
     alignItems: "center",
@@ -589,7 +606,7 @@ const styles = StyleSheet.create({
   indicator: {
     position: "absolute",
     zIndex: 1000,
-    right: '46%',
-    top: "50%"
-  }
+    right: "46%",
+    top: "50%",
+  },
 });

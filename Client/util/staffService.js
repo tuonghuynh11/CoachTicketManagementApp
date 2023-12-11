@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const baseURL = "https://coach-ticket-management-api.onrender.com";
@@ -8,9 +9,10 @@ const staffService = axios.create({
 
 staffService.interceptors.request.use(
   async (config) => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIyMjE0MjYsImV4cCI6MTcwMjIyNTAyNn0.yJabeqKWZVsSeaWQ6Tt8IyTmXHWBypieGHrIE_xNgIQ";
+    const token = await AsyncStorage.getItem("token");
+
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `${token}`;
     }
     return config;
   },
@@ -72,19 +74,19 @@ export const deleteStaff = async (staffId) => {
 };
 
 export const createStaffWithImage = async (item) => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIyMTY4NTUsImV4cCI6MTcwMjIyMDQ1NX0.QVtCoeVhU-p69fIR7PUFfHh6Q3v9ALfZPgpxekQKcnA";
+  const token = await AsyncStorage.getItem("token");
   const header = {
-    "Content-Type":"multipart/form-data",
-    Authorization: `Bearer ${token}`
+    "Content-Type": "multipart/form-data",
+    Authorization: `${token}`,
   };
 
   let body = new FormData();
   const file = {
     uri: item.image,
-    type: 'image/jpeg',
-    name: 'image.jpeg'
-  }
-  body.append("fullName",item.fullName);
+    type: "image/jpeg",
+    name: "image.jpeg",
+  };
+  body.append("fullName", item.fullName);
   body.append("image", file);
   body.append("phoneNumber", item.phone);
   body.append("positionId", item.currentValue);
@@ -93,51 +95,53 @@ export const createStaffWithImage = async (item) => {
   body.append("password", item.password);
   body.append("email", item.email);
   console.log(body);
-  var res = await axios.post(`${baseURL}/api/staffs`, body, {
-    headers:header
-  })
-  .then((reponse) => {
-    console.log(reponse.data);
-    return reponse;
-  })
-  .catch((err) => {
-    console.log("Error creating staff:", err);
-    return null;
-  })
+  var res = await axios
+    .post(`${baseURL}/api/staffs`, body, {
+      headers: header,
+    })
+    .then((reponse) => {
+      console.log(reponse.data);
+      return reponse;
+    })
+    .catch((err) => {
+      console.log("Error creating staff:", err);
+      return null;
+    });
   return res;
-}
+};
 
 export const updateStaffWithImage = async (item) => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIyMTY4NTUsImV4cCI6MTcwMjIyMDQ1NX0.QVtCoeVhU-p69fIR7PUFfHh6Q3v9ALfZPgpxekQKcnA";
+  const token = await AsyncStorage.getItem("token");
+
   const header = {
-    "content-type":"multipart/form-data",
-    Authorization: `Bearer ${token}`
+    "content-type": "multipart/form-data",
+    Authorization: `${token}`,
   };
   let body = new FormData();
   console.log(item.id);
   const file = {
     uri: item.image,
-    type: 'image/jpeg',
-    name: 'image.jpeg'
-  }
+    type: "image/jpeg",
+    name: "image.jpeg",
+  };
   console.log(item.image);
-  body.append("fullName",item.fullName);
+  body.append("fullName", item.fullName);
   body.append("image", file);
   body.append("phoneNumber", item.phone);
   body.append("positionId", item.currentValue);
   body.append("gender", item.currentValueGender);
   body.append("email", item.email);
-  var res = await axios.patch(`${baseURL}/api/users/${item.id}`, body, {
-    headers: header
-  })
-  .then((reponse) => {
-    console.log(reponse.data);
-    return reponse;
-  })
-  .catch((err) => {
-    console.log("Error updating staff:", err);
-    return null;
-  })
+  var res = await axios
+    .patch(`${baseURL}/api/users/${item.id}`, body, {
+      headers: header,
+    })
+    .then((reponse) => {
+      console.log(reponse.data);
+      return reponse;
+    })
+    .catch((err) => {
+      console.log("Error updating staff:", err);
+      return null;
+    });
   return res;
-}
-
+};

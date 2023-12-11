@@ -66,7 +66,7 @@
 
     "react-native-vector-icons": "^10.0.0",
     "rn-gesture-swipeable-flatlist": "^1.1.14",
-    "expo-av": "~13.4.1"
+    "expo-av": "~13.4.1",
 
     "react-native-view-shot": "3.7.0",
     "react-native-webview": "13.2.2"

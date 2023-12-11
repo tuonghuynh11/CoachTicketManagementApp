@@ -2,7 +2,7 @@ import { images } from "../../../../assets/Assets";
 import Icon from "react-native-vector-icons/AntDesign";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
 import {
@@ -19,11 +19,15 @@ import {
   Alert,
   Switch,
   LogBox,
+  Pressable,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import axios from "axios";
 import CheckBox from "expo-checkbox";
 import DropDownPicker from "react-native-dropdown-picker";
+import { AuthContext } from "../../../Store/authContex";
+import { Entypo } from "@expo/vector-icons";
+
 const config = {
   headers: {
     Authorization: "Bearer " + images.adminToken,
@@ -41,12 +45,13 @@ function Screen({ navigation }) {
   const [allUsers, setAllUsers] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const authCtx = useContext(AuthContext);
   const getData = async () => {
     axiosUsers = [];
     try {
       const config2 = {
         headers: {
-          Authorization: "Bearer " + images.adminToken,
+          Authorization: authCtx.token,
         },
         params: { page: 1 },
       };
@@ -209,8 +214,7 @@ function Screen({ navigation }) {
                                 console.log(item.userId);
                                 const config = {
                                   headers: {
-                                    Authorization:
-                                      "Bearer " + images.adminToken,
+                                    Authorization: authCtx.token,
                                   },
                                 };
                                 axios
@@ -286,6 +290,7 @@ function ProfileScreen({ navigation }) {
     if (isEnabled && !isAssistantEnabled) setIsEnabled(!isEnabled);
   };
 
+  const authCtx = useContext(AuthContext);
   return (
     <ScrollView style={[styles.container, { backgroundColor: "#eff0ed" }]}>
       <View
@@ -365,7 +370,7 @@ function ProfileScreen({ navigation }) {
                 if (buttonText === "Save") {
                   const patchconfig = {
                     headers: {
-                      Authorization: "Bearer " + images.adminToken,
+                      Authorization: authCtx.token,
                       "Content-Type": "multipart/form-data",
                     },
                   };
@@ -505,7 +510,7 @@ function EditProfileScreen({ navigation }) {
   const [phone, onChangePhone] = React.useState(data_mini.phone);
   const [isEnabled, setIsEnabled] = useState(false);
   const [isAssistantEnabled, setIsAssistantEnabled] = useState(false);
-
+  const authCtx = useContext(AuthContext);
   const onDriverChange = () => {
     setIsEnabled(!isEnabled);
     if (!isEnabled && isAssistantEnabled)
@@ -618,15 +623,36 @@ function EditProfileScreen({ navigation }) {
   );
 }
 const Stack = createNativeStackNavigator();
-function App() {
+function App({ navigation }) {
   return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="ManageUser">
-        <Stack.Screen name="ManageUser" component={Screen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <View style={styles.header}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.menuIcon,
+            pressed && { opacity: 0.85 },
+          ]}
+          onPress={() => {
+            navigation.openDrawer();
+          }}
+        >
+          <Entypo name="menu" size={30} color="#283663" />
+        </Pressable>
+
+        <Text style={styles.headerText}>Manage User</Text>
+      </View>
+      <NavigationContainer independent={true}>
+        <Stack.Navigator initialRouteName="ManageUser">
+          <Stack.Screen
+            name="ManageUser"
+            component={Screen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
 const styles = StyleSheet.create({
@@ -737,6 +763,26 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     marginStart: 5,
     backgroundColor: "red",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 50,
+    marginBottom: 15,
+  },
+  menuIcon: {
+    position: "absolute",
+    left: 16,
+    top: 50,
+  },
+  headerText: {
+    fontSize: 23,
+    color: "#283663",
+  },
+  addIconStyle: {
+    position: "absolute",
+    right: 16,
   },
 });
 export default App;

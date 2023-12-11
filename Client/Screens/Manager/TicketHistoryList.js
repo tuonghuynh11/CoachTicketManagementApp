@@ -9,17 +9,17 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   Keyboard,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import TicketCardHistory from "./TicketCardHistory";
 import TicketCard from "./TicketCard";
-import { useRoute } from '@react-navigation/native';
+import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { getAllUserTicketsHistory } from "../../util/userTicketService";
 
-export default function TicketHistoryList() {
-
+export default function TicketHistoryList({ navigation }) {
   const route = useRoute();
   const itemFromParent = route.params?.id;
   const [ticketList, setTicketList] = useState([
@@ -90,15 +90,31 @@ export default function TicketHistoryList() {
 
   const [indicator, setIndicator] = useState(false);
 
+  function onTicketHandler(item) {
+    console.log(item);
+    navigation.navigate("TicketDetailScreen", {
+      ticketInfo: item,
+      isHistory: true,
+      isManager: true,
+    });
+  }
   return (
     <View>
-      <ActivityIndicator style={styles.indicator} size={"large"} animating={indicator}/>
+      <ActivityIndicator
+        style={styles.indicator}
+        size={"large"}
+        animating={indicator}
+      />
       <FlatList
         data={currentTicketList}
         renderItem={({ item }) => (
-          <TouchableWithoutFeedback onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              onTicketHandler(item);
+            }}
+          >
             <TicketCardHistory item={item} />
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         )}
         keyExtractor={(item, index) => index + 1}
       />
@@ -110,7 +126,7 @@ const styles = StyleSheet.create({
   indicator: {
     position: "absolute",
     zIndex: 1000,
-    right: '46%',
-    top: "50%"
-  }
+    right: "46%",
+    top: "50%",
+  },
 });

@@ -59,7 +59,8 @@ function LoginScreen({ navigation, route }) {
           data.refreshToken,
           data.userId.toString(),
           data.userName,
-          data.roleId.toString()
+          data.roleId.toString(),
+          data?.idPosition ? data?.idPosition : "12"
         );
       } else {
         //phone number
@@ -74,7 +75,8 @@ function LoginScreen({ navigation, route }) {
           data.refreshToken,
           data.userId.toString(),
           data.userName,
-          data.roleId.toString()
+          data.roleId.toString(),
+          data?.idPosition ? data?.idPosition : "12"
         );
       }
     } catch (err) {

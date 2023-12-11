@@ -20,7 +20,10 @@ import {
   SafeAreaView,
   useWindowDimensions,
   Dimensions,
+  Pressable,
 } from "react-native";
+import { Entypo } from "@expo/vector-icons";
+import GlobalColors from "../../../Color/colors";
 const ticketsSOLD = {
   January: 379,
 
@@ -37,7 +40,7 @@ const ticketsSOLD = {
   December: 440,
 };
 import { ScrollView } from "react-native-gesture-handler";
-const StatisticsScreen = function () {
+const StatisticsScreen = function ({ navigation }) {
   const barchartcolors = [
     "#8A2BE2",
     "#FF4500",
@@ -138,98 +141,115 @@ const StatisticsScreen = function () {
     },
   ];
   return (
-    <ScrollView>
-      <Text style={styles.text}>Statistics</Text>
-      <View>
-        <Text>TICKETS SOLD BY MONTHS </Text>
+    <>
+      <View style={styles.header}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.menuIcon,
+            pressed && { opacity: 0.85 },
+          ]}
+          onPress={() => {
+            navigation.openDrawer();
+          }}
+        >
+          <Entypo name="menu" size={30} color="#283663" />
+        </Pressable>
 
-        <LineChart
-          width={Dimensions.get("window").width}
-          height={200}
-          yAxisLabel=""
-          chartConfig={{
-            backgroundColor: "blue",
-            backgroundGradientFrom: "white",
-            backgroundGradientTo: "white",
-            color: (opacity = 1) => `#235532`,
-          }}
-          data={{
-            labels: [
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-            ],
-            datasets: [
-              {
-                data: [
-                  ticketsSOLD.January,
-                  ticketsSOLD.February,
-                  ticketsSOLD.March,
-                  ticketsSOLD.April,
-                  ticketsSOLD.May,
-                  ticketsSOLD.June,
-                  ticketsSOLD.July,
-                  ticketsSOLD.August,
-                  ticketsSOLD.September,
-                  ticketsSOLD.October,
-                  ticketsSOLD.November,
-                  ticketsSOLD.December,
-                ],
-              },
-            ],
-          }}
-        ></LineChart>
+        <Text style={styles.headerText}>Statistics</Text>
       </View>
-      <View>
-        <Text>TICKETS SOLD BY TRIPS </Text>
-        <ScrollView>
-          <ScrollView horizontal={true}>
-            <BarChart
-              width={700}
-              height={550}
-              verticalLabelRotation={60}
-              chartConfig={{
-                backgroundColor: "pink",
-                backgroundGradientFrom: "white",
-                backgroundGradientTo: "white",
-                color: (opacity = 1) => `rgba(1, 1, 1, ${opacity})`,
-              }}
-              flatColor={true}
-              withCustomBarColorFromData={true}
-              style={{ margin: 10 }}
-              data={data}
-            ></BarChart>
+      <ScrollView style={{ opacity: 0.7 }}>
+        {/* <Text style={styles.text}>Statistics</Text> */}
+
+        <View>
+          <Text>TICKETS SOLD BY MONTHS </Text>
+
+          <LineChart
+            width={Dimensions.get("window").width}
+            height={200}
+            yAxisLabel=""
+            chartConfig={{
+              backgroundColor: "blue",
+              backgroundGradientFrom: "white",
+              backgroundGradientTo: "white",
+              color: (opacity = 1) => `#235532`,
+            }}
+            data={{
+              labels: [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+              ],
+              datasets: [
+                {
+                  data: [
+                    ticketsSOLD.January,
+                    ticketsSOLD.February,
+                    ticketsSOLD.March,
+                    ticketsSOLD.April,
+                    ticketsSOLD.May,
+                    ticketsSOLD.June,
+                    ticketsSOLD.July,
+                    ticketsSOLD.August,
+                    ticketsSOLD.September,
+                    ticketsSOLD.October,
+                    ticketsSOLD.November,
+                    ticketsSOLD.December,
+                  ],
+                },
+              ],
+            }}
+          ></LineChart>
+        </View>
+        <View>
+          <Text>TICKETS SOLD BY TRIPS </Text>
+          <ScrollView>
+            <ScrollView horizontal={true}>
+              <BarChart
+                width={700}
+                height={550}
+                verticalLabelRotation={60}
+                chartConfig={{
+                  backgroundColor: "pink",
+                  backgroundGradientFrom: "white",
+                  backgroundGradientTo: "white",
+                  color: (opacity = 1) => `rgba(1, 1, 1, ${opacity})`,
+                }}
+                flatColor={true}
+                withCustomBarColorFromData={true}
+                style={{ margin: 10 }}
+                data={data}
+              ></BarChart>
+            </ScrollView>
           </ScrollView>
-        </ScrollView>
-      </View>
-      <View>
-        <Text>PIE CHART</Text>
-        <PieChart
-          data={piedata}
-          width={Dimensions.get("window").width}
-          height={220}
-          chartConfig={{
-            backgroundGradientFrom: "white",
-            backgroundGradientTo: "white",
-            color: (opacity = 1) => `rgba(1, 1, 1, ${opacity})`,
-          }}
-          accessor={"population"}
-          backgroundColor={"transparent"}
-          paddingLeft={"15"}
-          center={[10, 50]}
-          absolute
-        />
-      </View>
-      {/* <View>
+        </View>
+        <View>
+          <Text>PIE CHART</Text>
+          <PieChart
+            data={piedata}
+            width={Dimensions.get("window").width}
+            height={220}
+            chartConfig={{
+              backgroundGradientFrom: "white",
+              backgroundGradientTo: "white",
+              color: (opacity = 1) => `rgba(1, 1, 1, ${opacity})`,
+            }}
+            accessor={"population"}
+            backgroundColor={"transparent"}
+            paddingLeft={"15"}
+            center={[10, 50]}
+            absolute
+          />
+        </View>
+        {/* <View>
         <Text>Bezier Line Chart</Text>
         <LineChart
           data={{
@@ -296,7 +316,7 @@ const StatisticsScreen = function () {
         />
       </View> */}
 
-      {/* <View>
+        {/* <View>
         <Text>TICKETS SOLD BY MONTHS </Text>
 
         <PieChart
@@ -340,7 +360,8 @@ const StatisticsScreen = function () {
           }}
         ></LineChart>
       </View> */}
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 const styles = StyleSheet.create({
@@ -349,6 +370,26 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 50,
+    marginBottom: 15,
+  },
+  menuIcon: {
+    position: "absolute",
+    left: 16,
+    top: 50,
+  },
+  headerText: {
+    fontSize: 23,
+    color: "#283663",
+  },
+  addIconStyle: {
+    position: "absolute",
+    right: 16,
   },
 });
 export default StatisticsScreen;

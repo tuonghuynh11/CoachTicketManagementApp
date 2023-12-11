@@ -32,8 +32,7 @@ DropDownPicker.setListMode("SCROLLVIEW");
 
 const Tab = createMaterialTopTabNavigator();
 
-function MyTabs({data}) {
-  
+function MyTabs({ data }) {
   return (
     <Tab.Navigator
       initialRouteName="StaffInfo"
@@ -64,7 +63,7 @@ function MyTabs({data}) {
   );
 }
 
-export default function EditStaff({navigation, route}) {
+export default function EditStaff({ navigation, route }) {
   const [visible, setVisible] = useState(false);
   const show = () => {
     setVisible(true);
@@ -73,12 +72,12 @@ export default function EditStaff({navigation, route}) {
     setVisible(false);
   };
 
-  const {UserAccountData} = route.params;
-  const {fullName} = route.params;
-  const {email} = route.params;
-  const {phoneNumber} = route.params;
-  const {gender} = route.params;
-  const {positionId} = route.params;
+  const { UserAccountData } = route.params;
+  const { fullName } = route.params;
+  const { email } = route.params;
+  const { phoneNumber } = route.params;
+  const { gender } = route.params;
+  const { positionId } = route.params;
 
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
@@ -110,13 +109,13 @@ export default function EditStaff({navigation, route}) {
   const [contentF, setContentF] = useState("Ban Staff Fail!");
 
   const confirm = () => {
-    try{
+    try {
       hideC();
       showSuccess();
-    }catch(error){
-      console.log("Error ban staff:"+error);
+    } catch (error) {
+      console.log("Error ban staff:" + error);
     }
-  }
+  };
 
   const [image, setImage] = useState(UserAccountData.avatar);
   const uploadImage = async (mode) => {
@@ -159,7 +158,7 @@ export default function EditStaff({navigation, route}) {
   };
   const pressHandler = () => {
     navigation.goBack();
-  }
+  };
 
   const data = {
     //image: image,
@@ -168,21 +167,32 @@ export default function EditStaff({navigation, route}) {
     phoneNumber: phoneNumber,
     gender: gender,
     positionId: positionId,
-    UserAccountData: UserAccountData
-  }
+    UserAccountData: UserAccountData,
+  };
   //console.log(data);
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-      <ModalSuccess visible={visibleSuccess} hide={hideSuccess} content={contentS}/>
+        <ModalSuccess
+          visible={visibleSuccess}
+          hide={hideSuccess}
+          content={contentS}
+        />
         <ModalFail visible={visibleFail} hide={hideFail} content={contentF} />
-      <ModalConfirm visible={visibleC} hide={hideC} content={content} confirm={confirm}/>
+        <ModalConfirm
+          visible={visibleC}
+          hide={hideC}
+          content={content}
+          confirm={confirm}
+        />
         <View style={styles.header}>
-          <Pressable style={({ pressed }) => [
-                styles.backIcon,
-                pressed && { opacity: 0.85 },
-              ]} onPress={pressHandler}>
-
+          <Pressable
+            style={({ pressed }) => [
+              styles.backIcon,
+              pressed && { opacity: 0.85 },
+            ]}
+            onPress={pressHandler}
+          >
             <Ionicons
               name="ios-arrow-back-circle-sharp"
               size={38}
@@ -190,25 +200,19 @@ export default function EditStaff({navigation, route}) {
             />
           </Pressable>
           <Text style={styles.headerText}>Edit Staff</Text>
-          <Pressable style={({ pressed }) => [
-                styles.resetIconStyle,
-                pressed && { opacity: 0.85 },
-              ]} onPress={showC}>
-
-            <FontAwesome
-              name="ban"
-              size={36}
-              
-              color="red"
-            />
+          <Pressable
+            style={({ pressed }) => [
+              styles.resetIconStyle,
+              pressed && { opacity: 0.85 },
+            ]}
+            onPress={showC}
+          >
+            <FontAwesome name="ban" size={36} color="red" />
           </Pressable>
         </View>
-        
-          
+
         <View style={styles.body}>
-          
-            <MyTabs data={data}/>
-          
+          <MyTabs data={data} />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -225,6 +229,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 10,
   },
   backIcon: {
     position: "absolute",

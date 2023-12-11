@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const baseURL = "https://coach-ticket-management-api.onrender.com";
@@ -8,9 +9,10 @@ const scheduleService = axios.create({
 
 scheduleService.interceptors.request.use(
   async (config) => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIyMjE0MjYsImV4cCI6MTcwMjIyNTAyNn0.yJabeqKWZVsSeaWQ6Tt8IyTmXHWBypieGHrIE_xNgIQ";
+    const token = await AsyncStorage.getItem("token");
+
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `${token}`;
     }
     return config;
   },
@@ -21,7 +23,9 @@ scheduleService.interceptors.request.use(
 
 export const getAllSchedules = async (routeid) => {
   try {
-    const response = await scheduleService.get(`/api/schedules?routeId=${routeid}`);
+    const response = await scheduleService.get(
+      `/api/schedules?routeId=${routeid}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching schedules:", error);
@@ -59,7 +63,9 @@ export const updateSchedule = async (scheduleId, updatedScheduleData) => {
 
 export const deleteSchedule = async (scheduleId) => {
   try {
-    const response = await scheduleService.delete(`/api/schedules/${scheduleId}`); 
+    const response = await scheduleService.delete(
+      `/api/schedules/${scheduleId}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error deleting schedule:", error);
