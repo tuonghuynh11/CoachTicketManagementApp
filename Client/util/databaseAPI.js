@@ -26,9 +26,10 @@ export async function Login(user) {
     .post(`${BASE_URL}/auth/login`, loginUser)
     .then((res) => {
       console.log("login: ", res.data.data);
+      const temp = res.request.responseHeaders["Set-Cookie"]?res.request.responseHeaders["Set-Cookie"]:res.request.responseHeaders["set-cookie"]
       return {
         accessToken: res.data.data["access_token"],
-        refreshToken: res.request.responseHeaders["Set-Cookie"]
+        refreshToken: temp
           .split("=")[1]
           .split(";")[0],
         userId: res.data.data.userId,
@@ -102,9 +103,11 @@ export async function ResetToken(user) {
       },
     })
     .then((res) => {
+      const temp = res.request.responseHeaders["Set-Cookie"]?res.request.responseHeaders["Set-Cookie"]:res.request.responseHeaders["set-cookie"]
       return {
+        
         accessToken: res.data.data["accessToken"],
-        refreshToken: res.request.responseHeaders["Set-Cookie"]
+        refreshToken: temp
           .split("=")[1]
           .split(";")[0],
       };

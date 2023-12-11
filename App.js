@@ -896,10 +896,12 @@ export default function App() {
         const refreshToken = await AsyncStorage.getItem("refreshToken");
 
         if (userName) {
+          //console.log(userName)
           const newTokens = await ResetToken({
             userName: userName,
             refreshToken: refreshToken,
           });
+          
           authCtx.authenticate(
             newTokens.accessToken,
             newTokens.refreshToken,
@@ -909,6 +911,7 @@ export default function App() {
             idPosition
           );
         }
+        //authCtx.logout();
         setIsTryLoading(false);
       }
       fetchToken();
