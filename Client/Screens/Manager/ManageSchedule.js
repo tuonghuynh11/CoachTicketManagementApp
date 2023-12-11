@@ -9,7 +9,7 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   Keyboard,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -41,8 +41,7 @@ export default function ManageSchedule({ route, navigation }) {
 
   useEffect(() => {
     const fetchSchedules = async () => {
-      if(isFocused){
-
+      if (isFocused) {
         try {
           setIndicator(true);
           const data = await getAllSchedules(id);
@@ -63,11 +62,10 @@ export default function ManageSchedule({ route, navigation }) {
   const [routeDataE, setRouteDataE] = useState([]);
 
   const deleteHandler = (idsche) => {
-    
-    const updatedItems = scheduleListData.filter(item => item.id !== idsche);
+    const updatedItems = scheduleListData.filter((item) => item.id !== idsche);
     setScheduleList(updatedItems);
     setScheduleListData(updatedItems);
-  }
+  };
 
   const fecthRoute = async () => {
     try {
@@ -108,7 +106,7 @@ export default function ManageSchedule({ route, navigation }) {
             .includes(currentValueStart.toLowerCase()) &&
           schedule.ArrivalPlaceData.placeName
             .toLowerCase()
-            .includes(currentValueStart.toLowerCase())
+            .includes(currentValueEnd.toLowerCase())
         );
       });
 
@@ -125,7 +123,7 @@ export default function ManageSchedule({ route, navigation }) {
       let filteredList = scheduleListData.filter((schedule) =>
         schedule.ArrivalPlaceData.placeName
           .toLowerCase()
-          .includes(currentValueStart.toLowerCase())
+          .includes(currentValueEnd.toLowerCase())
       );
       setScheduleList(filteredList);
     } else {
@@ -166,7 +164,11 @@ export default function ManageSchedule({ route, navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-      <ActivityIndicator style={styles.indicator} size={"large"} animating={indicator}/>
+        <ActivityIndicator
+          style={styles.indicator}
+          size={"large"}
+          animating={indicator}
+        />
         <ModalFilterSchedule
           hide={hide}
           visible={visible}
@@ -258,7 +260,11 @@ export default function ManageSchedule({ route, navigation }) {
                 onPress={() => navigation.navigate("DetailSchedule", item)}
               >
                 <TouchableWithoutFeedback onPress={() => {}}>
-                  <ScheduleCard item={item} navigation={navigation} deleteHandler={deleteHandler} />
+                  <ScheduleCard
+                    item={item}
+                    navigation={navigation}
+                    deleteHandler={deleteHandler}
+                  />
                 </TouchableWithoutFeedback>
               </Pressable>
             )}
@@ -327,7 +333,7 @@ const styles = StyleSheet.create({
   indicator: {
     position: "absolute",
     zIndex: 1000,
-    right: '46%',
-    top: "50%"
-  }
+    right: "46%",
+    top: "50%",
+  },
 });

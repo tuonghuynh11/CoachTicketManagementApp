@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const baseURL = "https://coach-ticket-management-api.onrender.com";
@@ -6,13 +7,13 @@ const coachService = axios.create({
   baseURL,
 });
 
-
-
 coachService.interceptors.request.use(
   async (config) => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIyMjE0MjYsImV4cCI6MTcwMjIyNTAyNn0.yJabeqKWZVsSeaWQ6Tt8IyTmXHWBypieGHrIE_xNgIQ";
+    const token = await AsyncStorage.getItem("token");
+
+    // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIyMjE0MjYsImV4cCI6MTcwMjIyNTAyNn0.yJabeqKWZVsSeaWQ6Tt8IyTmXHWBypieGHrIE_xNgIQ";
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `${token}`;
     }
     return config;
   },
@@ -65,67 +66,71 @@ export const deleteCoach = async (coachId) => {
 };
 
 export const createCoachWithImage = async (item) => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIyMDg2NDcsImV4cCI6MTcwMjIxMjI0N30.nZrq9Q6R3zmvcHNceRMRx8WkQkHCyaFeKJ_-AMj623I";
+  const token = await AsyncStorage.getItem("token");
+
   const header = {
-    "Content-Type":"multipart/form-data",
-    Authorization: `Bearer ${token}`
+    "Content-Type": "multipart/form-data",
+    Authorization: `${token}`,
   };
 
   let body = new FormData();
   const file = {
     uri: item.image,
-    type: 'image/jpeg',
-    name: 'image.jpeg'
-  }
-  
-  body.append("coachNumber",item.coachNumber);
+    type: "image/jpeg",
+    name: "image.jpeg",
+  };
+
+  body.append("coachNumber", item.coachNumber);
   body.append("image", file);
   body.append("idCoachType", item.idCoachType);
   body.append("capacity", item.capacity);
   body.append("services", JSON.stringify(item.services));
-  var res = await axios.post(`${baseURL}/api/coaches`, body, {
-    headers:header
-  })
-  .then((reponse) => {
-    console.log(reponse.data);
-    return reponse;
-  })
-  .catch((err) => {
-    console.log("Error creating coach:", err);
-    return null;
-  })
+  var res = await axios
+    .post(`${baseURL}/api/coaches`, body, {
+      headers: header,
+    })
+    .then((reponse) => {
+      console.log(reponse.data);
+      return reponse;
+    })
+    .catch((err) => {
+      console.log("Error creating coach:", err);
+      return null;
+    });
   return res;
-}
+};
 
 export const updateCoachWithImage = async (item) => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIyMDg2NDcsImV4cCI6MTcwMjIxMjI0N30.nZrq9Q6R3zmvcHNceRMRx8WkQkHCyaFeKJ_-AMj623I";
+  const token = await AsyncStorage.getItem("token");
+
   const header = {
-    "content-type":"multipart/form-data",
-    Authorization: `Bearer ${token}`
+    "content-type": "multipart/form-data",
+    Authorization: `${token}`,
   };
   let body = new FormData();
   console.log(item.id);
   const file = {
     uri: item.imageCoach,
-    type: 'image/jpeg',
-    name: 'image.jpeg'
-  }
+    type: "image/jpeg",
+    name: "image.jpeg",
+  };
   console.log(item.imageCoach);
-  body.append("coachNumber",item.coachNumber);
+  body.append("coachNumber", item.coachNumber);
   body.append("image", file);
   body.append("idCoachType", item.idCoachType);
   body.append("capacity", item.capacity);
   body.append("services", JSON.stringify(item.services));
-  var res = await axios.patch(`${baseURL}/api/coaches/${item.id}`, body, {
-    headers: header
-  })
-  .then((reponse) => {
-    console.log(reponse.data);
-    return reponse;
-  })
-  .catch((err) => {
-    console.log("Error updating coach:", err);
-    return null;
-  })
+  var res = await axios
+    .patch(`${baseURL}/api/coaches/${item.id}`, body, {
+      headers: header,
+    })
+    .then((reponse) => {
+      console.log(reponse.data);
+      return reponse;
+    })
+    .catch((err) => {
+      console.log("Error updating coach:", err);
+      return null;
+    });
   return res;
-}
+};

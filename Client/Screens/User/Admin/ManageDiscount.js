@@ -2,10 +2,10 @@ import { images } from "../../../../assets/Assets";
 import Icon from "react-native-vector-icons/AntDesign";
 import { AntDesign } from "@expo/vector-icons";
 import SwipeableFlatlist from "rn-gesture-swipeable-flatlist";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-
+import { Entypo } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
 import {
   useRoute,
@@ -40,6 +40,8 @@ import CheckBox from "expo-checkbox";
 import { LogBox } from "react-native";
 import axios from "axios";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
+import { AuthContext } from "../../../Store/authContex";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
@@ -59,6 +61,7 @@ let discountKey = 0;
 let axiosDiscounts = [];
 const getData = async () => {
   try {
+    const token = await AsyncStorage.getItem("token");
     axiosDiscounts.length = 0;
     config.params.page = 1;
     let flag = true;
@@ -66,7 +69,12 @@ const getData = async () => {
     do {
       const response = await axios.get(
         "https://coach-ticket-management-api.onrender.com/api/discounts",
-        config
+        {
+          headers: {
+            Authorization: token,
+          },
+          params: { page: config.params.page },
+        }
       );
 
       console.log(response.data.data.rows.length + " is length");
@@ -92,13 +100,20 @@ const getData = async () => {
 let axiosUsers = [];
 const getUsers = async () => {
   try {
+    const token = await AsyncStorage.getItem("token");
+
     axiosUsers.length = 0;
     config.params.page = 1;
     let flag = true;
     do {
       const response = await axios.get(
         "https://coach-ticket-management-api.onrender.com/api/users",
-        config
+        {
+          headers: {
+            Authorization: token,
+          },
+          params: { page: config.params.page },
+        }
       );
 
       console.log(response.data.data);
@@ -126,13 +141,20 @@ let axiosUserDiscounts = [];
 let axiosOtherUsers = [];
 const getUserDiscounts = async () => {
   try {
+    const token = await AsyncStorage.getItem("token");
+
     axiosUserDiscounts.length = 0;
     config.params.page = 1;
     let flag = true;
     do {
       const response = await axios.get(
         "https://coach-ticket-management-api.onrender.com/api/userDiscounts",
-        config
+        {
+          headers: {
+            Authorization: token,
+          },
+          params: { page: config.params.page },
+        }
       );
 
       console.log(response.data.data.rows);
@@ -321,7 +343,7 @@ const EditDiscount = function ({ navigation }) {
         <TouchableOpacity
           style={[styles.input, { backgroundColor: "#23f3a1", width: 100 }]}
           disabled={value == null || quantity == null}
-          onPress={() => {
+          onPress={async () => {
             if (minimum < maximum) {
               Alert.alert("Maximum < minimum");
               return;
@@ -334,9 +356,10 @@ const EditDiscount = function ({ navigation }) {
               minimumpricetoapply: minimum,
               maximumdiscountprice: maximum,
             };
+            const token = await AsyncStorage.getItem("token");
             const config = {
               headers: {
-                Authorization: "Bearer " + images.adminToken,
+                Authorization: token,
               },
             };
             axios
@@ -377,11 +400,13 @@ const EditDiscount = function ({ navigation }) {
   );
 };
 
-const deleteDiscount = function (discount, item, setDiscount) {
+const deleteDiscount = async function (discount, item, setDiscount) {
   //discount is the list of discounts
+  const token = await AsyncStorage.getItem("token");
+
   const delConfig = {
     headers: {
-      Authorization: "Bearer " + images.adminToken,
+      Authorization: token,
     },
   };
   axios
@@ -588,8 +613,9 @@ const User = function ({ navigation }) {
               setOpen={setdiscountopen}
             ></DropDownPicker>
             <TouchableOpacity
-              onPress={() => {
+              onPress={async () => {
                 console.log(membershipFlag);
+                const token = await AsyncStorage.getItem("token");
                 if (membershipFlag == 2) {
                   console.log(systemDiscountValue);
                   silverUser.forEach((silver) => {
@@ -603,11 +629,11 @@ const User = function ({ navigation }) {
                     };
 
                     axios
-                      .post(
-                        `${images.apiLink}userDiscounts`,
-                        newUserDiscount,
-                        standardConfig
-                      )
+                      .post(`${images.apiLink}userDiscounts`, newUserDiscount, {
+                        headers: {
+                          Authorization: token,
+                        },
+                      })
                       .then((response) => {
                         console.log(response.data);
                         Alert.alert("Add successfully");
@@ -632,11 +658,11 @@ const User = function ({ navigation }) {
                     };
 
                     axios
-                      .post(
-                        `${images.apiLink}userDiscounts`,
-                        newUserDiscount,
-                        standardConfig
-                      )
+                      .post(`${images.apiLink}userDiscounts`, newUserDiscount, {
+                        headers: {
+                          Authorization: token,
+                        },
+                      })
                       .then(async (response) => {
                         console.log(response.data);
                         Alert.alert("Add successfully");
@@ -1004,14 +1030,16 @@ const renderUserDiscountItem = ({
     <Swipeable
       renderRightActions={() => (
         <TouchableOpacity
-          onPress={() => {
+          onPress={async () => {
             console.log(discount);
             const c = {
               id: [`${item.id}`],
             };
+            const token = await AsyncStorage.getItem("token");
+
             const standardConfig2 = {
               headers: {
-                Authorization: "Bearer " + images.adminToken,
+                Authorization: token,
               },
               data: c,
             };
@@ -1425,7 +1453,7 @@ function AddDiscount({ navigation }) {
             maximum.trim() == "" ||
             dname.trim() == ""
           }
-          onPress={() => {
+          onPress={async () => {
             if (maximum >= minimum) {
               Alert.alert(
                 "Maximum discount price has to be lower than minimum price to apply"
@@ -1445,9 +1473,11 @@ function AddDiscount({ navigation }) {
               minimumpricetoapply: Number(minimum),
               maximumdiscountprice: Number(maximum),
             };
+            const token = await AsyncStorage.getItem("token");
+
             const config = {
               headers: {
-                Authorization: "Bearer " + images.adminToken,
+                Authorization: token,
               },
             };
             axios
@@ -1627,7 +1657,8 @@ function AddUserDiscount() {
         <TouchableOpacity
           style={[styles.input, { backgroundColor: "#23f3a1", width: 100 }]}
           disabled={value == null || quantity == null}
-          onPress={() => {
+          onPress={async () => {
+            const navigation = useNavigation();
             setCurrID(currID + 1);
             console.log("count = " + discountKey);
             let key = "key" + (discountKey + 1);
@@ -1640,9 +1671,11 @@ function AddUserDiscount() {
               quantity: quantity,
               isSystem: 1,
             };
+            const token = await AsyncStorage.getItem("token");
+
             const config = {
               headers: {
-                Authorization: "Bearer " + images.adminToken,
+                Authorization: token,
               },
             };
             axios
@@ -1712,23 +1745,43 @@ function Tab() {
   );
 }
 const MTab = createMaterialTopTabNavigator();
-const Tabs = function () {
+const Tabs = function ({ navigation }) {
   useFocusEffect(() => {
     console.log("Focus");
   });
   return (
-    <NavigationContainer independent={true}>
-      <MTab.Navigator
-        screenOptions={{
-          tabBarActiveTintColor: "#6A5ACD",
-          tabBarInactiveTintColor: "#FFA500",
-          tabBarStyle: { backgroundColor: "#808080" },
-        }}
-      >
-        <MTab.Screen name="User Tab" component={UserTab} />
-        <MTab.Screen name="System Tab" component={SystemTab} />
-      </MTab.Navigator>
-    </NavigationContainer>
+    <>
+      <View style={styles.header}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.menuIcon,
+            pressed && { opacity: 0.85 },
+          ]}
+          onPress={() => {
+            navigation.openDrawer();
+          }}
+        >
+          <Entypo name="menu" size={30} color="#283663" />
+        </Pressable>
+
+        <Text style={styles.headerText}>Manage Discount</Text>
+      </View>
+      <NavigationContainer independent={true}>
+        <MTab.Navigator
+          screenOptions={{
+            tabBarActiveTintColor: "#FFA500",
+            tabBarInactiveTintColor: "#5acdc9",
+            tabBarStyle: { backgroundColor: "#808080" },
+            tabBarLabelStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        >
+          <MTab.Screen name="User Tab" component={UserTab} />
+          <MTab.Screen name="System Tab" component={SystemTab} />
+        </MTab.Navigator>
+      </NavigationContainer>
+    </>
   );
 };
 function SystemTab() {
@@ -1818,6 +1871,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 50,
+    marginBottom: 15,
+  },
+  menuIcon: {
+    position: "absolute",
+    left: 16,
+    top: 50,
+  },
+  headerText: {
+    fontSize: 23,
+    color: "#283663",
+  },
+  addIconStyle: {
+    position: "absolute",
+    right: 16,
   },
 });
 export default Tabs;

@@ -9,7 +9,7 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   Keyboard,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -21,52 +21,53 @@ import { getAllUsers } from "../../util/userService";
 import { useIsFocused } from "@react-navigation/native";
 import ModalFilterUser from "./Popup/ModalFilterUser";
 
-export default function ManageUserTicket({navigation}) {
-
+export default function ManageUserTicket({ navigation }) {
   const openMenu = () => {
-    navigation.openDrawer()
-  }
+    navigation.openDrawer();
+  };
 
-  const users = [{
-    id: "1",
-    name: "Alan",
-    phone: "092323232323",
-    email: "abc@gmail.com",
-    status: "Working",
-    idTicket: "12345",
-  },
-  {
-    id: "2",
-    name: "John",
-    phone: "092323232323",
-    email: "abc@gmail.com",
-    status: "Available",
-    idTicket: "12345",
-  },
-  {
-    id: "3",
-    name: "Josh",
-    phone: "092323232323",
-    email: "abc@gmail.com",
-    status: "Working",
-    idTicket: "12345",
-  },
-  {
-    id: "4",
-    name: "James",
-    phone: "092323232323",
-    email: "abc@gmail.com",
-    status: "Working",
-    idTicket: "12345",
-  },
-  {
-    id: "5",
-    name: "Kevin",
-    phone: "092323232323",
-    email: "abc@gmail.com",
-    status: "Available",
-    idTicket: "12345",
-  },]
+  const users = [
+    {
+      id: "1",
+      name: "Alan",
+      phone: "092323232323",
+      email: "abc@gmail.com",
+      status: "Working",
+      idTicket: "12345",
+    },
+    {
+      id: "2",
+      name: "John",
+      phone: "092323232323",
+      email: "abc@gmail.com",
+      status: "Available",
+      idTicket: "12345",
+    },
+    {
+      id: "3",
+      name: "Josh",
+      phone: "092323232323",
+      email: "abc@gmail.com",
+      status: "Working",
+      idTicket: "12345",
+    },
+    {
+      id: "4",
+      name: "James",
+      phone: "092323232323",
+      email: "abc@gmail.com",
+      status: "Working",
+      idTicket: "12345",
+    },
+    {
+      id: "5",
+      name: "Kevin",
+      phone: "092323232323",
+      email: "abc@gmail.com",
+      status: "Available",
+      idTicket: "12345",
+    },
+  ];
 
   const [userList, setUserList] = useState([]);
   const [userListData, setUserListData] = useState([]);
@@ -83,7 +84,7 @@ export default function ManageUserTicket({navigation}) {
         setIndicator(false);
       } catch (error) {
         // Handle error, e.g., redirect to login if unauthorized
-        console.error("Error fetching users:", error);
+        console.error("Error fetching users:", error.response.data);
       }
     }
   };
@@ -95,19 +96,20 @@ export default function ManageUserTicket({navigation}) {
   const [searchText, setSearchText] = useState("");
 
   const handlerFilter = (text) => {
-    if(text){
-      let filteredList = userListData.filter((user) => user.fullName.toLowerCase().includes(text.toLowerCase()));
+    if (text) {
+      let filteredList = userListData.filter((user) =>
+        user.fullName.toLowerCase().includes(text.toLowerCase())
+      );
 
       setUserList(filteredList);
-    }
-    else{
+    } else {
       setUserList(userListData);
     }
-  }
+  };
 
   const textHandler = (val) => {
     setSearchText(val);
-    handlerFilter(val)
+    handlerFilter(val);
   };
 
   const [visible, setVisible] = useState(false);
@@ -119,53 +121,72 @@ export default function ManageUserTicket({navigation}) {
   };
 
   const hadlerSort = (type) => {
-    if(type == '1'){
-      let sortedList = userListData.slice().sort((a, b) => a.fullName.toLowerCase().localeCompare(b.fullName.toLowerCase()));
-      
-      setUserList(sortedList);
-    }
-    else if(type == '2'){
-      let sortedList = userListData.slice().sort((a, b) => b.fullName.toLowerCase().localeCompare(a.fullName.toLowerCase()));
+    if (type == "1") {
+      let sortedList = userListData
+        .slice()
+        .sort((a, b) =>
+          a.fullName.toLowerCase().localeCompare(b.fullName.toLowerCase())
+        );
 
       setUserList(sortedList);
-    }
-    else{
+    } else if (type == "2") {
+      let sortedList = userListData
+        .slice()
+        .sort((a, b) =>
+          b.fullName.toLowerCase().localeCompare(a.fullName.toLowerCase())
+        );
+
+      setUserList(sortedList);
+    } else {
       setUserList(userListData);
     }
-  }
+  };
 
   const handlerSortPoint = (type) => {
-    if(type == '1'){
-      let sortedList = userListData.slice().sort((a, b) => a.UserAccountData.rewardPoint - b.UserAccountData.rewardPoint);
-      
+    if (type == "1") {
+      let sortedList = userListData
+        .slice()
+        .sort(
+          (a, b) =>
+            a.UserAccountData.rewardPoint - b.UserAccountData.rewardPoint
+        );
+
       setUserList(sortedList);
-    }
-    else if(type == '2'){
-      let sortedList = userListData.slice().sort((a, b) =>  b.UserAccountData.rewardPoint - a.UserAccountData.rewardPoint);
-      
+    } else if (type == "2") {
+      let sortedList = userListData
+        .slice()
+        .sort(
+          (a, b) =>
+            b.UserAccountData.rewardPoint - a.UserAccountData.rewardPoint
+        );
+
       setUserList(sortedList);
-    }
-    else{
+    } else {
       setUserList(userListData);
     }
-  }
+  };
 
   const [indicator, setIndicator] = useState(false);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-      <ActivityIndicator style={styles.indicator} size={"large"} animating={indicator}/>
-        <ModalFilterUser hide={hide}
-            visible={visible}
-            handlerSort={hadlerSort}
-            handlerSortPoint={handlerSortPoint}/>
+        <ActivityIndicator
+          style={styles.indicator}
+          size={"large"}
+          animating={indicator}
+        />
+        <ModalFilterUser
+          hide={hide}
+          visible={visible}
+          handlerSort={hadlerSort}
+          handlerSortPoint={handlerSortPoint}
+        />
         <View style={styles.header}>
-        <Pressable style={styles.menuIcon} onPress={openMenu}>
+          <Pressable style={styles.menuIcon} onPress={openMenu}>
             <Entypo name="menu" size={30} color="#283663" />
           </Pressable>
           <Text style={styles.headerText}>List Of Users</Text>
-          
         </View>
         <View style={styles.body}>
           <View style={{ flexDirection: "row" }}>
@@ -179,7 +200,12 @@ export default function ManageUserTicket({navigation}) {
               ></TextInput>
               {searchText !== "" && (
                 <View style={styles.iconCancel}>
-                  <Pressable onPress={() => {setSearchText(""); handlerFilter("");}}>
+                  <Pressable
+                    onPress={() => {
+                      setSearchText("");
+                      handlerFilter("");
+                    }}
+                  >
                     <MaterialIcons name="cancel" size={30} color="white" />
                   </Pressable>
                 </View>
@@ -197,10 +223,11 @@ export default function ManageUserTicket({navigation}) {
             <FlatList
               data={userList}
               renderItem={({ item }) => (
-                <Pressable onPress={() => navigation.navigate("TicketConfirmList", item)}>
-
+                <Pressable
+                  onPress={() => navigation.navigate("TicketConfirmList", item)}
+                >
                   <TouchableWithoutFeedback onPress={() => {}}>
-                    <UserCard item={item} navigation={navigation}/>
+                    <UserCard item={item} navigation={navigation} />
                   </TouchableWithoutFeedback>
                 </Pressable>
               )}
@@ -272,7 +299,7 @@ const styles = StyleSheet.create({
   indicator: {
     position: "absolute",
     zIndex: 1000,
-    right: '46%',
-    top: "50%"
-  }
+    right: "46%",
+    top: "50%",
+  },
 });

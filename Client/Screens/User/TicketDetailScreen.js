@@ -2347,21 +2347,66 @@ function TicketDetailScreen({ navigation, route }) {
         </View> */}
 
         {/* Rating */}
-        <View
-          style={{
-            marginHorizontal: 10,
-            flexDirection: "row",
-            gap: 10,
-            marginBottom: 30,
-            marginTop: 10,
-          }}
-        >
-          {isHistory && (
+        {!route?.params?.isManager && (
+          <View
+            style={{
+              marginHorizontal: 10,
+              flexDirection: "row",
+              gap: 10,
+              marginBottom: 30,
+              marginTop: 10,
+            }}
+          >
+            {isHistory && (
+              <View style={{ flex: 1 }}>
+                <CustomButton
+                  radius={10}
+                  color={"#F0DB18"}
+                  onPress={() => {
+                    setIsShowModal((curr) => !curr);
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      color: "white",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Rating
+                  </Text>
+                </CustomButton>
+              </View>
+            )}
+            {!route?.params?.isHistory && (
+              <View style={{ flex: 1 }}>
+                <CustomButton
+                  radius={10}
+                  color={"#F0DB18"}
+                  onPress={() => {
+                    setIsShowCancel((curr) => !curr);
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      color: "white",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </CustomButton>
+              </View>
+            )}
             <View style={{ flex: 1 }}>
               <CustomButton
                 radius={10}
-                color={"#F0DB18"}
+                color={"#f16710"}
                 onPress={() => {
+                  setIsRating(false);
                   setIsShowModal((curr) => !curr);
                 }}
               >
@@ -2373,55 +2418,12 @@ function TicketDetailScreen({ navigation, route }) {
                     fontWeight: "bold",
                   }}
                 >
-                  Rating
+                  Report
                 </Text>
               </CustomButton>
             </View>
-          )}
-          {!route?.params?.isHistory && (
-            <View style={{ flex: 1 }}>
-              <CustomButton
-                radius={10}
-                color={"#F0DB18"}
-                onPress={() => {
-                  setIsShowCancel((curr) => !curr);
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    color: "white",
-                    fontSize: 16,
-                    fontWeight: "bold",
-                  }}
-                >
-                  Cancel
-                </Text>
-              </CustomButton>
-            </View>
-          )}
-          <View style={{ flex: 1 }}>
-            <CustomButton
-              radius={10}
-              color={"#f16710"}
-              onPress={() => {
-                setIsRating(false);
-                setIsShowModal((curr) => !curr);
-              }}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  color: "white",
-                  fontSize: 16,
-                  fontWeight: "bold",
-                }}
-              >
-                Report
-              </Text>
-            </CustomButton>
           </View>
-        </View>
+        )}
       </View>
     </>
   );

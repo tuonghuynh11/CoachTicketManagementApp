@@ -34,6 +34,7 @@ export async function Login(user) {
         userId: res.data.data.userId,
         roleId: res.data.data.role.id,
         userName: res.data.data.userName,
+        idPosition: res?.data?.data?.position?.id,
       };
     })
     .catch((err) => {

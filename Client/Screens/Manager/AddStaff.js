@@ -96,7 +96,7 @@ export default function AddStaff({ navigation }) {
     navigation.goBack();
   };
   const [isOpen, setIsOpen] = useState(false);
-  const [currentValue, setCurrentValue] = useState('');
+  const [currentValue, setCurrentValue] = useState("");
   const items = [
     { label: "Driver", value: "2" },
     { label: "Coach Assistant", value: "3" },
@@ -104,7 +104,7 @@ export default function AddStaff({ navigation }) {
   ];
 
   const [isOpenGender, setIsOpenGender] = useState(false);
-  const [currentValueGender, setCurrentValueGender] = useState('');
+  const [currentValueGender, setCurrentValueGender] = useState("");
   const itemsGender = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -193,13 +193,21 @@ export default function AddStaff({ navigation }) {
     } else {
       setValidateGender(true);
     }
-    if(fullName != "" && email != "" && phone != "" && username != "" && password != "" && repassword != "" && currentValue != "" && currentValueGender != ""){
-      if(repassword != password){
-        setContentF('Password and Re-Password must be the same')
+    if (
+      fullName != "" &&
+      email != "" &&
+      phone != "" &&
+      username != "" &&
+      password != "" &&
+      repassword != "" &&
+      currentValue != "" &&
+      currentValueGender != ""
+    ) {
+      if (repassword != password) {
+        setContentF("Password and Re-Password must be the same");
         showFail();
-      }
-      else{
-        try{
+      } else {
+        try {
           const data = {
             fullName: fullName,
             email: email,
@@ -208,24 +216,34 @@ export default function AddStaff({ navigation }) {
             currentValueGender: currentValueGender,
             username: username,
             password: password,
-            image: image
-          }
+            image: image,
+          };
           const createdStaff = await createStaffWithImage(data);
           console.log(createdStaff);
           showSuccess();
-        }catch(error){
+        } catch (error) {
           console.log("Error create staff:" + error);
           showFail();
         }
-        
       }
     }
   };
-
+  const reloadHandler = () => {
+    setFullName("");
+    setEmail("");
+    setPhone("");
+    setPassword("");
+    setRePassword("");
+    setUsername("");
+  };
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-        <ModalSuccess visible={visibleSuccess} hide={hideSuccess} content={contentS}/>
+        <ModalSuccess
+          visible={visibleSuccess}
+          hide={hideSuccess}
+          content={contentS}
+        />
         <ModalFail visible={visibleFail} hide={hideFail} content={contentF} />
         <View style={styles.header}>
           <Pressable
@@ -242,12 +260,15 @@ export default function AddStaff({ navigation }) {
             />
           </Pressable>
           <Text style={styles.headerText}>New Staff</Text>
-          <Ionicons
-            name="reload-circle"
-            size={38}
-            color="#EB3223"
-            style={styles.resetIconStyle}
-          />
+          <Pressable
+            style={({ pressed }) => [
+              pressed && { opacity: 0.85 },
+              styles.resetIconStyle,
+            ]}
+            onPress={reloadHandler}
+          >
+            <Ionicons name="reload-circle" size={38} color="#EB3223" />
+          </Pressable>
         </View>
         <ScrollView
           style={styles.body}
@@ -294,9 +315,7 @@ export default function AddStaff({ navigation }) {
             <Text style={styles.textLabel}>Email</Text>
             <TextInput
               style={
-                validateEmail == true
-                  ? styles.textInput
-                  : styles.textInputWrong
+                validateEmail == true ? styles.textInput : styles.textInputWrong
               }
               placeholder="Enter Email"
               value={email}
@@ -319,7 +338,7 @@ export default function AddStaff({ navigation }) {
               <Text style={styles.validateText}>This field can't be empty</Text>
             )}
             <Text style={styles.textLabel}>Position</Text>
-            <View style={styles.dropDownStyle}>
+            <View style={[styles.dropDownStyle, { zIndex: 10000 }]}>
               <DropDownPicker
                 items={items}
                 open={isOpen}
@@ -338,7 +357,7 @@ export default function AddStaff({ navigation }) {
               <Text style={styles.validateText}>Please choose position</Text>
             )}
             <Text style={styles.textLabel}>Gender</Text>
-            <View style={styles.dropDownStyle}>
+            <View style={[styles.dropDownStyle, { zIndex: 100 }]}>
               <DropDownPicker
                 items={itemsGender}
                 open={isOpenGender}
@@ -357,8 +376,10 @@ export default function AddStaff({ navigation }) {
               <Text style={styles.validateText}>Please choose gender</Text>
             )}
           </View>
-          <Text style={styles.titleText}>Account Information</Text>
-          <View>
+          <Text style={[styles.titleText, { zIndex: -1 }]}>
+            Account Information
+          </Text>
+          <View style={{ zIndex: -1 }}>
             <Text style={styles.textLabel}>Username</Text>
             <TextInput
               style={
@@ -523,7 +544,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginBottom: 10,
     borderRadius: 20,
-    marginTop: 30
+    marginTop: 30,
   },
   saveText: {
     fontSize: 16,

@@ -26,7 +26,7 @@ import ModalSuccess from "./Popup/ModalSuccess";
 import ModalFail from "./Popup/ModalFail";
 import ModalConfirm from "./Popup/ModalConfirm";
 import { deleteCoach } from "../../util/coachService";
-
+import * as Progress from "react-native-progress";
 export default function Tracking({ route, navigation }) {
   const pressHandler = () => {
     navigation.goBack();
@@ -42,11 +42,11 @@ export default function Tracking({ route, navigation }) {
   const { lng } = route.params;
   const { image } = route.params;
   const { CoachTypeData } = route.params;
-  const {ServiceData} = route.params;
+  const { ServiceData } = route.params;
   const ServiceList = ServiceData.map((item, index) => ({
     id: index + 1,
     name: item,
-  })); 
+  }));
 
   const [visible, setVisible] = useState(false);
   const show = () => {
@@ -60,7 +60,7 @@ export default function Tracking({ route, navigation }) {
     show();
   };
 
-  const contentC = "Are you sure to delete coach?"
+  const contentC = "Are you sure to delete coach?";
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -71,21 +71,21 @@ export default function Tracking({ route, navigation }) {
 
   const confirm = async () => {
     hideC();
-    hide()
+    hide();
     try {
-      const coachIdToDelete = id; 
-      console.log(coachIdToDelete)
+      const coachIdToDelete = id;
+      console.log(coachIdToDelete);
       const deletedCoach = await deleteCoach(coachIdToDelete);
-      console.log('Deleted Coach:', deletedCoach);
-      showSuccess()
+      console.log("Deleted Coach:", deletedCoach);
+      showSuccess();
       hide();
       navigation.goBack();
       // Perform other actions
     } catch (error) {
-      showFail()
-      console.log(error)
+      showFail();
+      console.log(error);
     }
-  }
+  };
 
   const navigateScreen = "EditCoach";
 
@@ -110,13 +110,40 @@ export default function Tracking({ route, navigation }) {
 
   const deleteHandler = async () => {
     showC();
+  };
+  function Separator() {
+    return (
+      <View
+        style={{
+          overflow: "hidden",
+          marginTop: 20,
+          width: 250,
+          alignSelf: "center",
+        }}
+      >
+        <View
+          style={{
+            borderStyle: "dashed",
+            borderWidth: 2.5,
+            borderColor: "black",
+            margin: -2,
+            marginTop: 0,
+            opacity: 0.4,
+          }}
+        ></View>
+      </View>
+    );
   }
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-      <ModalConfirm visible={visibleC} hide={hideC} content={contentC} confirm={confirm}/>
-      <ModalSuccess
+        <ModalConfirm
+          visible={visibleC}
+          hide={hideC}
+          content={contentC}
+          confirm={confirm}
+        />
+        <ModalSuccess
           visible={visibleSuccess}
           hide={hideSuccess}
           content={contentSuccess}
@@ -150,8 +177,8 @@ export default function Tracking({ route, navigation }) {
         <ScrollView
           style={styles.body}
           nestedScrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          decelerationRate={"fast"}
+          // showsVerticalScrollIndicator={false}
+          // decelerationRate={"fast"}
         >
           <View style={styles.infoContainer}>
             <Text style={styles.text}>Coach Number: {coachNumber}</Text>
@@ -163,6 +190,161 @@ export default function Tracking({ route, navigation }) {
           <View>
             <Text style={styles.title}>Tracking</Text>
           </View>
+          {/* Process */}
+          <View
+            style={[
+              {
+                gap: 15,
+                alignItems: "center",
+                // marginLeft: 40,
+                backgroundColor: "white",
+                borderRadius: 10,
+                padding: 5,
+                paddingBottom: 10,
+              },
+            ]}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                marginTop: 10,
+                paddingBottom: 20,
+              }}
+            >
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 15,
+                }}
+              >
+                <Image
+                  style={{ width: 27, height: 40 }}
+                  source={require("../../../icon/position.png")}
+                />
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    {
+                      marginTop: 5,
+                      fontWeight: "500",
+                    },
+                    {
+                      maxWidth: 60,
+                    },
+                  ]}
+                >
+                  {/* {tripInfo?.departurePlace} */}
+                  Long An
+                </Text>
+              </View>
+              <View
+                style={{
+                  justifyContent: "flex-end",
+                  marginLeft: -18,
+                  marginRight: -15,
+                  paddingBottom: 18,
+                }}
+              >
+                <View style={{ zIndex: 1 }}>
+                  <Progress.Bar
+                    progress={0}
+                    width={250}
+                    height={6}
+                    borderWidth={0}
+                    color="#12d252"
+                  />
+                </View>
+                <View
+                  style={{
+                    position: "absolute",
+                    zIndex: 0,
+                    right: 0,
+                    // left: 20,
+                    left: 0,
+                    top: 30,
+                    bottom: 0,
+                  }}
+                >
+                  <Text
+                    style={{
+                      alignSelf: "center",
+                      fontSize: 15,
+                      fontWeight: "600",
+                    }}
+                  >
+                    {/* {(tripInfo?.distance * progressValue).toFixed(
+                                  1
+                                )}{" "} */}
+                    {0} km
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    position: "absolute",
+                    bottom: 19,
+                    zIndex: 0,
+                  }}
+                >
+                  <Separator />
+                </View>
+              </View>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: -25,
+                }}
+              >
+                <Image
+                  style={{ width: 27, height: 40 }}
+                  source={require("../../../icon/position.png")}
+                />
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    {
+                      maxWidth: 100,
+                      color: "black",
+                      marginBottom: -14,
+                      marginLeft: 0,
+                      fontWeight: "500",
+                      fontSize: 15,
+                      marginTop: 5,
+                    },
+                  ]}
+                >
+                  {/* {tripInfo?.arrivalPlace} */}
+                  Hồ Chí Minh
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  position: "absolute",
+                  zIndex: 0,
+                  right: 0,
+                  left: 0,
+                  top: 65,
+                  bottom: 0,
+                }}
+              >
+                <Text
+                  style={{
+                    alignSelf: "center",
+                    fontSize: 15,
+                    fontWeight: "600",
+                    opacity: 0.5,
+                  }}
+                >
+                  {/* {tripInfo?.distance} km */}
+                  100 km
+                </Text>
+              </View>
+            </View>
+          </View>
+          {/* Process */}
           {/* <View></View>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Driver & Coach Assistant</Text>

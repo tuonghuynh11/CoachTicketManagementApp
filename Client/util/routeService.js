@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const baseURL = "https://coach-ticket-management-api.onrender.com";
@@ -8,9 +9,10 @@ const routeService = axios.create({
 
 routeService.interceptors.request.use(
   async (config) => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJhZG1pbiIsInJvbGUiOnsiaWQiOiIzIiwicm9sZU5hbWUiOiJBZG1pbiJ9LCJpYXQiOjE3MDIyMjE0MjYsImV4cCI6MTcwMjIyNTAyNn0.yJabeqKWZVsSeaWQ6Tt8IyTmXHWBypieGHrIE_xNgIQ";
+    const token = await AsyncStorage.getItem("token");
+
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `${token}`;
     }
     return config;
   },
@@ -75,10 +77,13 @@ export const deleteRoute = async (routeId) => {
 
 export const patchRoute = async (routeId, updatedRouteData) => {
   try {
-    const response = await routeService.patch(`/api/routes/${routeId}`, updatedRouteData); 
+    const response = await routeService.patch(
+      `/api/routes/${routeId}`,
+      updatedRouteData
+    );
     return response.data;
   } catch (error) {
-    console.error('Error patching route:', error);
+    console.error("Error patching route:", error);
     throw error;
   }
 };

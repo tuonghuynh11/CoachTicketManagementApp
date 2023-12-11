@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   Keyboard,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -26,15 +26,14 @@ import * as ImagePicker from "expo-image-picker";
 
 DropDownPicker.setListMode("SCROLLVIEW");
 
-export default function EditStaffInfo({route}) {
-
+export default function EditStaffInfo({ route }) {
   //const {image} = route.params;
-  const {fullName} = route.params;
-  const {email} = route.params;
-  const {phoneNumber} = route.params;
-  const {gender} = route.params;
-  const {positionId} = route.params;
-  const {UserAccountData} = route.params;
+  const { fullName } = route.params;
+  const { email } = route.params;
+  const { phoneNumber } = route.params;
+  const { gender } = route.params;
+  const { positionId } = route.params;
+  const { UserAccountData } = route.params;
 
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState(positionId.toString());
@@ -44,8 +43,6 @@ export default function EditStaffInfo({route}) {
     { label: "Coach Assistant", value: "3" },
     { label: "Manager", value: "4" },
   ];
-
-  
 
   const [isOpenGender, setIsOpenGender] = useState(false);
   const [currentValueGender, setCurrentValueGender] = useState(gender);
@@ -92,24 +89,21 @@ export default function EditStaffInfo({route}) {
     setValidatePhone(true);
   };
   const saveHadler = async () => {
-    if(fullName2 == '') {
+    if (fullName2 == "") {
       setValidateFullName2(false);
-    }
-    else{
+    } else {
       setValidateFullName2(true);
     }
 
-    if(email2 == '') {
+    if (email2 == "") {
       setValidateEmail(false);
-    }
-    else{
+    } else {
       setValidateEmail(true);
     }
 
-    if(phone == '') {
+    if (phone == "") {
       setValidatePhone(false);
-    }
-    else{
+    } else {
       setValidatePhone(true);
     }
     if (currentValue == "") {
@@ -122,29 +116,35 @@ export default function EditStaffInfo({route}) {
     } else {
       setValidateGender(true);
     }
-    if(fullName2 != '' && email2 != '' && phone != '' && currentValue != "" && currentValueGender != ""){
-      try{
+    if (
+      fullName2 != "" &&
+      email2 != "" &&
+      phone != "" &&
+      currentValue != "" &&
+      currentValueGender != ""
+    ) {
+      try {
         setIndicator(true);
         const data = {
           fullName: fullName,
           email: email2,
-          phone:phone,
+          phone: phone,
           currentValue: currentValue,
           currentValueGender: currentValueGender,
           image: image,
-          id: UserAccountData.id
-        }
+          id: UserAccountData.id,
+        };
         // console.log(data);
         const updatedStaff = await updateStaffWithImage(data);
         console.log(updatedStaff);
         setIndicator(false);
         showSuccess();
-      }catch(error){
+      } catch (error) {
         console.log(error);
         showFail();
       }
     }
-  }
+  };
 
   const [image, setImage] = useState(UserAccountData.avatar);
   const uploadImage = async (mode) => {
@@ -199,9 +199,17 @@ export default function EditStaffInfo({route}) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-      <ModalSuccess visible={visibleSuccess} hide={hideSuccess} content={contentS}/>
+        <ModalSuccess
+          visible={visibleSuccess}
+          hide={hideSuccess}
+          content={contentS}
+        />
         <ModalFail visible={visibleFail} hide={hideFail} content={contentF} />
-        <ActivityIndicator style={styles.indicator} size={"large"} animating={indicator}/>
+        <ActivityIndicator
+          style={styles.indicator}
+          size={"large"}
+          animating={indicator}
+        />
         <ScrollView
           style={styles.body}
           nestedScrollEnabled={true}
@@ -231,31 +239,45 @@ export default function EditStaffInfo({route}) {
           <View>
             <Text style={styles.textLabel}>Full Name</Text>
             <TextInput
-              style={validateFullName2 == true ? styles.textInput:styles.textInputWrong}
+              style={
+                validateFullName2 == true
+                  ? styles.textInput
+                  : styles.textInputWrong
+              }
               placeholder="Enter Full Name"
               value={fullName2}
               onChangeText={fullNameHandler}
             ></TextInput>
-            {!validateFullName2 && <Text style={styles.validateText}>This field can't be empty</Text>}
+            {!validateFullName2 && (
+              <Text style={styles.validateText}>This field can't be empty</Text>
+            )}
             <Text style={styles.textLabel}>Email</Text>
             <TextInput
-              style={validateEmail == true ? styles.textInput:styles.textInputWrong}
+              style={
+                validateEmail == true ? styles.textInput : styles.textInputWrong
+              }
               placeholder="Enter Email"
               value={email2}
               onChangeText={emailHandler}
             ></TextInput>
-            {!validateEmail && <Text style={styles.validateText}>This field can't be empty</Text>}
+            {!validateEmail && (
+              <Text style={styles.validateText}>This field can't be empty</Text>
+            )}
             <Text style={styles.textLabel}>Phone Number</Text>
             <TextInput
-              style={validatePhone == true ? styles.textInput:styles.textInputWrong}
+              style={
+                validatePhone == true ? styles.textInput : styles.textInputWrong
+              }
               placeholder="Enter Phone Number"
               keyboardType="numeric"
               value={phone}
               onChangeText={phoneHandler}
             ></TextInput>
-            {!validatePhone && <Text style={styles.validateText}>This field can't be empty</Text>}
+            {!validatePhone && (
+              <Text style={styles.validateText}>This field can't be empty</Text>
+            )}
             <Text style={styles.textLabel}>Position</Text>
-            <View style={styles.dropDownStyle}>
+            <View style={[styles.dropDownStyle, { zIndex: 1 }]}>
               <DropDownPicker
                 items={items}
                 open={isOpen}
@@ -270,16 +292,18 @@ export default function EditStaffInfo({route}) {
                 nestedScrollEnabled={true}
               />
             </View>
-            {!validatePosition && <Text style={styles.validateText}>Please choose position</Text>}
+            {!validatePosition && (
+              <Text style={styles.validateText}>Please choose position</Text>
+            )}
             <Text style={styles.textLabel}>Gender</Text>
-            <View style={styles.dropDownStyle}>
+            <View style={[styles.dropDownStyle]}>
               <DropDownPicker
                 items={itemsGender}
                 open={isOpenGender}
                 setOpen={() => setIsOpenGender(!isOpenGender)}
                 value={currentValueGender}
                 setValue={(val) => setCurrentValueGender(val)}
-                maxHeight={150}
+                maxHeight={100}
                 autoScroll
                 placeholder="Select Gender"
                 showTickIcon={true}
@@ -295,6 +319,7 @@ export default function EditStaffInfo({route}) {
             style={({ pressed }) => [
               styles.saveButton,
               pressed && { opacity: 0.85 },
+              { zIndex: -1 },
             ]}
             onPress={saveHadler}
           >
@@ -320,7 +345,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
     marginBottom: 5,
-    marginTop: 10
+    marginTop: 10,
   },
   textInput: {
     backgroundColor: "white",
@@ -331,7 +356,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 40,
     borderRadius: 10,
-    borderColor: '#283663',
+    borderColor: "#283663",
     borderWidth: 1,
     color: "#283663",
   },
@@ -344,16 +369,15 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 40,
     borderRadius: 10,
-    borderColor: '#EB3223',
+    borderColor: "#EB3223",
     borderWidth: 1,
     color: "#283663",
-    
   },
   textLabel: {
     color: "#283663",
     marginLeft: 34,
     marginBottom: 5,
-    marginTop: 10
+    marginTop: 10,
   },
   startDropDown: {
     zIndex: 100,
@@ -373,7 +397,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginBottom: 10,
     borderRadius: 20,
-    marginTop: 30
+    marginTop: 30,
   },
   saveText: {
     fontSize: 16,
@@ -407,7 +431,7 @@ const styles = StyleSheet.create({
   indicator: {
     position: "absolute",
     zIndex: 1000,
-    right: '46%',
-    top: "50%"
-  }
+    right: "46%",
+    top: "50%",
+  },
 });
