@@ -755,7 +755,7 @@ function HomeScreen({ navigation }) {
                   <FlatList
                     data={locations}
                     keyExtractor={(item, index) => index}
-                    showsVerticalScrollIndicator="false"
+                    showsVerticalScrollIndicator={false}
                     renderItem={renderLocationItem}
                   />
                 </View>
@@ -770,7 +770,7 @@ function HomeScreen({ navigation }) {
           source={require("../../../assets/coachBackground.png")}
         />
         <View style={styles.imageContainer}></View>
-        <ScrollView style={styles.root} showsVerticalScrollIndicator="false">
+        <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
           <View style={styles.secondContainer}>
             <View style={styles.headerContainer}>
               <View>
@@ -1197,7 +1197,7 @@ function HomeScreen({ navigation }) {
                 data={popularRoutes}
                 keyExtractor={(item, index) => item.id}
                 renderItem={renderRouteItem}
-                showsHorizontalScrollIndicator="false"
+                showsHorizontalScrollIndicator={false}
               />
             </View>
             <View style={styles.routeList}>
@@ -1207,7 +1207,7 @@ function HomeScreen({ navigation }) {
                 keyExtractor={(item, index) => item.id}
                 data={recentSearchRoutes}
                 renderItem={renderRouteItem}
-                showsHorizontalScrollIndicator="false"
+                showsHorizontalScrollIndicator={false}
               />
             </View>
             <View style={styles.routeList}>
@@ -1217,7 +1217,7 @@ function HomeScreen({ navigation }) {
                 keyExtractor={(item, index) => item.id}
                 data={suggestRoutes}
                 renderItem={renderRouteItem}
-                showsHorizontalScrollIndicator="false"
+                showsHorizontalScrollIndicator={false}
               />
             </View>
           </View>

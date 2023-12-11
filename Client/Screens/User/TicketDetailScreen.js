@@ -1024,7 +1024,7 @@ function TicketDetailScreen({ navigation, route }) {
                     { backgroundColor: GlobalColors.contentBackground },
                   ]}
                 >
-                  <ScrollView showsVerticalScrollIndicator="false">
+                  <ScrollView showsVerticalScrollIndicator={false}>
                     <View>
                       {/* Trip Information */}
                       <View
@@ -1532,7 +1532,7 @@ function TicketDetailScreen({ navigation, route }) {
                       { backgroundColor: GlobalColors.contentBackground },
                     ]}
                   >
-                    <ScrollView showsVerticalScrollIndicator="false">
+                    <ScrollView showsVerticalScrollIndicator={false}>
                       <View>
                         {/* Trip Information */}
                         <View

@@ -233,21 +233,24 @@ const StatisticsScreen = function ({ navigation }) {
         </View>
         <View>
           <Text>PIE CHART</Text>
-          <PieChart
-            data={piedata}
-            width={Dimensions.get("window").width}
-            height={220}
-            chartConfig={{
-              backgroundGradientFrom: "white",
-              backgroundGradientTo: "white",
-              color: (opacity = 1) => `rgba(1, 1, 1, ${opacity})`,
-            }}
-            accessor={"population"}
-            backgroundColor={"transparent"}
-            paddingLeft={"15"}
-            center={[10, 50]}
-            absolute
-          />
+          <View>
+
+            <PieChart
+              data={piedata}
+              width={Dimensions.get("window").width-20}
+              height={200}
+              chartConfig={{
+                backgroundGradientFrom: "white",
+                backgroundGradientTo: "white",
+                color: (opacity = 1) => `rgba(1, 1, 1, ${opacity})`,
+              }}
+              accessor={"population"}
+              backgroundColor={"transparent"}
+              paddingLeft={"15"}
+              center={[10, 50]}
+              absolute
+            />
+          </View>
         </View>
         {/* <View>
         <Text>Bezier Line Chart</Text>

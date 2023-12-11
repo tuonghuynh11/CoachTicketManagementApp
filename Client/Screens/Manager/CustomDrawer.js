@@ -71,7 +71,7 @@ export default function CustomDrawer(props) {
             bottom: 0,
             height: "100%",
             width: "150%",
-            zIndex: 1,
+            zIndex: 100,
             backgroundColor: GlobalColors.lightBackground,
             opacity: 0.9,
           }}
@@ -98,10 +98,11 @@ export default function CustomDrawer(props) {
           }, 2000);
         }}
       />
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1}}>
         <DrawerContentScrollView
           {...props}
           contentContainerStyle={{ backgroundColor: "#72C6A1" }}
+          style={{zIndex: 100}}
         >
           <ImageBackground
             source={require("../../../assets/coachDrawer.png")}
@@ -153,8 +154,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   botView: {
+    flex: 2,
     backgroundColor: "white",
     paddingTop: 55,
+    paddingBottom: '167%'
   },
   custom: {
     padding: 20,
@@ -163,5 +166,6 @@ const styles = StyleSheet.create({
   },
   press: {
     flexDirection: "row",
+    backgroundColor: "white",
   },
 });
