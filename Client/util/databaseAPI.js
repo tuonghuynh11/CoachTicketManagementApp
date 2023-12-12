@@ -26,12 +26,12 @@ export async function Login(user) {
     .post(`${BASE_URL}/auth/login`, loginUser)
     .then((res) => {
       console.log("login: ", res.data.data);
-      const temp = res.request.responseHeaders["Set-Cookie"]?res.request.responseHeaders["Set-Cookie"]:res.request.responseHeaders["set-cookie"]
+      const temp = res.request.responseHeaders["Set-Cookie"]
+        ? res.request.responseHeaders["Set-Cookie"]
+        : res.request.responseHeaders["set-cookie"];
       return {
         accessToken: res.data.data["access_token"],
-        refreshToken: temp
-          .split("=")[1]
-          .split(";")[0],
+        refreshToken: temp.split("=")[1].split(";")[0],
         userId: res.data.data.userId,
         roleId: res.data.data.role.id,
         userName: res.data.data.userName,
@@ -103,13 +103,12 @@ export async function ResetToken(user) {
       },
     })
     .then((res) => {
-      const temp = res.request.responseHeaders["Set-Cookie"]?res.request.responseHeaders["Set-Cookie"]:res.request.responseHeaders["set-cookie"]
+      const temp = res.request.responseHeaders["Set-Cookie"]
+        ? res.request.responseHeaders["Set-Cookie"]
+        : res.request.responseHeaders["set-cookie"];
       return {
-        
         accessToken: res.data.data["accessToken"],
-        refreshToken: temp
-          .split("=")[1]
-          .split(";")[0],
+        refreshToken: temp.split("=")[1].split(";")[0],
       };
     })
     .catch((err) => {
@@ -447,7 +446,7 @@ export async function createBookingSession(token, body) {
       return response.data.data;
     })
     .catch((err) => {
-      console.log("create-booking err: ", err);
+      console.log("create-booking err: ", err.response.data);
       return null;
     });
   // console.log(res.data);
@@ -466,13 +465,16 @@ export async function cancelBookingSession(token, body) {
   //   "reservations": ["2", "3"],
   //   "reservationsRoundTrip": ["1", "2"]
   // }
-
+  let send = {
+    reservations: body.reservations,
+  };
+  if (body?.reservationsRoundTrip) {
+    send.reservationsRoundTrip = body.reservationsRoundTrip;
+  }
   var res = await axios({
     url: `${BASE_URL}/tickets/cancel-booking`,
     method: "delete",
-    data: {
-      reservations: body.reservations,
-    },
+    data: send,
     headers: { Authorization: `${token}` },
   })
     .then((response) => {
@@ -482,7 +484,7 @@ export async function cancelBookingSession(token, body) {
     .catch((err) => {
       console.log("cancel-booking err: ", err.response.data);
       console.log("cancel-booking err config: ", err.config);
-      return -1;
+      return null;
     });
 
   // console.log(res.data);

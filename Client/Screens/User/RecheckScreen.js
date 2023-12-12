@@ -101,11 +101,34 @@ function RecheckScreen({ navigation, route }) {
               color={"white"}
               icon={"arrow-back-outline"}
               size={30}
-              onPress={() => {
+              onPress={async () => {
                 console.log("Press");
                 navigation.goBack();
                 bookingCtx.stopTimeout();
                 bookingCtx.resetTimeout();
+                //CancelBooking
+                let cancelBody = {
+                  reservations: bookingCtx?.bookingInfoTemp?.reservations,
+                };
+                if (bookingCtx?.bookingInfoTemp?.reservationsRoundTrip) {
+                  cancelBody.reservationsRoundTrip =
+                    bookingCtx?.bookingInfoTemp?.reservationsRoundTrip;
+                }
+                console.log("cancel", bookingCtx.bookingInfoTemp);
+
+                const res = await cancelBookingSession(
+                  authCtx.token,
+                  cancelBody
+                );
+                if (!res) {
+                  Alert.alert(
+                    "Connection Error",
+                    "Please check your internet connection"
+                  );
+                }
+                console.log("Cancel Booking Response code", res);
+                //CancelBooking
+
                 // setTimeout(() => {
                 //   navigation.goBack();
                 // }, 1000);
@@ -115,7 +138,7 @@ function RecheckScreen({ navigation, route }) {
         );
       },
     });
-  }, []);
+  }, [bookingCtx.bookingInfoTemp]);
 
   //Create Booking Session
   useEffect(() => {
@@ -169,6 +192,7 @@ function RecheckScreen({ navigation, route }) {
           };
         }
       }
+      console.log("createBookingSessionBody:", createBookingSessionBody);
       const res = await createBookingSession(
         authCtx.token,
         createBookingSessionBody
@@ -210,8 +234,10 @@ function RecheckScreen({ navigation, route }) {
       setBookingInfoTemp(bookingInfoTemp);
       bookingCtx.setBookingInfoTemp(bookingInfoTemp);
     }
-    createBookingSessions();
-  }, []);
+    if (isFocused) {
+      createBookingSessions();
+    }
+  }, [isFocused]);
   //Timeout
   useEffect(() => {
     // //get discount list from database
@@ -481,7 +507,7 @@ function RecheckScreen({ navigation, route }) {
       bodyRequest.discountId = discount.id;
     }
 
-    bodyRequest.paymentId = payType; // 1: pay later, 2: pay now credit card
+    bodyRequest.paymentId = payType.toString(); // 1: pay later, 2: pay now credit card
     bodyRequest.passengers = temp?.mainTripPassengers?.map((item) => {
       return {
         address: item.address,

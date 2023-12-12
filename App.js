@@ -191,6 +191,8 @@ export default function App() {
               component={SelectPointScreen}
               options={{
                 title: "Select Pick Up Point",
+                gestureEnabled: false,
+
                 headerStyle: {
                   backgroundColor: GlobalColors.headerColor,
                 },
@@ -213,6 +215,8 @@ export default function App() {
               component={PassengerDetailsScreen}
               options={{
                 title: "Passenger Details",
+                gestureEnabled: false,
+
                 headerStyle: {
                   backgroundColor: GlobalColors.headerColor,
                 },
@@ -234,6 +238,8 @@ export default function App() {
               component={RecheckScreen}
               options={{
                 title: "Recheck Information",
+                gestureEnabled: false,
+
                 headerStyle: {
                   backgroundColor: GlobalColors.headerColor,
                 },
@@ -256,6 +262,8 @@ export default function App() {
               component={PaymentScreen}
               options={{
                 title: "Payment",
+                gestureEnabled: false,
+
                 headerStyle: {
                   backgroundColor: GlobalColors.headerColor,
                 },
@@ -299,6 +307,8 @@ export default function App() {
               component={ElectronicTicketScreen}
               options={{
                 title: "E-Tickets",
+                gestureEnabled: false,
+
                 headerStyle: {
                   backgroundColor: GlobalColors.headerColor,
                 },
@@ -901,7 +911,7 @@ export default function App() {
             userName: userName,
             refreshToken: refreshToken,
           });
-          
+
           authCtx.authenticate(
             newTokens.accessToken,
             newTokens.refreshToken,

@@ -181,7 +181,7 @@ function TicketItemNew({
       )}
 
       <View style={styles.root}>
-        {!isHistory && (
+        {/* {!isHistory && (
           <TouchableOpacity
             style={[
               {
@@ -198,7 +198,7 @@ function TicketItemNew({
           >
             <Ionicons name="ios-close-circle-outline" size={28} color="red" />
           </TouchableOpacity>
-        )}
+        )} */}
         <View style={styles.subRoot}>
           <View ref={captureRefHandler} style={styles.subRoot1}>
             <View

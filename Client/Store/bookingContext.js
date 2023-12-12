@@ -34,7 +34,7 @@ function BookingContextProvider({ children }) {
   const [bookingInfoTemp, setBookingInfosTemp] = useState({});
   const navigation = useNavigation();
   function IsTimeout(timeout) {
-    // setIsTimeout(timeout);
+    setIsTimeout(timeout);
   }
   function resetTimeout() {
     setTimeout(300);

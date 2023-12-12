@@ -65,6 +65,9 @@ function TicketDetailScreen({ navigation, route }) {
   const [progressValue, setProgressValue] = useState(0.5);
 
   const [tabScreenIndex, setTabScreenIndex] = useState(0);
+  const [mainTimeStart, setMainTimeStart] = useState(0);
+  const [roundTimeStart, setRoundTimeStart] = useState(0);
+
   async function verifyPermission() {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status === PermissionStatus.UNDETERMINED) {
@@ -265,7 +268,7 @@ function TicketDetailScreen({ navigation, route }) {
       availableSeats: "4",
       distance: temp.ScheduleData.RouteData.distance,
       services: temp.ScheduleData.CoachData.ServiceData,
-      status: temp.status,
+      status: temp?.ScheduleData?.status,
       gate: temp?.ScheduleData?.gate,
       passengers: temp?.reservationId,
       roundTripDate:
@@ -317,6 +320,14 @@ function TicketDetailScreen({ navigation, route }) {
       departurePlacePosition: temp.ScheduleData.StartPlaceData,
       arrivalPlacePosition: temp.ScheduleData.ArrivalPlaceData,
     };
+    setMainTimeStart(
+      Math.abs(
+        calculateTimeDifferenceV3(
+          new Date(),
+          new Date(temp.ScheduleData.departureTime)
+        )
+      )
+    );
     setTripInfo(trip);
     //Main Trip
 
@@ -341,7 +352,8 @@ function TicketDetailScreen({ navigation, route }) {
         coachCapacity: temp1.ScheduleData.CoachData.capacity,
         coachType: temp1.ScheduleData.CoachData.CoachTypeData.typeName,
         availableSeats: "4",
-        status: temp1.status,
+        status: temp1?.ScheduleData?.status,
+        gate: temp1?.ScheduleData?.gate,
         distance: temp1.ScheduleData.RouteData.distance,
         services: temp1.ScheduleData.CoachData?.ServiceData,
         totalPrice: temp1.totalPrice,
@@ -405,8 +417,15 @@ function TicketDetailScreen({ navigation, route }) {
       );
       setRoundTripGroupTickets(groupRoundTripTicket);
       setRoundTripInfo(roundTrip);
+      setRoundTimeStart(
+        Math.abs(
+          calculateTimeDifferenceV3(
+            new Date(),
+            new Date(temp1.ScheduleData.departureTime)
+          )
+        )
+      );
     }
-
     //Round Trip
   }, []);
 
@@ -424,7 +443,20 @@ function TicketDetailScreen({ navigation, route }) {
     if (minutes === 0) return `${0}`;
     return `${minutes}`;
   }
+  function calculateTimeDifferenceV3(date1, date2) {
+    // Calculate the time difference in milliseconds
+    const timeDifferenceMillis = date2 - date1;
+    // Calculate hours, minutes, and seconds from milliseconds
+    const hours = Math.floor(timeDifferenceMillis / (1000 * 60 * 60));
+    const minutes = Math.floor(
+      (timeDifferenceMillis % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    const seconds = Math.floor((timeDifferenceMillis % (1000 * 60)) / 1000);
 
+    // Return the time difference as an object
+    if (hours === 0) return 0;
+    return hours;
+  }
   function calculateTimeDifferenceV2(date1, date2) {
     // Calculate the time difference in milliseconds
     const timeDifferenceMillis = date2 - date1;
@@ -1239,16 +1271,14 @@ function TicketDetailScreen({ navigation, route }) {
                                     styles.subTitle,
                                     {
                                       maxWidth: 110,
-                                      color: tripInfo?.shuttleRoute
-                                        ? GlobalColors.button
-                                        : "gray",
-                                      fontWeight:
-                                        tripInfo?.shuttleRoute && "bold",
+                                      color: GlobalColors.button,
+
+                                      fontWeight: "bold",
                                     },
                                   ]}
                                   numberOfLines={1}
                                 >
-                                  Gate 13
+                                  Gate {tripInfo?.gate ? tripInfo.gate : 0}
                                 </Text>
                               </Pressable>
                             </View>
@@ -1282,17 +1312,28 @@ function TicketDetailScreen({ navigation, route }) {
                                   style={[
                                     styles.subTitle,
                                     {
+                                      // 0: gray, 1: red, 2: yellow, 3: green
                                       maxWidth: 110,
-                                      color: tripInfo?.shuttleRoute
-                                        ? GlobalColors.button
-                                        : "gray",
-                                      fontWeight:
-                                        tripInfo?.shuttleRoute && "bold",
+                                      color:
+                                        tripInfo?.status == 0
+                                          ? "gray"
+                                          : tripInfo?.status == 1
+                                          ? "red"
+                                          : tripInfo?.status == 2
+                                          ? "#d5df08ff"
+                                          : GlobalColors.button,
+                                      fontWeight: "bold",
                                     },
                                   ]}
                                   numberOfLines={1}
                                 >
-                                  UnStarting
+                                  {tripInfo?.status == 0
+                                    ? "Unready"
+                                    : tripInfo?.status == 1
+                                    ? "Ready"
+                                    : tripInfo?.status == 2
+                                    ? "Arriving"
+                                    : "Finished"}{" "}
                                 </Text>
                               </Pressable>
                             </View>
@@ -1755,16 +1796,16 @@ function TicketDetailScreen({ navigation, route }) {
                                       styles.subTitle,
                                       {
                                         maxWidth: 110,
-                                        color: tripInfo?.shuttleRoute
-                                          ? GlobalColors.button
-                                          : "gray",
-                                        fontWeight:
-                                          tripInfo?.shuttleRoute && "bold",
+                                        color: GlobalColors.button,
+                                        fontWeight: "bold",
                                       },
                                     ]}
                                     numberOfLines={1}
                                   >
-                                    Gate 13
+                                    Gate{" "}
+                                    {roundTripInfo?.gate
+                                      ? roundTripInfo.gate
+                                      : 0}
                                   </Text>
                                 </Pressable>
                               </View>
@@ -1799,16 +1840,26 @@ function TicketDetailScreen({ navigation, route }) {
                                       styles.subTitle,
                                       {
                                         maxWidth: 110,
-                                        color: roundTripInfo?.shuttleRoute
-                                          ? GlobalColors.button
-                                          : "gray",
-                                        fontWeight:
-                                          roundTripInfo?.shuttleRoute && "bold",
+                                        color:
+                                          roundTripInfo?.status == 0
+                                            ? "gray"
+                                            : roundTripInfo?.status == 1
+                                            ? "red"
+                                            : roundTripInfo?.status == 2
+                                            ? "#d5df08ff"
+                                            : GlobalColors.button,
+                                        fontWeight: "bold",
                                       },
                                     ]}
                                     numberOfLines={1}
                                   >
-                                    UnStarting
+                                    {roundTripInfo?.status == 0
+                                      ? "Unready"
+                                      : roundTripInfo?.status == 1
+                                      ? "Ready"
+                                      : roundTripInfo?.status == 2
+                                      ? "Arriving"
+                                      : "Finished"}{" "}
                                   </Text>
                                 </Pressable>
                               </View>
@@ -2409,6 +2460,13 @@ function TicketDetailScreen({ navigation, route }) {
                   setIsRating(false);
                   setIsShowModal((curr) => !curr);
                 }}
+                disabled={
+                  tabScreenIndex == 0 && tripInfo?.status == 0
+                    ? true
+                    : tabScreenIndex == 1 && roundTripInfo?.status == 0
+                    ? true
+                    : false
+                }
               >
                 <Text
                   style={{
