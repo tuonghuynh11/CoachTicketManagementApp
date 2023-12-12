@@ -198,6 +198,8 @@ function EditProfileScreen({ navigation, route }) {
       if (res === null) {
         throw new Error("Something went wrong");
       }
+      setPopUpType("Success");
+
       setIsPopUpVisible((curr) => !curr);
     } catch (error) {
       //Failure
@@ -241,7 +243,7 @@ function EditProfileScreen({ navigation, route }) {
       />
       <PopUp
         isVisible={isPopUpVisible}
-        isNotButton
+        isNotButton={isUpdatePassword && popUpType === "Success"}
         type={popUpType}
         title={popUpType == "Success" ? "Success" : "Failure"}
         textBody={
