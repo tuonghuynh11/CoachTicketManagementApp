@@ -901,7 +901,7 @@ export default function App() {
             userName: userName,
             refreshToken: refreshToken,
           });
-          
+
           authCtx.authenticate(
             newTokens.accessToken,
             newTokens.refreshToken,
@@ -911,7 +911,7 @@ export default function App() {
             idPosition
           );
         }
-        //authCtx.logout();
+        // authCtx.logout();
         setIsTryLoading(false);
       }
       fetchToken();

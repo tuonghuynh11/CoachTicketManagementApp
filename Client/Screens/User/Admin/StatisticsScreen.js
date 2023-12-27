@@ -60,9 +60,9 @@ const StatisticsScreen = function ({ navigation }) {
       "Da Nang - TPHCM",
       "Da Nang - Hanoi",
       "Quang Nam - Hanoi",
-      "Ninh BInh - TPHCM",
-      "May",
-      "June",
+      "Ninh Binh - TPHCM",
+      "Hanoi - TPHCM",
+      "Hanoi - TPHCM",
       "July",
       "August",
       "September",
@@ -234,10 +234,9 @@ const StatisticsScreen = function ({ navigation }) {
         <View>
           <Text>PIE CHART</Text>
           <View>
-
             <PieChart
               data={piedata}
-              width={Dimensions.get("window").width-20}
+              width={Dimensions.get("window").width - 20}
               height={200}
               chartConfig={{
                 backgroundGradientFrom: "white",
