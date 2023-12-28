@@ -160,7 +160,7 @@ function EditProfileScreen({ navigation, route }) {
       setUserNameIsInvalid(!useNameIsValid);
       setFullNameIsInvalid(!fullNameIsValid);
       setPhoneNumberIsInvalid(!phoneNumberIsValid);
-      setAddressIsInvalid(!addressIsInvalid);
+      setAddressIsInvalid(!addressIsValid);
       return;
     }
     ///Call APi to update
