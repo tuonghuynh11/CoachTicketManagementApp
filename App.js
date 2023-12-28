@@ -921,7 +921,7 @@ export default function App() {
             idPosition
           );
         }
-        //authCtx.logout();
+        // authCtx.logout();
         setIsTryLoading(false);
       }
       fetchToken();

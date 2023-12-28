@@ -2,6 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import { images } from "../../../../assets/Assets";
 import { useIsFocused, useRoute } from "@react-navigation/native";
 import React, { useState, useEffect, createContext, useContext } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 //Them mot nut o mot goc de xac nhan khi chuyen di da xong
 import {
   StyleSheet,
@@ -12,6 +14,7 @@ import {
   FlatList,
   SafeAreaView,
   TouchableHighlight,
+  Pressable,
 } from "react-native";
 import CheckBox from "expo-checkbox";
 const DATA = [
@@ -82,11 +85,20 @@ const DATA = [
 function Passengers({ navigation }) {
   const route = useRoute();
   console.log(route);
+  async function getPosition() {
+    return await AsyncStorage.getItem("idPosition");
+  }
+  let positionId = -1;
+  const from = route.params?.from;
   const ticketList = route.params.ticketList;
   const tripId = route.params.tripId;
   let seatList = [];
   const isFocused = useIsFocused();
   useEffect(() => {
+    getPosition().then((response) => {
+      positionId = response;
+    });
+
     ticketList.forEach((ticket) => {
       let i = 0;
       for (i = 0; i < ticket.seatNumber.length; i++) {
@@ -115,46 +127,62 @@ function Passengers({ navigation }) {
   const [seatInfo, setSeatInfo] = useState(seatList);
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        style={{
-          padding: 10,
-          marginTop: 10,
-          marginStart: 20,
-
-          display: "flex",
-          justifyContent: "flex-start",
-          borderRadius: 30,
-          backgroundColor: "#14dea2",
-        }}
+      <View
+        style={{ justifyContent: "center", flexDirection: "row", padding: 10 }}
       >
-        <Text
-          style={{ textAlign: "center", color: "white" }}
-          onPress={() => {}}
-        >
-          Trip has ended
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          padding: 10,
-          marginTop: 10,
-          marginStart: 250,
-          marginEnd: 20,
-          display: "flex",
-          justifyContent: "flex-end",
-          borderRadius: 30,
-          backgroundColor: "#14dea2",
-        }}
-      >
-        <Text
-          style={{ textAlign: "center", color: "white" }}
+        <Pressable
+          style={{ left: 16, position: "absolute" }}
           onPress={() => {
-            navigation.navigate("Scan Barcode", ticketList);
+            navigation.goBack();
           }}
         >
-          Scan
-        </Text>
-      </TouchableOpacity>
+          <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
+        </Pressable>
+        {from === "history" && (
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              marginTop: 10,
+              marginStart: 20,
+
+              display: "flex",
+              justifyContent: "flex-start",
+              borderRadius: 30,
+              backgroundColor: "#14dea2",
+            }}
+          >
+            <Text
+              style={{ textAlign: "center", color: "white" }}
+              onPress={() => {}}
+            >
+              Trip has ended
+            </Text>
+          </TouchableOpacity>
+        )}
+        {positionId != 2 && from === "current" && (
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              marginTop: 10,
+              marginStart: 250,
+              marginEnd: 20,
+              display: "flex",
+              justifyContent: "flex-end",
+              borderRadius: 30,
+              backgroundColor: "#14dea2",
+            }}
+          >
+            <Text
+              style={{ textAlign: "center", color: "white" }}
+              onPress={() => {
+                navigation.navigate("Scan Barcode", ticketList);
+              }}
+            >
+              Scan
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
       <Text style={styles.text}>
         Seats {" ("} id = {tripId + ")"}
       </Text>

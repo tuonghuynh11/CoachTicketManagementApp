@@ -2,7 +2,9 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { StatusBar } from "expo-status-bar";
 import { images } from "../../../../assets/Assets";
 import { useRoute } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
+import {} from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -14,6 +16,7 @@ import {
   FlatList,
   SafeAreaView,
   ScrollView,
+  Pressable,
 } from "react-native";
 const tickets = [
   {
@@ -32,7 +35,7 @@ const tickets = [
     barcode: "T1245f33",
   },
 ];
-function CheckScreen() {
+function CheckScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState("Not yet scanned");
@@ -40,26 +43,35 @@ function CheckScreen() {
   const route = useRoute();
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Ticket Check</Text>
+      <Pressable
+        style={{ left: 16, position: "absolute" }}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
+      </Pressable>
+      <Text style={styles.text}>Ticket Information</Text>
       <View style={styles.body}>
         <View style={styles.item}>
           <View style={styles.avatarContainer}>
-            <TouchableHighlight>
+            <TouchableHighlight
+              style={{ justifyContent: "center", alignItems: "center" }}
+            >
               <Text style={styles.avatar}> {route.params.seatNum}</Text>
             </TouchableHighlight>
             <View style={{ marginStart: 30 }}>
-              <Text style={{ marginTop: 10 }}> Name: {route.params.name}</Text>
+              <Text style={{ marginTop: 10 }}>Name: {route.params.name}</Text>
 
               <Text style={{ marginTop: 10 }}>
                 Gender: {route.params.gender}
               </Text>
+              <Text style={{ marginTop: 10 }}>
+                Phone number: {route.params.phone}{" "}
+              </Text>
             </View>
           </View>
-          <View style={{ marginStart: 30 }}>
-            <Text style={{ marginTop: 10 }}>
-              Phone number: {route.params.phone}{" "}
-            </Text>
-          </View>
+
           <View
             style={{
               marginTop: 20,
@@ -97,7 +109,12 @@ function CheckScreen() {
             </TouchableOpacity> */}
           </View>
         </View>
-        <TouchableOpacity style={styles.button1}>
+        <TouchableOpacity
+          style={styles.button1}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
           <Text
             color="darkgreen"
             style={{
@@ -106,7 +123,7 @@ function CheckScreen() {
               fontWeight: "bold",
             }}
           >
-            OK
+            BACK
           </Text>
         </TouchableOpacity>
       </View>
@@ -139,13 +156,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   body: {
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 20,
     backgroundColor: "#283663",
-    marginTop: 20,
-    height: "100%",
+    margin: 20,
   },
   item: {
-    marginTop: 20,
+    margin: 20,
     borderRadius: 20,
     backgroundColor: "#D9D9D9",
   },
@@ -154,9 +172,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   avatar: {
+    fontWeight: "900",
+    fontSize: 20,
     height: 90,
     width: 90,
-    borderRadius: 40,
+    padding: 30,
+    alignItems: "center",
+    flex: 3,
   },
   button1: {
     borderRadius: 10,

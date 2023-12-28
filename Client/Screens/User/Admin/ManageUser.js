@@ -162,94 +162,116 @@ function Screen({ navigation }) {
           data={users}
           keyExtractor={(item) => item.userId}
           renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => {
-                console.log(item);
-                navigation.navigate("Profile", {
-                  data_mini: item,
-                });
+            <View
+              style={{
+                flex: 1,
+                borderRadius: 10,
+                elevation: 3,
+                backgroundColor: "#FFFFFF",
+                shadowOffset: { width: 1, height: 1 },
+                shadowColor: "#333333",
+                shadowOpacity: 0.3,
+                shadowRadius: 2,
+                marginHorizontal: 10,
+                marginVertical: 10,
               }}
             >
-              <Text style={{ marginBottom: 10 }}>{item.userId}</Text>
-              <View
-                style={[
-                  styles.avatarContainer,
-                  { justifyContent: "space-between" },
-                ]}
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => {
+                  console.log(item);
+                  navigation.navigate("Profile", {
+                    data_mini: item,
+                  });
+                }}
               >
-                <View>
-                  <Image
-                    source={{ uri: item.UserAccountData.avatar }}
-                    style={styles.avatar}
-                  ></Image>
-                </View>
-                <View>
-                  <Text>
-                    {" "}
-                    Name:{" "}
-                    <Text style={{ fontWeight: "bold" }}>{item.fullName}</Text>
-                  </Text>
-                  <Text> Phone number: {item.phoneNumber}</Text>
-                  <Text> Email: {item.email}</Text>
-                  <Text>Role: {getRoleName(item.UserAccountData.roleId)}</Text>
-                </View>
+                <Text style={{ marginBottom: 10 }}>{item.userId}</Text>
                 <View
-                  style={{ flexDirection: "row", justifyContent: "flex-end" }}
+                  style={[
+                    styles.avatarContainer,
+                    { justifyContent: "space-between" },
+                  ]}
                 >
-                  {item.UserAccountData.roleId == 1 && (
-                    <AntDesign
-                      onPress={() => {
-                        Alert.alert(
-                          "ALERT",
-                          "Do you want to delete this user?",
-                          [
-                            {
-                              text: "No",
-                              onPress: () => {},
-                            },
-                            {
-                              text: "Yes",
-                              onPress: () => {
-                                console.log(item.userId);
-                                const config = {
-                                  headers: {
-                                    Authorization: authCtx.token,
-                                  },
-                                };
-                                axios
-                                  .delete(
-                                    `${images.apiLink}users/${item.userId}`,
-                                    config
-                                  )
-                                  .then((response) => {
-                                    setUsers(
-                                      users.filter(
-                                        (user) => user.userId != item.userId
-                                      )
-                                    );
-                                  })
-                                  .catch((error) => {
-                                    if (error.request)
-                                      console.log(error.request);
-                                    else if (error.response)
-                                      console.log(error.response);
-                                  });
+                  <View>
+                    <Image
+                      source={{ uri: item.UserAccountData.avatar }}
+                      style={styles.avatar}
+                    ></Image>
+                  </View>
+                  <View style={{ flex: 7, paddingRight: 15 }}>
+                    <Text style={styles.text2}>
+                      {" "}
+                      Name:{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        {item.fullName}
+                      </Text>
+                    </Text>
+                    <Text style={styles.text2}>
+                      {" "}
+                      Phone number: {item.phoneNumber}
+                    </Text>
+                    <Text style={styles.text2}> Email: {item.email}</Text>
+                    <Text style={styles.text2}>
+                      Role: {getRoleName(item.UserAccountData.roleId)}
+                    </Text>
+                  </View>
+                  <View
+                    style={{ flexDirection: "row", justifyContent: "flex-end" }}
+                  >
+                    {item.UserAccountData.roleId == 1 && (
+                      <AntDesign
+                        onPress={() => {
+                          Alert.alert(
+                            "ALERT",
+                            "Do you want to delete this user?",
+                            [
+                              {
+                                text: "No",
+                                onPress: () => {},
                               },
-                            },
-                          ]
-                        );
-                      }}
-                      size={20}
-                      name="closecircle"
-                      color="#ff0000"
-                      backgroundColor="#D9D9D9"
-                      style={{ backgroundColor: "transparent" }}
-                    ></AntDesign>
-                  )}
+                              {
+                                text: "Yes",
+                                onPress: () => {
+                                  console.log(item.userId);
+                                  const config = {
+                                    headers: {
+                                      Authorization: authCtx.token,
+                                    },
+                                  };
+                                  axios
+                                    .delete(
+                                      `${images.apiLink}users/${item.userId}`,
+                                      config
+                                    )
+                                    .then((response) => {
+                                      setUsers(
+                                        users.filter(
+                                          (user) => user.userId != item.userId
+                                        )
+                                      );
+                                    })
+                                    .catch((error) => {
+                                      if (error.request)
+                                        console.log(error.request);
+                                      else if (error.response)
+                                        console.log(error.response);
+                                    });
+                                },
+                              },
+                            ]
+                          );
+                        }}
+                        size={20}
+                        name="closecircle"
+                        color="#ff0000"
+                        backgroundColor="#D9D9D9"
+                        style={{ backgroundColor: "transparent" }}
+                      ></AntDesign>
+                    )}
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           )}
           ListEmptyComponent={<Text>This is empty af</Text>}
         ></FlatList>
@@ -293,6 +315,14 @@ function ProfileScreen({ navigation }) {
   const authCtx = useContext(AuthContext);
   return (
     <ScrollView style={[styles.container, { backgroundColor: "#eff0ed" }]}>
+      <Pressable
+        style={{ left: 16, position: "absolute" }}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
+      </Pressable>
       <View
         style={{
           margin: 20,
@@ -722,6 +752,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: "center",
   },
+  text2: { flex: 1, flexWrap: "wrap" },
   dumbass: {
     marginTop: 20,
     backgroundColor: "#6875B7",
@@ -741,10 +772,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   item: {
-    marginTop: 20,
     padding: 10,
-    borderRadius: 20,
-    backgroundColor: "#D9D9D9",
+    borderRadius: 10,
     justifyContent: "space-between",
   },
   button1: {
