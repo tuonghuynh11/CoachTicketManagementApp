@@ -26,7 +26,7 @@ import axios from "axios";
 import CheckBox from "expo-checkbox";
 import DropDownPicker from "react-native-dropdown-picker";
 import { AuthContext } from "../../../Store/authContex";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 
 const config = {
   headers: {
@@ -212,6 +212,7 @@ function Screen({ navigation }) {
                     </Text>
                     <Text style={styles.text2}> Email: {item.email}</Text>
                     <Text style={styles.text2}>
+                      {" "}
                       Role: {getRoleName(item.UserAccountData.roleId)}
                     </Text>
                   </View>

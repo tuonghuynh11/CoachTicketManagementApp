@@ -132,8 +132,9 @@ function App({ navigation }) {
     getData()
       .then(async () => {
         // console.log("getAllData", trips);
-
+        console.log(trips.length);
         trips.forEach((sche) => {
+          console.log("Id: " + sche.id);
           const currentDate = new Date().getTime();
           const departureTime = new Date(sche.departureTime).getTime();
           if (departureTime > currentDate) {
@@ -221,6 +222,7 @@ function App({ navigation }) {
                   ticketList: item.ticketList,
                   tripId: item.id,
                   from: "current",
+                  tripStatus: item.status,
                 });
               }}
             >
@@ -280,8 +282,6 @@ function History({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>My work</Text>
-
       <StatusBar style="auto" />
       {/* <View style={[styles.dumbass, styles.dumbass2]}>
         <TouchableOpacity style={styles.button1}>
@@ -318,6 +318,7 @@ function History({ navigation }) {
                   ticketList: item.ticketList,
                   tripId: item.id,
                   from: "history",
+                  tripStatus: item.status,
                 })
               }
             >

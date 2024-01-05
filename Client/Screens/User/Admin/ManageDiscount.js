@@ -334,10 +334,6 @@ const EditDiscount = function ({ navigation }) {
           style={[styles.input, { backgroundColor: "#23f3a1", width: 100 }]}
           disabled={value == null || quantity == null}
           onPress={async () => {
-            if (minimum < maximum) {
-              Alert.alert("Maximum < minimum");
-              return;
-            }
             const newDiscount2 = {
               value: value,
               title: name,
@@ -1500,11 +1496,6 @@ function AddDiscount({ navigation }) {
             dname.trim() == ""
           }
           onPress={async () => {
-            if (maximum >= minimum) {
-              Alert.alert(
-                "Maximum discount price has to be lower than minimum price to apply"
-              );
-            }
             setCurrID(currID + 1);
             console.log("count = " + discountKey);
             let key = generateKey(14);

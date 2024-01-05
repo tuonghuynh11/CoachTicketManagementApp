@@ -15,8 +15,10 @@ import {
   SafeAreaView,
   TouchableHighlight,
   Pressable,
+  Alert,
 } from "react-native";
 import CheckBox from "expo-checkbox";
+import axios from "axios";
 const DATA = [
   {
     id: "Se100",
@@ -92,6 +94,7 @@ function Passengers({ navigation }) {
   const from = route.params?.from;
   const ticketList = route.params.ticketList;
   const tripId = route.params.tripId;
+  const [tripStatus, setStatus] = useState(route.params.tripStatus);
   let seatList = [];
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -138,7 +141,7 @@ function Passengers({ navigation }) {
         >
           <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
         </Pressable>
-        {from === "history" && (
+        {from === "history" && tripStatus != 3 && (
           <TouchableOpacity
             style={{
               padding: 10,
@@ -153,7 +156,36 @@ function Passengers({ navigation }) {
           >
             <Text
               style={{ textAlign: "center", color: "white" }}
-              onPress={() => {}}
+              onPress={async () => {
+                const token = await AsyncStorage.getItem("token");
+                console.log(tripStatus);
+                axios
+                  .patch(
+                    `${images.apiLink}schedules/finish/${tripId}`,
+                    {},
+                    {
+                      headers: {
+                        Authorization: token,
+                      },
+                    }
+                  )
+                  .then(() => {
+                    Alert.alert(
+                      "Success",
+                      "Successfully confirm the trip has ended"
+                    );
+                    setStatus(3);
+                  })
+                  .catch((error) => {
+                    if (error.request) {
+                      console.log(error.request);
+                    }
+                    if (error.response) {
+                      console.log(error.response);
+                      Alert.alert("Error", "Error");
+                    }
+                  });
+              }}
             >
               Trip has ended
             </Text>
