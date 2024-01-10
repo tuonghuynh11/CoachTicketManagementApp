@@ -189,12 +189,17 @@ function HistoryScreen({ navigation }) {
         break;
       case 2:
         setGroupCurrentTickets((curr) =>
-          initCurrentTickets.filter((trip) => !trip.isRoundTrip)
+          // initCurrentTickets.filter((trip) => !trip.isRoundTrip)
+          initCurrentTickets.filter(
+            (trip) => trip?.RoundTripTicketData?.length === 0
+          )
         );
         break;
       case 3:
         setGroupCurrentTickets((curr) =>
-          initCurrentTickets.filter((trip) => trip.isRoundTrip)
+          initCurrentTickets.filter(
+            (trip) => trip?.RoundTripTicketData?.length !== 0
+          )
         );
         break;
 

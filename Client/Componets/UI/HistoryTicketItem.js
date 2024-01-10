@@ -34,7 +34,15 @@ function HistoryTicketItem({ ticket, tripInfo, onPress }) {
                 />
                 <View>
                   <Text style={styles.time}>
-                    {tripInfo.ScheduleData.StartPlaceData.placeName}
+                    {
+                      tripInfo.ScheduleData.StartPlaceData.placeName.split(
+                        ", "
+                      )[
+                        tripInfo.ScheduleData.StartPlaceData.placeName.split(
+                          ", "
+                        ).length - 2
+                      ]
+                    }
                   </Text>
                   <Text style={styles.station}>
                     {tripInfo.ScheduleData.RouteData.departurePlace}
@@ -48,7 +56,15 @@ function HistoryTicketItem({ ticket, tripInfo, onPress }) {
                 />
                 <View>
                   <Text style={styles.time}>
-                    {tripInfo.ScheduleData.ArrivalPlaceData.placeName}
+                    {
+                      tripInfo.ScheduleData.ArrivalPlaceData.placeName.split(
+                        ", "
+                      )[
+                        tripInfo.ScheduleData.ArrivalPlaceData.placeName.split(
+                          ", "
+                        ).length - 2
+                      ]
+                    }
                   </Text>
                   <Text style={styles.station}>
                     {tripInfo.ScheduleData.RouteData.arrivalPlace}
@@ -101,14 +117,14 @@ function HistoryTicketItem({ ticket, tripInfo, onPress }) {
               </Text>
             </View>
             <View style={[styles.rowStyle, { gap: 5 }]}>
-              {!ticket.isRoundTrip && (
+              {ticket.RoundTripTicketData.length === 0 && (
                 <Text style={{ fontSize: 15 }}>One Way</Text>
               )}
-              {!ticket.isRoundTrip && (
+              {ticket.RoundTripTicketData.length === 0 && (
                 <Ionicons name="arrow-up-outline" size={24} color="black" />
               )}
 
-              {ticket.isRoundTrip && (
+              {ticket.RoundTripTicketData.length !== 0 && (
                 <Octicons
                   style={{ transform: [{ rotate: "90deg" }] }}
                   name="arrow-switch"
@@ -116,7 +132,7 @@ function HistoryTicketItem({ ticket, tripInfo, onPress }) {
                   color="black"
                 />
               )}
-              {ticket.isRoundTrip && (
+              {ticket.RoundTripTicketData.length !== 0 && (
                 <Text style={{ fontSize: 15 }}>Two Way</Text>
               )}
             </View>

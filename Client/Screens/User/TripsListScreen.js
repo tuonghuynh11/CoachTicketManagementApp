@@ -367,13 +367,18 @@ function TripListsScreen({ navigation, route }) {
     }
   }
   function renderScheduleItem(itemData) {
+    let departureShort = itemData.item.departurePlace.split(", ");
+    departureShort.pop();
+    let arrivalShort = itemData.item.arrivalPlace.split(", ");
+    arrivalShort.pop();
+
     return (
       <ScheduleItem
         onPressed={scheduleHandler.bind(this, itemData.item)}
         price={itemData.item.price}
         numberOfAvailableSeat={itemData.item.numberOfAvailableSeat}
-        departurePlace={itemData.item.departurePlace}
-        arrivalPlace={itemData.item.arrivalPlace}
+        departurePlace={departureShort.join(", ")}
+        arrivalPlace={arrivalShort.join(", ")}
         departureTime={itemData.item.departureTime}
         arrivalTime={itemData.item.arrivalTime}
         duration={itemData.item.duration}

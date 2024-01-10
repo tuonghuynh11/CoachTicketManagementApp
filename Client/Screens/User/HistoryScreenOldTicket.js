@@ -17,6 +17,7 @@ import { AuthContext } from "../../Store/authContex";
 import { getAllTicketsOfUser } from "../../util/databaseAPI";
 import { TicketHistoryModel } from "../../Models/TicketHistoryModel";
 import Loading from "../../Componets/UI/Loading";
+import EmptyTrip from "../../Componets/UI/EmptyTrip";
 function HistoryScreenOldTicket({ navigation }) {
   const authCtx = useContext(AuthContext);
   const [historyTicket, setHistoryTicket] = useState([]);
@@ -117,18 +118,25 @@ function HistoryScreenOldTicket({ navigation }) {
     return <Loading />;
   }
   return (
-    <View style={styles.root}>
-      <SectionList
-        stickySectionHeadersEnabled={true}
-        sections={historyTicket}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => renderPreviousTickets(item)}
-        renderSectionHeader={({ section: { title } }) =>
-          renderHeaderPreviousTickets(title)
-        }
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <>
+      {historyTicket.length === 0 && (
+        <EmptyTrip title="You don't have any reservations" message="" />
+      )}
+      {historyTicket.length !== 0 && (
+        <View style={styles.root}>
+          <SectionList
+            stickySectionHeadersEnabled={true}
+            sections={historyTicket}
+            keyExtractor={(item, index) => item + index}
+            renderItem={({ item }) => renderPreviousTickets(item)}
+            renderSectionHeader={({ section: { title } }) =>
+              renderHeaderPreviousTickets(title)
+            }
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      )}
+    </>
   );
 }
 

@@ -44,7 +44,12 @@ function HistoryTicketNextTripItem({ ticket, tripInfo, onPress }) {
             <View style={{ marginTop: 2 }}>
               <View>
                 <Text style={styles.place}>
-                  {tripInfo.ScheduleData.StartPlaceData.placeName}
+                  {
+                    tripInfo.ScheduleData.StartPlaceData.placeName.split(", ")[
+                      tripInfo.ScheduleData.StartPlaceData.placeName.split(", ")
+                        .length - 2
+                    ]
+                  }
                 </Text>
                 <Text style={styles.station}>
                   {tripInfo.ScheduleData.RouteData.departurePlace}
@@ -52,7 +57,15 @@ function HistoryTicketNextTripItem({ ticket, tripInfo, onPress }) {
               </View>
               <View>
                 <Text style={styles.place}>
-                  {tripInfo.ScheduleData.ArrivalPlaceData.placeName}
+                  {
+                    tripInfo.ScheduleData.ArrivalPlaceData.placeName.split(
+                      ", "
+                    )[
+                      tripInfo.ScheduleData.ArrivalPlaceData.placeName.split(
+                        ", "
+                      ).length - 2
+                    ]
+                  }
                 </Text>
                 <Text style={styles.station}>
                   {tripInfo.ScheduleData.RouteData.arrivalPlace}

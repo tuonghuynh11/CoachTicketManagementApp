@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "gray",
     marginRight: 20,
+    backgroundColor: "white",
   },
   image: {
     width: 100,

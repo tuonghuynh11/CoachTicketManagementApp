@@ -43,7 +43,6 @@ function RecheckScreen({ navigation, route }) {
   const [cost, setCost] = useState(0);
   const [tripInfo, setTripInfo] = useState({});
   const authCtx = useContext(AuthContext);
-
   ///Payment
 
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +59,13 @@ function RecheckScreen({ navigation, route }) {
 
   const [bookingInfoTemp, setBookingInfoTemp] = useState();
 
+  const tem12 = bookingCtx.bookingInfo.mainTripInfo?.departurePlace.split(", ");
+  tem12?.pop();
+  const shortStartPlaceMain = tem12?.join(", ");
+  const tem13 =
+    bookingCtx.bookingInfo.roundTripInfo?.departurePlace.split(", ");
+  tem13?.pop();
+  const shortStartPlaceRound = tem13?.join(", ");
   const tickets = [
     {
       reservationId: "1",
@@ -143,6 +149,7 @@ function RecheckScreen({ navigation, route }) {
   //Create Booking Session
   useEffect(() => {
     async function createBookingSessions() {
+      console.log("bookingInfo", bookingCtx?.bookingInfo);
       const temp = bookingCtx?.bookingInfo;
       let createBookingSessionBody = {
         scheduleId: temp?.mainTripInfo?.id,
@@ -233,6 +240,7 @@ function RecheckScreen({ navigation, route }) {
       }
       setBookingInfoTemp(bookingInfoTemp);
       bookingCtx.setBookingInfoTemp(bookingInfoTemp);
+      console.log("bookingInfoTemp", bookingInfoTemp);
     }
     if (isFocused) {
       createBookingSessions();
@@ -356,7 +364,7 @@ function RecheckScreen({ navigation, route }) {
       Alert.alert(`Error code: ${error.code}`, error.message);
       console.log(error.message);
     } else {
-      Alert.alert(`Success`, "The payment was confirm successfully");
+      // Alert.alert(`Success`, "The payment was confirm successfully");
       //Them ve vao database voi status la 1
       //Lay thong tin tickets moi them vao database
       bookingCtx.stopTimeout();
@@ -915,6 +923,7 @@ function RecheckScreen({ navigation, route }) {
                     borderWidth: 0.2,
                     borderColor: "gray",
                     // borderBottomWidth: 0,
+                    alignItems: "center",
                   },
                 ]}
                 onPress={() => setIsSelectMainTrip((curr) => !curr)}
@@ -930,8 +939,10 @@ function RecheckScreen({ navigation, route }) {
                     source={require("../../../icon/coachIcon.png")}
                   />
                   <View>
-                    <Text style={{ fontWeight: "600", fontSize: 16 }}>
-                      {bookingCtx.bookingInfo.mainTripInfo?.departurePlace}
+                    <Text
+                      style={{ fontWeight: "600", fontSize: 16, maxWidth: 170 }}
+                    >
+                      {shortStartPlaceMain}
                     </Text>
                     <Text
                       numberOfLines={1}
@@ -1090,6 +1101,7 @@ function RecheckScreen({ navigation, route }) {
                       marginBottom: 0,
                       borderWidth: 0.2,
                       borderColor: "gray",
+                      alignItems: "center",
                       // borderBottomWidth: 0,
                     },
                   ]}
@@ -1107,10 +1119,15 @@ function RecheckScreen({ navigation, route }) {
                     />
                     <View>
                       <Text
-                        numberOfLines={1}
-                        style={{ fontWeight: "600", fontSize: 16, width: 160 }}
+                        // numberOfLines={1}
+                        style={{
+                          fontWeight: "600",
+                          fontSize: 16,
+                          maxWidth: 170,
+                        }}
                       >
-                        {bookingCtx.bookingInfo?.roundTripInfo?.departurePlace}
+                        {/* {bookingCtx.bookingInfo?.roundTripInfo?.departurePlace} */}
+                        {shortStartPlaceRound}
                       </Text>
                       <Text
                         style={{

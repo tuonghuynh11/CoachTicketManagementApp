@@ -44,7 +44,7 @@ function ElectronicTicketScreen({ navigation, route }) {
     //   roundTripDate: route?.params?.roundTripDate,
     //   shuttleRoute: route?.params?.shuttleRoute,
     // });
-
+    console.log(bookingCtx?.bookingInfo);
     const temp = bookingCtx?.bookingInfo?.mainTripInfo;
     setTripInfo({
       departurePlace: temp?.departurePlace,
@@ -60,23 +60,9 @@ function ElectronicTicketScreen({ navigation, route }) {
       ),
       shuttleRoute: bookingCtx?.bookingInfo?.mainTripShuttleRoute,
     });
-    const temp2 = bookingCtx?.bookingInfo?.roundTripInfo;
 
-    setRoundTripInfo({
-      departurePlace: temp2?.departurePlace,
-      arrivalPlace: temp2?.arrivalPlace,
-      departureTime: new Date(temp2?.departureTime),
-      arrivalTime: new Date(temp2?.arrivalTime),
-      duration: temp2?.duration,
-      services: temp2?.services,
-      idTrip: temp2?.id,
-      passengers: bookingCtx?.bookingInfo?.roundTripPassengers,
-      roundTripDate: null,
-      shuttleRoute: bookingCtx?.bookingInfo?.roundTripShuttleRoute,
-    });
     const paymentStatus = route?.params?.paymentStatus;
     const reservationIds = route?.params?.reservationIds;
-    const reservationsRoundTrip = route?.params?.reservationsRoundTrip;
 
     const mainTickets = bookingCtx?.bookingInfo?.mainTripPassengers?.map(
       (item, index) => {
@@ -91,6 +77,23 @@ function ElectronicTicketScreen({ navigation, route }) {
         };
       }
     );
+
+    const temp2 = bookingCtx?.bookingInfo?.roundTripInfo;
+
+    setRoundTripInfo({
+      departurePlace: temp2?.departurePlace,
+      arrivalPlace: temp2?.arrivalPlace,
+      departureTime: new Date(temp2?.departureTime),
+      arrivalTime: new Date(temp2?.arrivalTime),
+      duration: temp2?.duration,
+      services: temp2?.services,
+      idTrip: temp2?.id,
+      passengers: bookingCtx?.bookingInfo?.roundTripPassengers,
+      roundTripDate: null,
+      shuttleRoute: bookingCtx?.bookingInfo?.roundTripShuttleRoute,
+    });
+    const reservationsRoundTrip = route?.params?.reservationsRoundTrip;
+
     const roundTripTickets = bookingCtx?.bookingInfo?.roundTripPassengers?.map(
       (item, index) => {
         return {
@@ -104,7 +107,10 @@ function ElectronicTicketScreen({ navigation, route }) {
         };
       }
     );
-    const union = [...mainTickets, ...roundTripTickets];
+
+    const union = roundTripTickets
+      ? [...mainTickets, ...roundTripTickets]
+      : [...mainTickets];
     setTickets(union);
     console.log("mainTrip:", {
       departurePlace: temp?.departurePlace,

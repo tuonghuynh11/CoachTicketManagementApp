@@ -146,75 +146,93 @@ function TripDetailScreen({ navigation, route }) {
   return (
     <View style={styles.root}>
       <StatusBar style="light" />
-
       <Image
         defaultSource={require("../../../icon/defaultCoach.jpg")}
-        style={styles.image}
+        style={[
+          styles.image,
+          {
+            position: "relative",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: -1,
+          },
+        ]}
         source={{
           uri: tripInfo.image,
         }}
       ></Image>
-      <View style={styles.body}>
-        <View
-          style={{
-            backgroundColor: "#4B2795",
-            height: 40,
-            width: 150,
-            borderRadius: 10,
-            alignSelf: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: -30,
-          }}
+      <View
+        style={{
+          marginBottom: 360,
+        }}
+      >
+        <ScrollView
+          style={{ paddingTop: 40, zIndex: 1 }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 40 }}
         >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 20,
-              fontWeight: "bold",
-            }}
-          >
-            COACH {tripInfo.coachId}
-          </Text>
-        </View>
+          <View style={[styles.body]}>
+            <View
+              style={{
+                backgroundColor: "#4B2795",
+                height: 40,
+                width: 150,
+                borderRadius: 10,
+                alignSelf: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: -30,
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 20,
+                  fontWeight: "bold",
+                }}
+              >
+                COACH {tripInfo.coachId}
+              </Text>
+            </View>
 
-        <View
-          style={{
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            borderWidth: 1,
-            borderColor: "#EEF0EB",
-            padding: 10,
-            paddingBottom: 25,
-            marginTop: 10,
-            backgroundColor: "white",
-          }}
-        >
-          <Text
-            style={{
-              color: "gray",
-              fontSize: 20,
-              fontWeight: "bold",
-              opacity: 0.7,
-            }}
-          >
-            {getDate(tripInfo.departureTime)}
-          </Text>
-        </View>
+            <View
+              style={{
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+                borderWidth: 1,
+                borderColor: "#EEF0EB",
+                padding: 10,
+                paddingBottom: 25,
+                marginTop: 10,
+                backgroundColor: "white",
+              }}
+            >
+              <Text
+                style={{
+                  color: "gray",
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  opacity: 0.7,
+                }}
+              >
+                {getDate(tripInfo.departureTime)}
+              </Text>
+            </View>
 
-        <View
-          style={{
-            borderRadius: 10,
-            borderWidth: 0.2,
-            borderColor: "#d0d1cc",
-            padding: 10,
-            backgroundColor: "#F8F5F5",
-            alignItems: "center",
-            marginTop: -15,
-            marginHorizontal: -5,
-          }}
-        >
-          {/* <Text
+            <View
+              style={{
+                borderRadius: 10,
+                borderWidth: 0.2,
+                borderColor: "#d0d1cc",
+                padding: 10,
+                backgroundColor: "#F8F5F5",
+                alignItems: "center",
+                marginTop: -15,
+                marginHorizontal: -5,
+              }}
+            >
+              {/* <Text
             style={{
               color: "gray",
               fontSize: 20,
@@ -225,89 +243,98 @@ function TripDetailScreen({ navigation, route }) {
             Bus no. {tripInfo.coachNumber}
           </Text> */}
 
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              paddingTop: 10,
-            }}
-          >
-            <View style={styles.dateTime}>
-              <Text style={styles.time}>{tripInfo.departurePlace}</Text>
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingTop: 10,
+                }}
+              >
+                <View style={styles.dateTime}>
+                  <Text style={styles.time}>{tripInfo.departurePlace}</Text>
 
-              <Text style={styles.date}>{getTime(tripInfo.departureTime)}</Text>
+                  <Text style={styles.date}>
+                    {getTime(tripInfo.departureTime)}
+                  </Text>
+                </View>
+
+                <View style={styles.iconActivity}>
+                  <View style={styles.iconContainer}>
+                    <Octicons name="dot" size={24} color="#1C6AE4" />
+                    <View
+                      style={{
+                        height: 1,
+                        width: 100,
+                        borderTopWidth: 1,
+                        borderTopColor: "#1C6AE4",
+                        opacity: 0.3,
+                      }}
+                    ></View>
+                    <Octicons name="dot-fill" size={24} color="#1C6AE4" />
+                  </View>
+                  <View style={{ marginTop: -33 }}>
+                    <MaterialCommunityIcons
+                      name="bus-articulated-front"
+                      size={24}
+                      color="#1C6AE4"
+                    />
+                  </View>
+                  <Text style={[styles.date, { marginTop: -1 }]}>
+                    {tripInfo.duration}
+                  </Text>
+                </View>
+
+                <View style={styles.dateTime1}>
+                  <Text style={styles.time}>{tripInfo.arrivalPlace}</Text>
+
+                  <Text style={styles.date}>
+                    {getTime(tripInfo.arrivalTime)}
+                  </Text>
+                </View>
+              </View>
             </View>
+            <View style={styles.footer}>
+              <Text style={styles.title}>Coach Information</Text>
 
-            <View style={styles.iconActivity}>
-              <View style={styles.iconContainer}>
-                <Octicons name="dot" size={24} color="#1C6AE4" />
-                <View
-                  style={{
-                    height: 1,
-                    width: 100,
-                    borderTopWidth: 1,
-                    borderTopColor: "#1C6AE4",
-                    opacity: 0.3,
-                  }}
-                ></View>
-                <Octicons name="dot-fill" size={24} color="#1C6AE4" />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Capacity:</Text>
+                <Text style={styles.text}> {tripInfo.capacity} seats</Text>
               </View>
-              <View style={{ marginTop: -33 }}>
-                <MaterialCommunityIcons
-                  name="bus-articulated-front"
-                  size={24}
-                  color="#1C6AE4"
-                />
+
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Type:</Text>
+                <Text style={styles.text}> {tripInfo.coachType}</Text>
               </View>
-              <Text style={[styles.date, { marginTop: -1 }]}>
-                {tripInfo.duration}
+
+              <Text style={[styles.title, { marginTop: 8 }]}>
+                Available Seats
               </Text>
-            </View>
+              <Text style={styles.text}>
+                {tripInfo.numberOfAvailableSeat} seats
+              </Text>
 
-            <View style={styles.dateTime1}>
-              <Text style={styles.time}>{tripInfo.arrivalPlace}</Text>
-
-              <Text style={styles.date}>{getTime(tripInfo.arrivalTime)}</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.footer}>
-          <Text style={styles.title}>Coach Information</Text>
-
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>Capacity:</Text>
-            <Text style={styles.text}> {tripInfo.capacity} seats</Text>
-          </View>
-
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>Type:</Text>
-            <Text style={styles.text}> {tripInfo.coachType}</Text>
-          </View>
-
-          <Text style={[styles.title, { marginTop: 8 }]}>Available Seats</Text>
-          <Text style={styles.text}>
-            {tripInfo.numberOfAvailableSeat} seats
-          </Text>
-
-          <View style={styles.subFooter}>
-            <Text style={styles.title}>Utilities</Text>
-            <ScrollView
-              bounces="false"
-              showsHorizontalScrollIndicator="false"
-              horizontal
-            >
-              <View style={styles.serviceGroup}>
-                {tripInfo.services &&
-                  tripInfo.services.map((service, index) => (
-                    <ServiceIcon key={index} serviceName={service} />
-                  ))}
+              <View style={styles.subFooter}>
+                <Text style={styles.title}>Utilities</Text>
+                <ScrollView
+                  bounces="false"
+                  showsHorizontalScrollIndicator="false"
+                  horizontal
+                >
+                  <View style={styles.serviceGroup}>
+                    {tripInfo.services &&
+                      tripInfo.services.map((service, index) => (
+                        <ServiceIcon key={index} serviceName={service} />
+                      ))}
+                  </View>
+                </ScrollView>
               </View>
-            </ScrollView>
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
+
       <View style={styles.pickUpSeat}>
         <View style={{ flexDirection: "row", flex: 1 }}>
           <Text style={{ color: "orange", fontWeight: "bold", fontSize: 18 }}>
@@ -335,7 +362,14 @@ function TripDetailScreen({ navigation, route }) {
           </CustomButton>
         </View>
       </View>
-      <View style={{ position: "absolute", height: 100, top: 27, left: 10 }}>
+      <View
+        style={{
+          position: "absolute",
+          height: 100,
+          top: 27,
+          left: 10,
+        }}
+      >
         <IconButton
           style={styles.icon}
           icon="arrow-back-sharp"
@@ -363,6 +397,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     height: "100%",
+    backgroundColor: "#F1F1F1",
   },
   icon: {},
   iconContainer: {
@@ -456,5 +491,6 @@ const styles = StyleSheet.create({
     left: 0,
     height: 100,
     backgroundColor: "white",
+    zIndex: 2,
   },
 });

@@ -122,6 +122,8 @@ function TicketItem({
             style={{
               fontSize: 16,
               color: "#8C8D89",
+              maxWidth: 160,
+              textAlign: "left",
             }}
           >
             {tripInfo.departurePlace}
@@ -130,6 +132,8 @@ function TicketItem({
             style={{
               fontSize: 16,
               color: "#8C8D89",
+              maxWidth: 160,
+              textAlign: "right",
             }}
           >
             {tripInfo.arrivalPlace}
@@ -444,7 +448,7 @@ function TicketItem({
             style={{
               width: "100%",
               backgroundColor: "gray",
-              marginTop: 20,
+              marginTop: 10,
               marginBottom: 10,
             }}
           >
@@ -453,7 +457,7 @@ function TicketItem({
               style={{ width: "100%" }}
               format="CODE128A"
               value={generateInvoiceCode()}
-              height={70}
+              height={45}
               text={generateInvoiceCode(20)}
               maxWidth={300}
             />
