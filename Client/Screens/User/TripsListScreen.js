@@ -653,7 +653,7 @@ function TripListsScreen({ navigation, route }) {
             data={listOfTrips}
             keyExtractor={(item, index) => item.id}
             renderItem={renderScheduleItem}
-            showsVerticalScrollIndicator="true"
+            showsVerticalScrollIndicator={true}
           />
         )}
 

@@ -5,7 +5,7 @@ import SwipeableFlatlist from "rn-gesture-swipeable-flatlist";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
 import {
   useRoute,
@@ -77,16 +77,11 @@ const getData = async () => {
         }
       );
 
-      console.log(response.data.data.rows.length + " is length");
-      console.log(flag + " is true");
-
       if (response.data.data.rows.length == 0) {
         flag = false;
       }
-      console.log(flag + " is false");
       discountKey = response.data.data.count;
       axiosDiscounts = axiosDiscounts.concat(response.data.data.rows);
-      console.log(JSON.stringify(axiosDiscounts) + "!");
       config.params.page++;
     } while (flag);
   } catch (error) {
@@ -123,8 +118,6 @@ const getUsers = async () => {
         console.log(flag);
       }
       axiosUsers = axiosUsers.concat(response.data.data);
-      console.log(axiosUsers + "@@ff@");
-      console.log(axiosUsers + "@@ff@");
 
       config.params.page++;
     } while (flag);
@@ -157,10 +150,8 @@ const getUserDiscounts = async () => {
         }
       );
 
-      console.log(response.data.data.rows);
       if (response.data.data.rows.length == 0) flag = false;
       axiosUserDiscounts = axiosUserDiscounts.concat(response.data.data.rows);
-      console.log(axiosUserDiscounts + ". That's rw;pl@ right");
 
       //neu userDiscount.userId trung voi 1 user thi dua user do vao trong axiosDiscountUser
 
@@ -169,12 +160,10 @@ const getUserDiscounts = async () => {
           if (userDiscount.userId == user.userId) {
             axiosUsers = axiosUsers.filter((u) => u.userId != user.userId);
             axiosOtherUsers.push(user);
-            console.log(user.userId + "that");
           }
         });
       });
 
-      console.log("Users with discount: " + axiosUsers);
       config.params.page++;
     } while (flag);
   } catch (error) {
@@ -197,10 +186,8 @@ const init = () => {
       label: otherUser.userId + ". " + otherUser.fullName,
       value: otherUser.userId,
     };
-    console.log(`new item: ${newItem.label}`);
     otherUserDropDownItems.push(newItem);
   });
-  console.log("Other user Items: " + otherUserDropDownItems);
   axiosDiscounts.forEach((discount) => {
     const newItem = {
       label: discount.key + ": " + discount.title + ` ${discount.value * 100}%`,
@@ -208,8 +195,6 @@ const init = () => {
     };
     systemDiscountItems.push(newItem);
   });
-  console.log("COunt = " + discountKey);
-  console.log(axiosDiscounts);
 };
 
 const Stack = createNativeStackNavigator();
@@ -253,10 +238,8 @@ const EditDiscount = function ({ navigation }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const formatDate = (rawdate) => {
     const date = new Date(rawdate);
-    console.log("Date after format" + date);
     const day = date.getDate();
     const month = date.getMonth() + 1;
-    console.log("Month: " + month);
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
@@ -268,7 +251,6 @@ const EditDiscount = function ({ navigation }) {
   const dateChange = ({ type }, selectedDate) => {
     if (type == "set") {
       const currentDate = selectedDate;
-      console.log(currentDate);
       setDate(currentDate);
       if (Platform.OS == "android") {
         toggleDatePicker();
@@ -280,6 +262,14 @@ const EditDiscount = function ({ navigation }) {
   };
   return (
     <SafeAreaView style={styles.container}>
+      <Pressable
+        style={{ left: 16, position: "absolute" }}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
+      </Pressable>
       <View style={[styles.discountInfo, { position: "relative" }]}>
         <TextInput
           placeholder="Name"
@@ -415,7 +405,6 @@ const deleteDiscount = async function (discount, item, setDiscount) {
       Alert.prompt("Delete successfully");
       const updateDiscount = discount.filter((i) => i.id != item.id);
       setDiscount(updateDiscount);
-      console.log(updateDiscount);
     })
     .catch((error) => {
       if (error.response) {
@@ -435,7 +424,6 @@ const User = function ({ navigation }) {
   const [silverUser, setSilverUser] = useState(axiosSilverUser);
   const [bronzeUser, setBronzeUser] = useState(axiosBronzeUser);
 
-  console.log("WElcome to the User screen");
   const [value, setValue] = useState(null);
   const [open, setOpen] = useState(false);
   const [goldOpen, setGoldOpen] = useState(false);
@@ -468,7 +456,6 @@ const User = function ({ navigation }) {
             axiosBronzeUser.push(bronze);
 
             setBronzeUser(bronze);
-            console.log("Length " + bronze.length);
             getUserDiscounts().then(() => {
               silver.forEach((user) => {
                 user.isChecked = false;
@@ -484,18 +471,15 @@ const User = function ({ navigation }) {
                 user.isChecked = false;
                 user.discountList = [];
                 axiosUserDiscounts.forEach((userDiscount) => {
-                  if (user.id == userDiscount.userId) {
+                  if (user.userId == userDiscount.userId) {
                     user.discountList.push(userDiscount.DiscountData);
                   }
                 });
               });
               setGoldUser(gold);
               setSilverUser(silver);
-              console.log("Silver user update: " + silver);
               init();
               setDiscountItems(systemDiscountItems);
-              console.log("Successful! w");
-              console.log(axiosOtherUsers);
             });
           }
         })
@@ -614,13 +598,10 @@ const User = function ({ navigation }) {
             ></DropDownPicker>
             <TouchableOpacity
               onPress={async () => {
-                console.log(membershipFlag);
                 const token = await AsyncStorage.getItem("token");
                 if (membershipFlag == 2) {
-                  console.log(systemDiscountValue);
                   silverUser.forEach((silver) => {
                     if (!silver.isChecked) return;
-                    console.log(silver);
                     const x = silver.userId + "";
                     const y = systemDiscountValue + "";
                     const newUserDiscount = {
@@ -635,8 +616,31 @@ const User = function ({ navigation }) {
                         },
                       })
                       .then((response) => {
-                        console.log(response.data);
                         Alert.alert("Add successfully");
+                        axios
+                          .get(`${images.apiLink}userDiscounts`, {
+                            headers: {
+                              Authorization: token,
+                            },
+                            params: {
+                              userId: silver.userId,
+                              discountId: systemDiscountValue,
+                            },
+                          })
+                          .then((response) => {
+                            const newlyAdded =
+                              response.data.data.rows[0].DiscountData;
+                            silver.discountList.push(newlyAdded);
+                          })
+                          .catch((error) => {
+                            if (error.request) {
+                              console.log(error.request);
+                            }
+                            if (error.response) {
+                              console.log(error.response);
+                              Alert.alert(error.response.message);
+                            }
+                          });
                         setModalVisible(!modalVisible);
                       })
                       .catch((error) => {
@@ -664,11 +668,37 @@ const User = function ({ navigation }) {
                         },
                       })
                       .then(async (response) => {
-                        console.log(response.data);
                         Alert.alert("Add successfully");
+                        axios
+                          .get(`${images.apiLink}userDiscounts`, {
+                            headers: {
+                              Authorization: token,
+                            },
+                            params: {
+                              userId: gold.userId,
+                              discountId: systemDiscountValue,
+                            },
+                          })
+                          .then((response) => {
+                            console.log(response.data.data.rows);
+
+                            const newlyAdded =
+                              response.data.data.rows[0].DiscountData;
+                            gold.discountList =
+                              gold.discountList.concat(newlyAdded);
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                            if (error.request) {
+                              console.log(error.request);
+                            }
+                            if (error.response) {
+                              console.log(error.response);
+                              Alert.alert(error.response.message);
+                            }
+                          });
                         setModalVisible(!modalVisible);
                         setAddDiscountFlag(!addDiscountFlag);
-                        await reload();
                       })
                       .catch((error) => {
                         if (error.request) {
@@ -733,14 +763,13 @@ const User = function ({ navigation }) {
                 }}
                 onPress={() => {
                   setSilverOpen(false);
-                  console.log("xxx open");
                   setGoldOpen(!goldOpen);
                 }}
               >
                 {memberships[0].name}
               </Text>
             </TouchableOpacity>
-            <CheckBox
+            {/* <CheckBox
               style={{ marginLeft: 5 }}
               value={goldAllChecked}
               onValueChange={(value) => {
@@ -754,7 +783,7 @@ const User = function ({ navigation }) {
                 );
                 setGoldAllChecked(!goldAllChecked);
               }}
-            ></CheckBox>
+            ></CheckBox> */}
             <AntDesign
               name="pluscircle"
               size={24}
@@ -783,28 +812,10 @@ const User = function ({ navigation }) {
                       justifyContent: "space-between",
                     }}
                   >
-                    <CheckBox
-                      style={{ marginLeft: 5 }}
-                      value={item.isChecked}
-                      onValueChange={() => {
-                        console.log("Hello");
-                        setGoldUser((goldUser) =>
-                          goldUser.map((user) =>
-                            item.id === user.id
-                              ? {
-                                  ...user,
-                                  isChecked: !user.isChecked,
-                                }
-                              : user
-                          )
-                        );
-                      }}
-                    ></CheckBox>
                     <TouchableOpacity
                       style={styles.userItem}
                       onPress={
                         () => {
-                          console.log(bronzeUser.length);
                           navigation.navigate("User Discount", {
                             userId: item.userId,
                             discountList: item.discountList,
@@ -825,18 +836,37 @@ const User = function ({ navigation }) {
                           ></Image>
                         </TouchableHighlight>
                         <View>
-                          <Text>
+                          <Text style={styles.text2}>
                             {" "}
                             Name:{" "}
                             <Text style={{ fontWeight: "bold" }}>
                               {item.fullName}
                             </Text>
                           </Text>
-                          <Text> Phone number: {item.phoneNumber}</Text>
-                          <Text> Email: {item.email}</Text>
+                          <Text style={styles.text2}>
+                            {" "}
+                            Phone number: {item.phoneNumber}
+                          </Text>
+                          <Text style={styles.text2}> Email: {item.email}</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
+                    <CheckBox
+                      style={{ marginLeft: 5 }}
+                      value={item.isChecked}
+                      onValueChange={() => {
+                        setGoldUser((goldUser) =>
+                          goldUser.map((user) =>
+                            item.id === user.id
+                              ? {
+                                  ...user,
+                                  isChecked: !user.isChecked,
+                                }
+                              : user
+                          )
+                        );
+                      }}
+                    ></CheckBox>
                   </View>
                 );
               })}
@@ -865,7 +895,7 @@ const User = function ({ navigation }) {
                 {memberships[1].name}
               </Text>
             </TouchableOpacity>
-            <CheckBox
+            {/* <CheckBox
               style={{ marginLeft: 5 }}
               value={silverAllChecked}
               onValueChange={(value) => {
@@ -879,7 +909,7 @@ const User = function ({ navigation }) {
                 );
                 setSilverAllChecked(!silverAllChecked);
               }}
-            ></CheckBox>
+            ></CheckBox> */}
             <AntDesign
               name="pluscircle"
               size={24}
@@ -897,6 +927,25 @@ const User = function ({ navigation }) {
               }}
             />
           </View>
+
+          {silverOpen && <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10, marginLeft: 15}}>
+            <Text style={{alignSelf: 'center', marginLeft: 170, fontSize: 18, fontWeight: 700}}>All</Text>
+            <CheckBox
+              style={{ marginLeft: 5 }}
+              value={silverAllChecked}
+              onValueChange={(value) => {
+                setSilverUser((silverUser) =>
+                  silverUser.map((user) => {
+                    return {
+                      ...user,
+                      isChecked: value,
+                    };
+                  })
+                );
+                setSilverAllChecked(!silverAllChecked);
+              }}
+            ></CheckBox>
+          </View>}
           <View style={styles.flatlist}>
             {silverOpen &&
               silverUser.map((item, index) => {
@@ -909,28 +958,10 @@ const User = function ({ navigation }) {
                       justifyContent: "space-between",
                     }}
                   >
-                    <CheckBox
-                      style={{ marginLeft: 1 }}
-                      value={item.isChecked}
-                      onValueChange={() => {
-                        console.log("Hello");
-                        setSilverUser((silverUser) =>
-                          silverUser.map((user) =>
-                            item.id === user.id
-                              ? {
-                                  ...user,
-                                  isChecked: !user.isChecked,
-                                }
-                              : user
-                          )
-                        );
-                      }}
-                    ></CheckBox>
                     <TouchableOpacity
                       style={styles.userItem}
                       onPress={
                         () => {
-                          console.log(silverUser.length);
                           navigation.navigate("User Discount", {
                             userId: item.userId,
                             discountList: item.discountList,
@@ -946,7 +977,7 @@ const User = function ({ navigation }) {
                         // })
                       }
                     >
-                      <Text style={{ margin: 10 }}>{item.id}</Text>
+                      <Text style={{ margin: 10 }}>{item.userId}</Text>
                       <View style={styles.avatarContainer}>
                         <TouchableHighlight>
                           <Image
@@ -954,19 +985,38 @@ const User = function ({ navigation }) {
                             style={styles.avatar}
                           ></Image>
                         </TouchableHighlight>
-                        <View>
-                          <Text>
+                        <View style={{ marginRight: 14 }}>
+                          <Text style={styles.text2}>
                             {" "}
                             Name:{" "}
                             <Text style={{ fontWeight: "bold" }}>
                               {item.fullName}
                             </Text>
                           </Text>
-                          <Text> Phone number: {item.phoneNumber}</Text>
-                          <Text> Email: {item.email}</Text>
+                          <Text style={styles.text2}>
+                            {" "}
+                            Phone number: {item.phoneNumber}
+                          </Text>
+                          <Text style={styles.text2}> Email: {item.email}</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
+                    <CheckBox
+                      style={{ marginLeft: 1, marginTop: 80 }}
+                      value={item.isChecked}
+                      onValueChange={() => {
+                        setSilverUser((silverUser) =>
+                          silverUser.map((user) =>
+                            item.id === user.id
+                              ? {
+                                  ...user,
+                                  isChecked: !user.isChecked,
+                                }
+                              : user
+                          )
+                        );
+                      }}
+                    ></CheckBox>
                   </View>
                 );
               })}
@@ -996,7 +1046,6 @@ const renderDiscountItem = ({ item, navigation, discount, setDiscount }) => {
     >
       <TouchableOpacity
         onPress={() => {
-          console.log(item);
           navigation.navigate("Edit Discount", item);
         }}
         key={item.key}
@@ -1024,14 +1073,11 @@ const renderUserDiscountItem = ({
   color,
   userId,
 }) => {
-  console.log(item);
-  console.log(discount);
   return (
     <Swipeable
       renderRightActions={() => (
         <TouchableOpacity
           onPress={async () => {
-            console.log(discount);
             const c = {
               id: [`${item.id}`],
             };
@@ -1049,8 +1095,11 @@ const renderUserDiscountItem = ({
                 standardConfig2
               )
               .then(() => {
+                const updatedUserDiscount = discount.filter(
+                  (dc) => dc.id != item.id
+                );
+                setDiscount(updatedUserDiscount);
                 Alert.alert("Delete successfully!");
-                console.log(c);
               })
               .catch((error) => {
                 if (error.request) {
@@ -1183,7 +1232,15 @@ const UsersDiscount = function ({ navigation }) {
           margin: 20,
         }}
       >
-        <View>
+        <Pressable
+          style={{ left: 16, position: "absolute" }}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
+        </Pressable>
+        <View style={{marginLeft: 130, alignItems: 'center'}}>
           <Image
             source={{ uri: route.params.avatar }}
             style={{ width: 50, height: 50, borderRadius: 70 }}
@@ -1242,7 +1299,7 @@ const UsersDiscount = function ({ navigation }) {
   );
 };
 const System = function () {
-  const colors = ["#234531", "#a24fbc", "#bc6666"];
+  const colors = ["#FFD700", "#a24fbc", "#bc6666"];
   const [discount, setDiscount] = useState(axiosDiscounts);
 
   useFocusEffect(
@@ -1273,6 +1330,7 @@ const System = function () {
           alignItems: "center",
           justifyContent: "space-between",
           paddingHorizontal: 20,
+          marginTop: 15
         }}
       >
         <Text style={styles.text}>List of discounts</Text>
@@ -1387,6 +1445,14 @@ function AddDiscount({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Pressable
+        style={{ left: 16, position: "absolute" }}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
+      </Pressable>
       <View style={[styles.discountInfo, { position: "relative" }]}>
         <TextInput
           placeholder="Name"
@@ -1528,7 +1594,7 @@ function AddDiscount({ navigation }) {
     </SafeAreaView>
   );
 }
-function AddUserDiscount() {
+function AddUserDiscount({ navigation }) {
   const [name, setName] = useState("");
   const [value, setValue] = useState(null);
   const [open, setOpen] = useState(false);
@@ -1597,6 +1663,14 @@ function AddUserDiscount() {
   //Select a discount name will automatic
   return (
     <SafeAreaView style={styles.container}>
+      <Pressable
+        style={{ left: 16, position: "absolute" }}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
+      </Pressable>
       <View style={[styles.discountInfo, { position: "relative" }]}>
         <TextInput
           placeholder="Name"
@@ -1769,9 +1843,9 @@ const Tabs = function ({ navigation }) {
       <NavigationContainer independent={true}>
         <MTab.Navigator
           screenOptions={{
-            tabBarActiveTintColor: "#FFA500",
-            tabBarInactiveTintColor: "#5acdc9",
-            tabBarStyle: { backgroundColor: "#808080" },
+            tabBarActiveTintColor: "#5374e0",
+            tabBarInactiveTintColor: "#3040759d",
+            tabBarStyle: { backgroundColor: "#72C6A1" },
             tabBarLabelStyle: {
               fontWeight: "bold",
             },
@@ -1786,7 +1860,7 @@ const Tabs = function ({ navigation }) {
 };
 function SystemTab() {
   return (
-    <Stack.Navigator initialRouteName="System">
+    <Stack.Navigator initialRouteName="System" screenOptions={{headerShown: false,}}>
       <Stack.Screen name="System" component={System} />
       <Stack.Screen name="Add Discount" component={AddDiscount} />
       <Stack.Screen name="Edit Discount" component={EditDiscount} />
@@ -1795,7 +1869,7 @@ function SystemTab() {
 }
 function UserTab() {
   return (
-    <Stack.Navigator initialRouteName="User">
+    <Stack.Navigator initialRouteName="User" screenOptions={{headerShown: false}}>
       <Stack.Screen name="User" component={User} />
       <Stack.Screen name="User Discount" component={UsersDiscount} />
       <Stack.Screen name="Add Discount" component={AddUserDiscount} />
@@ -1830,11 +1904,11 @@ const styles = StyleSheet.create({
 
   avatarContainer: {
     borderRadius: 200,
-    height: 90,
+    height: undefined,
     width: undefined,
     flexDirection: "row",
     flex: 5,
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
   },
   avatar: {
     height: 90,
@@ -1843,11 +1917,13 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    paddingTop: 30,
+    //paddingTop: 30,
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center",
   },
+  text2: { flexWrap: "wrap", flex: 1, width: 160 },
+
   flatlist: {
     borderRadius: 10,
     marginTop: 20,
@@ -1860,11 +1936,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   userItem: {
+    padding: 5,
     borderRadius: 20,
-    padding: 10,
     backgroundColor: "#D9D9D9",
     justifyContent: "space-between",
     borderColor: "rgba(237, 40, 145, 1)",
+    maxWidth: "84%",
+    marginVertical: 10,
+    flex: 7,
   },
   centeredView: {
     flex: 1,

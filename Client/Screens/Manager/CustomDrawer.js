@@ -156,8 +156,7 @@ const styles = StyleSheet.create({
   botView: {
     flex: 2,
     backgroundColor: "white",
-    paddingTop: 55,
-    // paddingBottom: '167%'
+    paddingTop: 55
   },
   custom: {
     padding: 20,

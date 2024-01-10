@@ -3,6 +3,7 @@ import { images } from "../../../../assets/Assets";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CheckScreen from "./CheckInScreen";
 import Passengers from "./PassengersList";
+import ModalFail from "../../Manager/Popup/ModalFail";
 import {
   useFocusEffect,
   useIsFocused,
@@ -28,6 +29,7 @@ import { Audio } from "expo-av";
 import axios from "axios";
 import { AuthContext } from "../../../Store/authContex";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 const config = {
   headers: {
     Authorization: "Bearer " + images.adminToken,
@@ -182,8 +184,6 @@ function App({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>My work</Text>
-
       <StatusBar style="auto" />
       {/* <View style={[styles.dumbass, styles.dumbass2]}>
         <TouchableOpacity style={styles.button1}>
@@ -220,6 +220,7 @@ function App({ navigation }) {
                 navigation.navigate("Passenger List", {
                   ticketList: item.ticketList,
                   tripId: item.id,
+                  from: "current",
                 });
               }}
             >
@@ -316,6 +317,7 @@ function History({ navigation }) {
                 navigation.navigate("Passenger List", {
                   ticketList: item.ticketList,
                   tripId: item.id,
+                  from: "history",
                 })
               }
             >
@@ -371,7 +373,11 @@ function ScanBarcode({ navigation }) {
   const [text, setText] = useState("Not yet scanned");
   const [sound, setSound] = useState();
   const authCtx = useContext(AuthContext);
-
+  const [visible, setVisible] = useState(false);
+  const [contentF, setContentF] = useState("Failed to scan this ticket");
+  const hideFail = () => {
+    setVisible(false);
+  };
   const askForCameraPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -394,13 +400,17 @@ function ScanBarcode({ navigation }) {
   const handleBarCodeScanned = async ({ type, data }) => {
     setText(data);
     const { sound } = await Audio.Sound.createAsync(images.beep);
-
+    if (ticketList.length == 0) {
+      setVisible(true);
+      return;
+    }
     ticketList.forEach((ticket) => {
       for (let i = 0; i < ticket.seatNumber.length; i++) {
-        if (
-          ticket.reservationId[i] ==
-          data.substring(data.length - ticket.reservationId[i].length)
-        ) {
+        let ticketCode = `E${ticket.reservationId[i]}`;
+        let scannedTicketCode = `E${data.substring(
+          data.length - ticket.reservationId[i].length
+        )}`;
+        if (ticketCode == scannedTicketCode) {
           console.log(ticket.reservationId[i], ticket.status);
           const configScan = {
             headers: {
@@ -422,6 +432,9 @@ function ScanBarcode({ navigation }) {
 
           console.log("Type: " + type + "\nData: " + data);
           return;
+        } else {
+          console.log("This is not te right ticket!");
+          setVisible(true);
         }
       }
     });
@@ -463,24 +476,27 @@ function ScanBarcode({ navigation }) {
         },
       ]}
     >
+      <ModalFail visible={visible} hide={hideFail} content={contentF} />
       <AntDesign
         style={{ marginTop: -5, alignSelf: "flex-end" }}
         name="close"
         size={24}
-        color="black"
+        color="white"
         onPress={() => {
           navigation.goBack();
         }}
       />
       <View>
-        <BarCodeScanner
-          onBarCodeScanned={handleBarCodeScanned}
-          style={{ height: 400, width: 400 }}
-        />
-      </View>
-      <Text style={{ fontSize: 16, margin: 20 }}>{text}</Text>
+        <View>
+          <BarCodeScanner
+            onBarCodeScanned={handleBarCodeScanned}
+            style={{ height: 400, width: 400 }}
+          />
+        </View>
+        <Text style={{ fontSize: 16, margin: 20 }}>{text}</Text>
 
-      <StatusBar style="auto" />
+        <StatusBar style="auto" />
+      </View>
     </View>
   );
 }
