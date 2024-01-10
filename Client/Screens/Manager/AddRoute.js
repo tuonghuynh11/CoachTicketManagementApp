@@ -695,7 +695,7 @@ export default function AddRoute({ navigation }) {
                   <PlaceCard item={item} />
                 </Pressable>
               }
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item, index) => index}
               />
             </View>
             <Text style={styles.titleText}>Destination Places</Text>
@@ -788,7 +788,7 @@ export default function AddRoute({ navigation }) {
                   <PlaceCard item={item} />
                 </Pressable>
               }
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item, index) => index}
               />
             </View>
           </View>

@@ -899,30 +899,36 @@ export default function App() {
       async function fetchToken() {
         // const token = await AsyncStorage.getItem("token");
         // const refreshToken = await AsyncStorage.getItem("refreshToken");
+
         const idUser = await AsyncStorage.getItem("idUser");
         const userName = await AsyncStorage.getItem("userName");
         const idRole = await AsyncStorage.getItem("idRole");
         const idPosition = await AsyncStorage.getItem("idPosition");
         const refreshToken = await AsyncStorage.getItem("refreshToken");
-
-        if (userName) {
-          //console.log(userName)
-          const newTokens = await ResetToken({
-            userName: userName,
-            refreshToken: refreshToken,
-          });
-
-          authCtx.authenticate(
-            newTokens.accessToken,
-            newTokens.refreshToken,
-            idUser,
-            userName,
-            idRole,
-            idPosition
-          );
+        try {
+          
+          if (userName) {
+            //console.log(userName)
+            const newTokens = await ResetToken({
+              userName: userName,
+              refreshToken: refreshToken,
+            });
+  
+            authCtx.authenticate(
+              newTokens.accessToken,
+              newTokens.refreshToken,
+              idUser,
+              userName,
+              idRole,
+              idPosition
+            );
+          }
+          setIsTryLoading(false);
+        } catch (error) {
+          
+          authCtx.logout();
+          setIsTryLoading(false);
         }
-        // authCtx.logout();
-        setIsTryLoading(false);
       }
       fetchToken();
     }, []);

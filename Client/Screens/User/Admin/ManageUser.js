@@ -130,12 +130,27 @@ function Screen({ navigation }) {
   };
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.menuIcon,
+            pressed && { opacity: 0.85 },
+          ]}
+          onPress={() => {
+            navigation.getParent().openDrawer();
+          }}
+        >
+          <Entypo name="menu" size={30} color="#283663" />
+        </Pressable>
+
+        <Text style={styles.headerText}>Manage User</Text>
+      </View>
       <View
         style={{
-          display: "flex",
+          //display: "flex",
           flexDirection: "row",
           marginStart: "10%",
-          justifyContent: "space-between",
+          //justifyContent: "space-between",
         }}
       >
         <TextInput
@@ -315,14 +330,14 @@ function ProfileScreen({ navigation }) {
   const authCtx = useContext(AuthContext);
   return (
     <ScrollView style={[styles.container, { backgroundColor: "#eff0ed" }]}>
-      <Pressable
+      {/* <Pressable
         style={{ left: 16, position: "absolute" }}
         onPress={() => {
           navigation.goBack();
         }}
       >
         <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
-      </Pressable>
+      </Pressable> */}
       <View
         style={{
           margin: 20,
@@ -653,10 +668,10 @@ function EditProfileScreen({ navigation }) {
   );
 }
 const Stack = createNativeStackNavigator();
-function App({ navigation }) {
+function ManageUser({ navigation }) {
   return (
     <>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Pressable
           style={({ pressed }) => [
             styles.menuIcon,
@@ -670,9 +685,11 @@ function App({ navigation }) {
         </Pressable>
 
         <Text style={styles.headerText}>Manage User</Text>
-      </View>
-      <NavigationContainer independent={true}>
-        <Stack.Navigator initialRouteName="ManageUser">
+      </View> */}
+      {/* <NavigationContainer independent={true}> */}
+        <Stack.Navigator initialRouteName="ManageUser" screenOptions={{headerStyle: {
+                    backgroundColor: "white",
+                  }}}>
           <Stack.Screen
             name="ManageUser"
             component={Screen}
@@ -681,7 +698,7 @@ function App({ navigation }) {
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
         </Stack.Navigator>
-      </NavigationContainer>
+      {/* </NavigationContainer> */}
     </>
   );
 }
@@ -708,6 +725,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 200,
     marginVertical: 10,
+    flex: 1,
+    marginEnd: "10%"
   },
   banner: {
     display: "flex",
@@ -814,4 +833,4 @@ const styles = StyleSheet.create({
     right: 16,
   },
 });
-export default App;
+export default ManageUser;

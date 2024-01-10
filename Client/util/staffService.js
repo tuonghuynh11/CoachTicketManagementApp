@@ -23,7 +23,7 @@ staffService.interceptors.request.use(
 
 export const getAllStaffs = async () => {
   try {
-    const response = await staffService.get("/api/staffs");
+    const response = await staffService.get("/api/staffs?limit=100");
     return response.data;
   } catch (error) {
     console.error("Error fetching staffs:", error);
@@ -124,13 +124,14 @@ export const updateStaffWithImage = async (item) => {
     type: "image/jpeg",
     name: "image.jpeg",
   };
-  console.log(item.image);
+  
   body.append("fullName", item.fullName);
   body.append("image", file);
   body.append("phoneNumber", item.phone);
   body.append("positionId", item.currentValue);
   body.append("gender", item.currentValueGender);
   body.append("email", item.email);
+  console.log(body);
   var res = await axios
     .patch(`${baseURL}/api/users/${item.id}`, body, {
       headers: header,

@@ -769,7 +769,7 @@ const User = function ({ navigation }) {
                 {memberships[0].name}
               </Text>
             </TouchableOpacity>
-            <CheckBox
+            {/* <CheckBox
               style={{ marginLeft: 5 }}
               value={goldAllChecked}
               onValueChange={(value) => {
@@ -783,7 +783,7 @@ const User = function ({ navigation }) {
                 );
                 setGoldAllChecked(!goldAllChecked);
               }}
-            ></CheckBox>
+            ></CheckBox> */}
             <AntDesign
               name="pluscircle"
               size={24}
@@ -895,7 +895,7 @@ const User = function ({ navigation }) {
                 {memberships[1].name}
               </Text>
             </TouchableOpacity>
-            <CheckBox
+            {/* <CheckBox
               style={{ marginLeft: 5 }}
               value={silverAllChecked}
               onValueChange={(value) => {
@@ -909,7 +909,7 @@ const User = function ({ navigation }) {
                 );
                 setSilverAllChecked(!silverAllChecked);
               }}
-            ></CheckBox>
+            ></CheckBox> */}
             <AntDesign
               name="pluscircle"
               size={24}
@@ -927,6 +927,25 @@ const User = function ({ navigation }) {
               }}
             />
           </View>
+
+          {silverOpen && <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10, marginLeft: 15}}>
+            <Text style={{alignSelf: 'center', marginLeft: 170, fontSize: 18, fontWeight: 700}}>All</Text>
+            <CheckBox
+              style={{ marginLeft: 5 }}
+              value={silverAllChecked}
+              onValueChange={(value) => {
+                setSilverUser((silverUser) =>
+                  silverUser.map((user) => {
+                    return {
+                      ...user,
+                      isChecked: value,
+                    };
+                  })
+                );
+                setSilverAllChecked(!silverAllChecked);
+              }}
+            ></CheckBox>
+          </View>}
           <View style={styles.flatlist}>
             {silverOpen &&
               silverUser.map((item, index) => {
@@ -983,7 +1002,7 @@ const User = function ({ navigation }) {
                       </View>
                     </TouchableOpacity>
                     <CheckBox
-                      style={{ marginLeft: 1 }}
+                      style={{ marginLeft: 1, marginTop: 80 }}
                       value={item.isChecked}
                       onValueChange={() => {
                         setSilverUser((silverUser) =>
@@ -1221,7 +1240,7 @@ const UsersDiscount = function ({ navigation }) {
         >
           <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
         </Pressable>
-        <View>
+        <View style={{marginLeft: 130, alignItems: 'center'}}>
           <Image
             source={{ uri: route.params.avatar }}
             style={{ width: 50, height: 50, borderRadius: 70 }}
@@ -1311,6 +1330,7 @@ const System = function () {
           alignItems: "center",
           justifyContent: "space-between",
           paddingHorizontal: 20,
+          marginTop: 15
         }}
       >
         <Text style={styles.text}>List of discounts</Text>
@@ -1823,9 +1843,9 @@ const Tabs = function ({ navigation }) {
       <NavigationContainer independent={true}>
         <MTab.Navigator
           screenOptions={{
-            tabBarActiveTintColor: "#FFA500",
-            tabBarInactiveTintColor: "#5acdc9",
-            tabBarStyle: { backgroundColor: "#808080" },
+            tabBarActiveTintColor: "#5374e0",
+            tabBarInactiveTintColor: "#3040759d",
+            tabBarStyle: { backgroundColor: "#72C6A1" },
             tabBarLabelStyle: {
               fontWeight: "bold",
             },
@@ -1840,7 +1860,7 @@ const Tabs = function ({ navigation }) {
 };
 function SystemTab() {
   return (
-    <Stack.Navigator initialRouteName="System">
+    <Stack.Navigator initialRouteName="System" screenOptions={{headerShown: false,}}>
       <Stack.Screen name="System" component={System} />
       <Stack.Screen name="Add Discount" component={AddDiscount} />
       <Stack.Screen name="Edit Discount" component={EditDiscount} />
@@ -1849,7 +1869,7 @@ function SystemTab() {
 }
 function UserTab() {
   return (
-    <Stack.Navigator initialRouteName="User">
+    <Stack.Navigator initialRouteName="User" screenOptions={{headerShown: false}}>
       <Stack.Screen name="User" component={User} />
       <Stack.Screen name="User Discount" component={UsersDiscount} />
       <Stack.Screen name="Add Discount" component={AddUserDiscount} />
@@ -1897,7 +1917,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    paddingTop: 30,
+    //paddingTop: 30,
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center",

@@ -357,9 +357,9 @@ export default function AddSchedule({ navigation, route }) {
       setValidateAssistantShuttle(true);
     }
     if (ShuttleDate == "") {
-      setShuttleDate(false);
+      setValidateShuttleDate(false);
     } else {
-      setShuttleDate(true);
+      setValidateShuttleDate(true);
     }
     if (
       currentValueCoachShuttle != "" &&
@@ -935,7 +935,7 @@ export default function AddSchedule({ navigation, route }) {
                     <ShuttleCard item={item} />
                   </Pressable>
                 )}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item, index) => index}
               />
             </View>
           </View>
