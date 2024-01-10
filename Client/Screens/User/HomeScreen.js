@@ -107,11 +107,14 @@ function HomeScreen({ navigation }) {
         if (jsonValue != null) {
           const temp = JSON.parse(jsonValue);
           const temp2 = temp.map((item) => {
+            const departurePlaces = item?.departurePlace?.split(",");
+            const arrivalPlaces = item?.arrivalPlace?.split(",");
             return {
               id: item.id,
               image: item.image,
-              departurePlace: item.departurePlace,
-              arrivalPlace: item.arrivalPlace,
+              departurePlace:
+                departurePlaces[departurePlaces.length - 1].trim(),
+              arrivalPlace: arrivalPlaces[arrivalPlaces.length - 1].trim(),
               Price: item.price,
             };
           });
@@ -130,11 +133,14 @@ function HomeScreen({ navigation }) {
         if (jsonValue != null) {
           const temp = JSON.parse(jsonValue);
           const temp2 = temp.map((item) => {
+            const departurePlaces = item?.departurePlace?.split(",");
+            const arrivalPlaces = item?.arrivalPlace?.split(",");
             return {
               id: item.id,
               image: item.image,
-              departurePlace: item.departurePlace,
-              arrivalPlace: item.arrivalPlace,
+              departurePlace:
+                departurePlaces[departurePlaces.length - 1].trim(),
+              arrivalPlace: arrivalPlaces[arrivalPlaces.length - 1].trim(),
               Price: item.price,
             };
           });
@@ -155,8 +161,8 @@ function HomeScreen({ navigation }) {
   useEffect(() => {
     async function getLocation() {
       const routes = await getAllRoutes(authCtx.token);
-      const places = await getAllPlaces(authCtx.token);
-
+      // const places = await getAllPlaces(authCtx.token);
+      const places = { rows: [] };
       if (!routes || !places) {
         return;
       }
@@ -175,11 +181,13 @@ function HomeScreen({ navigation }) {
         return;
       }
       const temp2 = popular.rows.map((item) => {
+        const departurePlaces = item?.StartPlaceData?.placeName?.split(", ");
+        const arrivalPlaces = item?.ArrivalPlaceData?.placeName?.split(", ");
         return {
           id: item.id,
           image: item.CoachData.image,
-          departurePlace: item.StartPlaceData.placeName,
-          arrivalPlace: item.ArrivalPlaceData.placeName,
+          departurePlace: departurePlaces[departurePlaces.length - 1].trim(),
+          arrivalPlace: arrivalPlaces[arrivalPlaces.length - 1].trim(),
           Price: item.price,
         };
       });
@@ -418,13 +426,16 @@ function HomeScreen({ navigation }) {
 
     console.log("roundDate: ", formatDate(roundTripDate, true));
 
+    console.log("departurePlaceObj: ", departurePlaceObj);
+    console.log("arrivalPlaceObj: ", arrivalPlaceObj);
+
     navigation.navigate("SearchTripsScreen", {
       info: {
         from: departurePlaceObj.placeType === 1 ? departurePlace : null,
         to: arrivalPlaceObj.placeType === 1 ? arrivalPlace : null,
         isRoundTrip: isRoundTrip,
         departureTime: date.toISOString().split("T")[0],
-        roundTripDate: isRoundTrip ? roundTripDate : null,
+        roundTripDate: isRoundTrip ? formatDate(roundTripDate, true) : null,
         numberOfSeats: selectedSeatText.charAt(0),
         startPlace: departurePlaceObj.placeType === 2 ? departurePlace : null,
         arrivalPlace: arrivalPlaceObj.placeType === 2 ? arrivalPlace : null,
@@ -444,11 +455,16 @@ function HomeScreen({ navigation }) {
   function renderRouteItem(itemData) {
     function goTripDetail() {
       const departurePlaceObjTemp = baseLocations.find(
-        (locations) => locations.placeName === itemData.item.departurePlace
+        (locations) =>
+          locations.placeName.trim() === itemData.item.departurePlace.trim()
       );
       const arrivalPlaceObjTemp = baseLocations.find(
-        (locations) => locations.placeName === itemData.item.arrivalPlace
+        (locations) =>
+          locations.placeName.trim() === itemData.item.arrivalPlace.trim()
       );
+      console.log("baseLocations", baseLocations);
+      console.log("departurePlaceObjTemp", departurePlaceObjTemp);
+      console.log("arrivalPlaceObjTemp", arrivalPlaceObjTemp);
       navigation.navigate("SearchTripsScreen", {
         info: {
           from:
@@ -558,6 +574,7 @@ function HomeScreen({ navigation }) {
       );
       return;
     }
+
     const location = await getCurrentPositionAsync();
     setMyPosition({
       latitude: location.coords.latitude,
@@ -568,6 +585,8 @@ function HomeScreen({ navigation }) {
       location.coords.latitude,
       location.coords.longitude
     );
+    console.log("get location", data);
+
     try {
       if (data.length !== 0) {
         const address = data[0].address.adminDistrict;
@@ -589,16 +608,16 @@ function HomeScreen({ navigation }) {
               .toLowerCase()
               .includes(convertVietnameseToNormal(finalResult.toLowerCase()));
           });
-          console.log(filter);
+          console.log("filter:", filter);
           if (pickPlaceOption === 0) {
             if (filter) {
               setDeparturePlace(filter.placeName);
               setDeparturePlaceObj(filter);
             } else {
-              setDeparturePlace("TP " + finalResult);
+              setDeparturePlace("Thành phố " + finalResult);
               setDeparturePlaceObj({
                 id: "myLocation",
-                placeName: "TP " + finalResult,
+                placeName: "Thành phố " + finalResult,
                 parentName: "",
                 placeType: 1,
               });
@@ -608,10 +627,48 @@ function HomeScreen({ navigation }) {
               setArrivalPlace(filter.placeName);
               setArrivalPlaceObj(filter);
             } else {
-              setArrivalPlace("TP " + finalResult);
+              setArrivalPlace("Thành phố " + finalResult);
               setArrivalPlaceObj({
                 id: "myLocation",
-                placeName: "TP " + finalResult,
+                placeName: "Thành phố " + finalResult,
+                parentName: "",
+                placeType: 1,
+              });
+            }
+          }
+          setIsShowSearchLocations((curr) => !curr);
+        } else {
+          const address = data[0].address.adminDistrict;
+          const finalResult = address.trim();
+
+          const filter = baseLocations.find((item) => {
+            return convertVietnameseToNormal(item.placeName)
+              .toLowerCase()
+              .includes(convertVietnameseToNormal(finalResult.toLowerCase()));
+          });
+          console.log("filter:", filter);
+          if (pickPlaceOption === 0) {
+            if (filter) {
+              setDeparturePlace(filter.placeName);
+              setDeparturePlaceObj(filter);
+            } else {
+              setDeparturePlace("Tỉnh " + finalResult);
+              setDeparturePlaceObj({
+                id: "myLocation",
+                placeName: "Tỉnh " + finalResult,
+                parentName: "",
+                placeType: 1,
+              });
+            }
+          } else {
+            if (filter) {
+              setArrivalPlace(filter.placeName);
+              setArrivalPlaceObj(filter);
+            } else {
+              setArrivalPlace("Tỉnh " + finalResult);
+              setArrivalPlaceObj({
+                id: "myLocation",
+                placeName: "Tỉnh " + finalResult,
                 parentName: "",
                 placeType: 1,
               });

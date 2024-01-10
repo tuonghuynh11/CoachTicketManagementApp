@@ -99,6 +99,9 @@ function MyOfferingScreen() {
       const newDis = [];
       const odlDis = [];
       discountTemp.forEach((discount) => {
+        if (numberDaysBetweenTwoDays(new Date(), discount.expireDate) < 0) {
+          return;
+        }
         if (numberDaysBetweenTwoDays(new Date(), discount.expireDate) < 3) {
           odlDis.push(discount);
         } else {

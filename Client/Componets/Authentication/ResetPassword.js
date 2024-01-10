@@ -52,8 +52,8 @@ function ResetPassword({ navigation, route }) {
       return;
     } else {
       const res = await resetPassword(
-        route?.param?.email,
-        route?.param?.phoneNumber,
+        route?.params?.email,
+        route?.params?.phoneNumber,
         enteredPassword
       );
       if (res !== null) {

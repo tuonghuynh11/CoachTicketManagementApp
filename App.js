@@ -904,24 +904,30 @@ export default function App() {
         const idRole = await AsyncStorage.getItem("idRole");
         const idPosition = await AsyncStorage.getItem("idPosition");
         const refreshToken = await AsyncStorage.getItem("refreshToken");
+        try {
+          if (userName) {
+            //console.log(userName)
+            const newTokens = await ResetToken({
+              userName: userName,
+              refreshToken: refreshToken,
+            });
 
-        if (userName) {
-          //console.log(userName)
-          const newTokens = await ResetToken({
-            userName: userName,
-            refreshToken: refreshToken,
-          });
-
-          authCtx.authenticate(
-            newTokens.accessToken,
-            newTokens.refreshToken,
-            idUser,
-            userName,
-            idRole,
-            idPosition
-          );
+            authCtx.authenticate(
+              newTokens.accessToken,
+              newTokens.refreshToken,
+              idUser,
+              userName,
+              idRole,
+              idPosition
+            );
+          }
+          setIsTryLoading(false);
+        } catch (error) {
+          authCtx.logout();
+          setIsTryLoading(false);
         }
-        //authCtx.logout();
+
+        // authCtx.logout();
         setIsTryLoading(false);
       }
       fetchToken();

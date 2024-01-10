@@ -684,7 +684,10 @@ function SelectPointScreen({ navigation, route }) {
                   color: "orange",
                 }}
               >
-                {getTime(route?.params?.departureTime)}
+                {/* {getTime(route?.params?.departureTime)} */}
+                {!selectedMaker
+                  ? "0:00 AM/PM"
+                  : getTime(selectedMaker?.departureTime)}
               </Text>
             </Text>
           </View>

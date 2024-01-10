@@ -94,6 +94,8 @@ function RecheckSchedule({
           style={{
             fontSize: 16,
             color: "#8C8D89",
+            maxWidth: 150,
+            textAlign: "left",
           }}
         >
           {departurePlace}
@@ -102,6 +104,8 @@ function RecheckSchedule({
           style={{
             fontSize: 16,
             color: "#8C8D89",
+            maxWidth: 150,
+            textAlign: "right",
           }}
         >
           {arrivalPlace}
