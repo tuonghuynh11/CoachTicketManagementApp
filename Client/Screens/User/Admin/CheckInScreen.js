@@ -3,7 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { images } from "../../../../assets/Assets";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-
+import { addDotsToNumber } from "../../../Helper/Date";
 import {} from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import {
@@ -43,14 +43,14 @@ function CheckScreen({ navigation }) {
   const route = useRoute();
   return (
     <SafeAreaView style={styles.container}>
-      <Pressable
+      {/* <Pressable
         style={{ left: 16, position: "absolute" }}
         onPress={() => {
           navigation.goBack();
         }}
       >
         <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
-      </Pressable>
+      </Pressable> */}
       <Text style={styles.text}>Ticket Information</Text>
       <View style={styles.body}>
         <View style={styles.item}>
@@ -86,7 +86,7 @@ function CheckScreen({ navigation }) {
               Ticket code: {route.params.id}
             </Text>
             <Text style={{ marginStart: 30, marginVertical: 10 }}>
-              Price: {route.params.price}đ{" "}
+              Price: {addDotsToNumber(route.params.price)}Đ{" "}
             </Text>
             {/* <BarCodeScanner
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -156,29 +156,30 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   body: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
+    // justifyContent: "center",
+    // alignItems: "center",
+    borderRadius: 10,
     backgroundColor: "#283663",
     margin: 20,
   },
   item: {
-    margin: 20,
-    borderRadius: 20,
+    margin: 10,
+    borderRadius: 10,
     backgroundColor: "#D9D9D9",
   },
   avatarContainer: {
     flexDirection: "row",
     justifyContent: "flex-start",
+    height: 100,
+    paddingLeft: 20,
   },
   avatar: {
     fontWeight: "900",
-    fontSize: 20,
-    height: 90,
-    width: 90,
-    padding: 30,
+    fontSize: 40,
+    height: 70,
+    width: 50,
     alignItems: "center",
-    flex: 3,
+    flex: 2,
   },
   button1: {
     borderRadius: 10,

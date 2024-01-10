@@ -227,6 +227,7 @@ function Screen({ navigation }) {
                     </Text>
                     <Text style={styles.text2}> Email: {item.email}</Text>
                     <Text style={styles.text2}>
+                      {" "}
                       Role: {getRoleName(item.UserAccountData.roleId)}
                     </Text>
                   </View>
