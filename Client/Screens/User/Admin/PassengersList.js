@@ -19,71 +19,7 @@ import {
 } from "react-native";
 import CheckBox from "expo-checkbox";
 import axios from "axios";
-const DATA = [
-  {
-    id: "Se100",
-    imageLink: images.beavis_and_butthead,
-    start: "6AM",
-    end: "9PM",
-    passengers: 54,
-    Name: "Beavis",
-    phone: "092333543",
-  },
-  {
-    id: "Se101",
-    imageLink: images.beavis_and_butthead,
-    start: "6AM",
-    end: "9PM",
-    passengers: 50,
-    Name: "Butt-Head",
-    phone: "099999999",
-  },
-  {
-    id: "Se102",
-    imageLink: images.beavis_and_butthead,
-    start: "6AM",
-    end: "9PM",
-    passengers: 50,
-    Name: "McDicker",
-    phone: "099999991",
-  },
-  {
-    id: "Se103",
-    imageLink: images.beavis_and_butthead,
-    start: "6AM",
-    end: "9PM",
-    passengers: 53,
-    Name: "Van Driessen",
-    phone: "099935799",
-  },
-  {
-    id: "Se104",
-    imageLink: images.beavis_and_butthead,
-    start: "6AM",
-    end: "9PM",
-    passengers: 40,
-    Name: "Daria",
-    phone: "099999999",
-  },
-  {
-    id: "Se105",
-    imageLink: images.beavis_and_butthead,
-    start: "6AM",
-    end: "9PM",
-    passengers: 50,
-    Name: "Stewart",
-    phone: "099999999",
-  },
-  {
-    id: "Se106",
-    imageLink: images.beavis_and_butthead,
-    start: "6AM",
-    end: "9PM",
-    passengers: 50,
-    Name: "Jim Cornette",
-    phone: "099999999",
-  },
-];
+
 function Passengers({ navigation }) {
   const route = useRoute();
   console.log(route);
@@ -92,55 +28,135 @@ function Passengers({ navigation }) {
   }
   let positionId = -1;
   const from = route.params?.from;
-  const ticketList = route.params.ticketList;
+  let ticketList = [];
   const tripId = route.params.tripId;
   const [tripStatus, setStatus] = useState(route.params.tripStatus);
+  const [seatInfo, setSeatInfo] = useState(seatList);
+  const [tickets, setTickets] = useState([]);
   let seatList = [];
   const isFocused = useIsFocused();
   useEffect(() => {
     getPosition().then((response) => {
       positionId = response;
     });
-
-    ticketList.forEach((ticket) => {
-      let i = 0;
-      for (i = 0; i < ticket.seatNumber.length; i++) {
-        const newSeat = {
-          id: ticket.reservationId[i],
-          seatNum: ticket.seatNumber[i],
-          name: ticket.PassengerData[i].fullName,
-          phone: ticket.PassengerData[i].phoneNumber,
-          gender: ticket.PassengerData[i].gender,
-          price: ticket.ScheduleData.price,
-          status: ticket.status,
+    const getTickets = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: "Bearer " + images.adminToken,
+          },
+          params: {
+            page: 1,
+          },
         };
-        seatList.push(newSeat);
-        console.log(seatList);
+        config.params.page = 1;
+        ticketList = [];
+        let flag = true;
+        const token = await AsyncStorage.getItem("token");
+        do {
+          const response = await axios.get(
+            "https://coach-ticket-management-api.onrender.com/api/tickets",
+            {
+              headers: {
+                Authorization: token,
+              },
+              params: {
+                page: config.params.page,
+                scheduleId: tripId,
+              },
+            }
+          );
+          console.log(response);
+          if (response.data.data.length == 0) {
+            flag = false;
+          }
+          ticketList = ticketList.concat(response.data.data);
+          config.params.page++;
+        } while (flag);
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response.data);
+        } else if (error.request) {
+          console.log(error.request.data);
+        }
       }
-    });
-    seatList.sort((a, b) => {
-      if (a.status > b.status) return 1;
-      if (a.status < b.status) return -1;
-      if (a.seatNum > b.seatNum) return 1;
-      if (a.seatNum < b.seatNum) return -1;
-      return 0;
+    };
+    getTickets().then(() => {
+      setTickets(ticketList);
+      console.log(ticketList);
+      ticketList.forEach((ticket) => {
+        let i = 0;
+        for (i = 0; i < ticket.seatNumber.length; i++) {
+          const newSeat = {
+            id: ticket.reservationId[i],
+            seatNum: ticket.seatNumber[i],
+            name: ticket.PassengerData[i].fullName,
+            phone: ticket.PassengerData[i].phoneNumber,
+            gender: ticket.PassengerData[i].gender,
+            price: ticket.ScheduleData.price,
+            status: ticket.status,
+          };
+          seatList.push(newSeat);
+          console.log(seatList);
+        }
+      });
+      setSeatInfo(seatList);
+      seatList.sort((a, b) => {
+        if (a.status > b.status) return 1;
+        if (a.status < b.status) return -1;
+        if (a.seatNum > b.seatNum) return 1;
+        if (a.seatNum < b.seatNum) return -1;
+        return 0;
+      });
     });
   }, [isFocused]);
 
-  const [seatInfo, setSeatInfo] = useState(seatList);
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{ justifyContent: "center", flexDirection: "row", padding: 10 }}
-      >
+      <View style={{ flexDirection: "row", display: "flex" }}>
         <Pressable
-          style={{ left: 16, position: "absolute" }}
+          style={{ left: 16, marginTop: 10, flex: 1 }}
           onPress={() => {
             navigation.goBack();
           }}
         >
           <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
         </Pressable>
+        <Text style={[styles.text, { flex: 4 }]}>
+          Seats {" ("} id = {tripId + ")"}
+        </Text>
+      </View>
+      <TouchableOpacity
+        style={{
+          padding: 10,
+          marginTop: 20,
+          // marginStart: 250,
+          // marginEnd: 20,
+          display: "flex",
+          justifyContent: "center",
+          alignSelf: "center",
+
+          borderRadius: 10,
+          backgroundColor: "red",
+        }}
+      >
+        <Text
+          style={{
+            textAlign: "center",
+            color: "white",
+            fontSize: 15,
+            fontWeight: "bold",
+          }}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          End trip
+        </Text>
+      </TouchableOpacity>
+      <View
+        style={{ justifyContent: "center", flexDirection: "row", padding: 10 }}
+      >
         {from === "history" && tripStatus != 3 && (
           <TouchableOpacity
             style={{
@@ -195,19 +211,26 @@ function Passengers({ navigation }) {
           <TouchableOpacity
             style={{
               padding: 10,
-              marginTop: 10,
-              marginStart: 250,
-              marginEnd: 20,
+              marginTop: 20,
+              // marginStart: 250,
+              // marginEnd: 20,
               display: "flex",
-              justifyContent: "flex-end",
-              borderRadius: 30,
+              justifyContent: "center",
+              alignSelf: "center",
+
+              borderRadius: 10,
               backgroundColor: "#14dea2",
             }}
           >
             <Text
-              style={{ textAlign: "center", color: "white" }}
+              style={{
+                textAlign: "center",
+                color: "white",
+                fontSize: 25,
+                fontWeight: "bold",
+              }}
               onPress={() => {
-                navigation.navigate("Scan Barcode", ticketList);
+                navigation.navigate("Scan Barcode", tickets);
               }}
             >
               Scan
@@ -215,15 +238,12 @@ function Passengers({ navigation }) {
           </TouchableOpacity>
         )}
       </View>
-      <Text style={styles.text}>
-        Seats {" ("} id = {tripId + ")"}
-      </Text>
 
       <StatusBar style="auto" />
 
       <TouchableOpacity style={styles.flatlist}>
         <FlatList
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={{ paddingBottom: 120, marginBottom: 40 }}
           data={seatInfo}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -354,12 +374,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center",
+    marginTop: -20,
   },
 
   flatlist: {
     borderRadius: 10,
     backgroundColor: "#283663",
-    marginTop: 20,
+    margin: 20,
+    marginTop: 10,
     padding: 10,
   },
 

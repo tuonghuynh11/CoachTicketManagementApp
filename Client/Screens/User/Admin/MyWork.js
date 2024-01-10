@@ -11,7 +11,7 @@ import {
 } from "@react-navigation/native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { AntDesign } from "@expo/vector-icons";
 import {
@@ -30,6 +30,9 @@ import axios from "axios";
 import { AuthContext } from "../../../Store/authContex";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
+import ModalSuccess from "../../Manager/Popup/ModalSuccess";
+import ModalConfirm from "../../Manager/Popup/ModalConfirm";
+import YesNoPopUp from "../../../Componets/UI/YesNoPopUp";
 const config = {
   headers: {
     Authorization: "Bearer " + images.adminToken,
@@ -42,23 +45,61 @@ let trips = [];
 
 const getData = async () => {
   try {
+    const positionId = await AsyncStorage.getItem("idPosition");
     const token = await AsyncStorage.getItem("token");
+    const idUser = await AsyncStorage.getItem("idUser");
+    let staffId = 0;
+    axios
+      .get(`${images.apiLink}staffs`, {
+        headers: { Authorization: token },
+        params: { userId: idUser },
+      })
+      .then((response) => {
+        console.log(response.data);
+        staffId = response.data.data.rows[0].id;
+      })
+      .catch((e) => {
+        console.log("Error staff: " + e);
+      });
+    const getStaff = async () => {
+      const response = await axios
+        .get(`${images.apiLink}staffs`, {
+          headers: { Authorization: token },
+          params: { userId: idUser },
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      return response;
+    };
+    const staffGet = await getStaff();
+    staffId = staffGet.data.data.rows[0].id;
+    console.log("position = " + positionId);
+    console.log("staff Id = " + staffId);
     config.params.page = 1;
     trips = [];
     let flag = true;
+    const staffData =
+      positionId == 2 ? { driverId: staffId } : { coachAssistantId: staffId };
+    console.log("Staff data: " + staffData);
     do {
       const response = await axios
         .get("https://coach-ticket-management-api.onrender.com/api/trips", {
           headers: {
             Authorization: token,
           },
+
           params: {
             page: config.params.page,
+            ...(positionId == 2
+              ? { driverId: staffId }
+              : { coachAssistantId: staffId }),
           },
         })
         .catch((err) => {
           console.log(err);
         });
+      console.log(response.data);
 
       if (response.data.data.rows.length == 0) {
         flag = false;
@@ -128,7 +169,10 @@ const translateDate = function (rawDate) {
 const Stack = createNativeStackNavigator();
 function App({ navigation }) {
   const [current, setCurrent] = useState(currentTrips);
+  const isFocused = useIsFocused();
   useEffect(() => {
+    currentTrips = [];
+    historyTrips = [];
     getData()
       .then(async () => {
         // console.log("getAllData", trips);
@@ -181,7 +225,7 @@ function App({ navigation }) {
 
     // }
     // getAllData();
-  }, []);
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -211,7 +255,7 @@ function App({ navigation }) {
       </View> */}
       <View style={styles.flatlist}>
         <FlatList
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={{ paddingBottom: 30, marginBottom: 40 }}
           data={current}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -260,7 +304,6 @@ function App({ navigation }) {
                   Number of passengers:{" "}
                   {Number(item.CoachData.capacity) - item.remainingSlot}
                   {"\n"}
-                  Service:
                 </Text>
                 <ScrollView horizontal={true}></ScrollView>
               </View>
@@ -275,10 +318,12 @@ function App({ navigation }) {
 function History({ navigation }) {
   const [history, setHistory] = useState(historyTrips);
 
-  useFocusEffect(() => {
-    console.log("Set Hostiry");
-    setHistory(historyTrips);
-  });
+  useFocusEffect(
+    useCallback(() => {
+      console.log("Set Hostiry");
+      setHistory(historyTrips);
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -308,7 +353,7 @@ function History({ navigation }) {
       </View> */}
       <View style={styles.flatlist}>
         <FlatList
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={{ paddingBottom: 30, marginBottom: 80 }}
           data={history}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -356,7 +401,7 @@ function History({ navigation }) {
                   Number of passengers:{" "}
                   {Number(item.CoachData.capacity) - item.remainingSlot}
                   {"\n"}
-                  Service:
+                  {/* Service: */}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -375,9 +420,16 @@ function ScanBarcode({ navigation }) {
   const [sound, setSound] = useState();
   const authCtx = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
-  const [contentF, setContentF] = useState("Failed to scan this ticket");
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [contentCf, setContentCf] = useState("Do you want to continue?");
+  const [contentF, setContentF] = useState("Failedte to scan this ticket");
+  const [barCodeVisible, setBarcodeVisible] = useState(true);
+  console.log(ticketList);
   const hideFail = () => {
     setVisible(false);
+  };
+  const hide = () => {
+    setConfirmVisible(false);
   };
   const askForCameraPermission = () => {
     (async () => {
@@ -401,8 +453,9 @@ function ScanBarcode({ navigation }) {
   const handleBarCodeScanned = async ({ type, data }) => {
     setText(data);
     const { sound } = await Audio.Sound.createAsync(images.beep);
+    console.log(ticketList.length);
     if (ticketList.length == 0) {
-      setVisible(true);
+      setConfirmVisible(true);
       return;
     }
     ticketList.forEach((ticket) => {
@@ -411,7 +464,7 @@ function ScanBarcode({ navigation }) {
         let scannedTicketCode = `E${data.substring(
           data.length - ticket.reservationId[i].length
         )}`;
-        if (ticketCode == scannedTicketCode) {
+        if (ticketCode == scannedTicketCode && ticket.status != 4) {
           console.log(ticket.reservationId[i], ticket.status);
           const configScan = {
             headers: {
@@ -429,13 +482,18 @@ function ScanBarcode({ navigation }) {
               sound.playAsync();
             });
 
-          navigation.goBack();
-
           console.log("Type: " + type + "\nData: " + data);
           return;
         } else {
+          if (ticket.status == 4) {
+            setContentCf("Ticket has been scanned. Do you want to continue?");
+          } else
+            setContentCf(
+              "Failed to scan this ticket. Do you want to continue?"
+            );
           console.log("This is not te right ticket!");
-          setVisible(true);
+          setConfirmVisible(true);
+          setBarcodeVisible(false);
         }
       }
     });
@@ -478,6 +536,17 @@ function ScanBarcode({ navigation }) {
       ]}
     >
       <ModalFail visible={visible} hide={hideFail} content={contentF} />
+      <YesNoPopUp
+        title={contentCf}
+        isVisible={confirmVisible}
+        YesHandler={() => {
+          setConfirmVisible(false);
+          setBarcodeVisible(true);
+        }}
+        NoHandler={() => {
+          navigation.goBack();
+        }}
+      ></YesNoPopUp>
       <AntDesign
         style={{ marginTop: -5, alignSelf: "flex-end" }}
         name="close"
@@ -489,10 +558,12 @@ function ScanBarcode({ navigation }) {
       />
       <View>
         <View>
-          <BarCodeScanner
-            onBarCodeScanned={handleBarCodeScanned}
-            style={{ height: 400, width: 400 }}
-          />
+          {barCodeVisible && (
+            <BarCodeScanner
+              onBarCodeScanned={handleBarCodeScanned}
+              style={{ height: 400, width: 400 }}
+            />
+          )}
         </View>
         <Text style={{ fontSize: 16, margin: 20 }}>{text}</Text>
 
@@ -507,9 +578,12 @@ const Tabs = function () {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: "#6A5ACD",
-        tabBarInactiveTintColor: "#FFA500",
-        tabBarStyle: { backgroundColor: "#808080" },
+        tabBarActiveTintColor: "#5374e0",
+        tabBarInactiveTintColor: "#3040759d",
+        tabBarStyle: { backgroundColor: "#72C6A1" },
+        tabBarLabelStyle: {
+          fontWeight: "bold",
+        },
       }}
     >
       <Tab.Screen name="Current" component={App} />
@@ -596,7 +670,8 @@ const styles = StyleSheet.create({
   flatlist: {
     borderRadius: 10,
     backgroundColor: "#283663",
-    marginTop: 20,
+    margin: 20,
+    marginBottom: 80,
     padding: 10,
   },
   dumbass2: {
