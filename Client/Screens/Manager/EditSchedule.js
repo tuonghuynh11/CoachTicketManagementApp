@@ -940,7 +940,7 @@ export default function EditSchedule({ navigation, route }) {
                     <ShuttleCard item={item} />
                   </Pressable>
                 )}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item,index) => index}
               />
             </View>
           </View>

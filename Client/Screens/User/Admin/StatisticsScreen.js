@@ -42,7 +42,7 @@ const ticketsSOLD = {
 import { ScrollView } from "react-native-gesture-handler";
 const StatisticsScreen = function ({ navigation }) {
   const barchartcolors = [
-    "#8A2BE2",
+    "#cf9dff",
     "#FF4500",
     "#32CD32",
     "#FFD700",
@@ -105,40 +105,26 @@ const StatisticsScreen = function ({ navigation }) {
   };
   const piedata = [
     {
-      name: "Seoul",
-      population: 21500000,
+      name: "2022",
+      population: 2150000000,
       color: "rgba(131, 167, 234, 1)",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
+      legendFontColor: "black",
+      legendFontSize: 14,
     },
     {
-      name: "Toronto",
-      population: 2800000,
-      color: "#F00",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
+      name: "2023",
+      population: 3150000000,
+      color: "#1be866",
+      legendFontColor: "black",
+      legendFontSize: 14,
     },
     {
-      name: "Beijing",
-      population: 527612,
-      color: "red",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
-    },
-    {
-      name: "New York",
-      population: 8538000,
-      color: "#ffffff",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
-    },
-    {
-      name: "Moscow",
-      population: 11920000,
-      color: "rgb(0, 0, 255)",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
-    },
+      name: "2024",
+      population: 15000000,
+      color: "#e8a01b",
+      legendFontColor: "black",
+      legendFontSize: 14,
+    }
   ];
   return (
     <>
@@ -161,17 +147,34 @@ const StatisticsScreen = function ({ navigation }) {
         {/* <Text style={styles.text}>Statistics</Text> */}
 
         <View>
-          <Text>TICKETS SOLD BY MONTHS </Text>
+          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18}}>TICKETS SOLD BY MONTHS </Text>
 
           <LineChart
             width={Dimensions.get("window").width}
             height={200}
             yAxisLabel=""
+            bezier
             chartConfig={{
-              backgroundColor: "blue",
-              backgroundGradientFrom: "white",
-              backgroundGradientTo: "white",
-              color: (opacity = 1) => `#235532`,
+              backgroundColor: "#e26a00",
+              backgroundGradientFrom: "#fb8c00",
+              backgroundGradientTo: "#ffa726",
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16,
+              },
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#ffa726",
+              },
+            }}
+            style={{
+              marginVertical: 8,
+              borderRadius: 16,
+              marginHorizontal: 8,
+              marginRight: 13,
             }}
             data={{
               labels: [
@@ -210,7 +213,7 @@ const StatisticsScreen = function ({ navigation }) {
           ></LineChart>
         </View>
         <View>
-          <Text>TICKETS SOLD BY TRIPS </Text>
+          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18}}>TICKETS SOLD BY TRIPS </Text>
           <ScrollView>
             <ScrollView horizontal={true}>
               <BarChart
@@ -219,25 +222,32 @@ const StatisticsScreen = function ({ navigation }) {
                 verticalLabelRotation={60}
                 chartConfig={{
                   backgroundColor: "pink",
-                  backgroundGradientFrom: "white",
-                  backgroundGradientTo: "white",
+                  backgroundGradientFrom: "#9b00fb",
+                  backgroundGradientTo: "#ff74f3",
                   color: (opacity = 1) => `rgba(1, 1, 1, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 }}
                 flatColor={true}
                 withCustomBarColorFromData={true}
-                style={{ margin: 10 }}
+                style={{
+                  marginVertical: 8,
+                  borderRadius: 16,
+                  marginHorizontal: 8,
+                  marginRight: 13,
+                }}
                 data={data}
               ></BarChart>
             </ScrollView>
           </ScrollView>
         </View>
         <View>
-          <Text>PIE CHART</Text>
-          <View>
+          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18}}>PIE CHART</Text>
+          <View >
             <PieChart
               data={piedata}
               width={Dimensions.get("window").width - 20}
-              height={200}
+              //width={100}
+              height={300}
               chartConfig={{
                 backgroundGradientFrom: "white",
                 backgroundGradientTo: "white",
@@ -245,9 +255,16 @@ const StatisticsScreen = function ({ navigation }) {
               }}
               accessor={"population"}
               backgroundColor={"transparent"}
-              paddingLeft={"15"}
-              center={[10, 50]}
+              paddingLeft={"20"}
+              center={[10, 20]}
               absolute
+              style={{
+                marginVertical: 8,
+                borderRadius: 16,
+                marginHorizontal: 8,
+                //marginRight: 13,
+                paddingBottom: 20
+              }}
             />
           </View>
         </View>

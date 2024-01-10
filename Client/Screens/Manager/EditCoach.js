@@ -437,7 +437,7 @@ export default function EditCoach({ route, navigation }) {
                   <ServiceCard item={item}></ServiceCard>
                 </Pressable>
               )}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item, index) => index}
             />
           </View>
 
