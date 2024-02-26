@@ -55,6 +55,7 @@ import HomeNavigationStaff from "./Client/Navigation/HomeNavigationStaff";
 import UserTicketStackNavigate from "./Client/Screens/Manager/UserTicketStackNavigate";
 import StaffStackNavigate from "./Client/Screens/Manager/StaffStackNavigate";
 import { FontAwesome } from "@expo/vector-icons";
+import LngContextProvider from "./Client/Store/languageContext";
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -878,8 +879,9 @@ export default function App() {
           },
         }}
       >
-        {/* <AuthenticatedStack /> */}
+        {/* <AuthenticatedStack roleId={1} /> */}
         {/* <AuthStack /> */}
+
         {authCtx.isAuthenticated && (
           <AuthenticatedStack
             roleId={authCtx.idRole}
@@ -906,7 +908,6 @@ export default function App() {
         const idPosition = await AsyncStorage.getItem("idPosition");
         const refreshToken = await AsyncStorage.getItem("refreshToken");
         try {
-
           if (userName) {
             //console.log(userName)
             const newTokens = await ResetToken({
@@ -940,8 +941,11 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
+
       <AuthContextProvider>
-        <Root />
+        <LngContextProvider>
+          <Root />
+        </LngContextProvider>
       </AuthContextProvider>
     </>
   );

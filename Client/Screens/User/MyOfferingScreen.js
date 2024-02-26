@@ -5,7 +5,9 @@ import { getDate } from "../../Helper/Date";
 import { getDiscountOfUser } from "../../util/databaseAPI";
 import { AuthContext } from "../../Store/authContex";
 import Loading from "../../Componets/UI/Loading";
+import { useTranslation } from "react-i18next";
 function MyOfferingScreen() {
+  const { t } = useTranslation();
   const [newDiscountList, setNewDiscountList] = useState([]);
   const [prepareExpiredDiscountList, setPrepareExpiredDiscountList] = useState(
     []
@@ -84,7 +86,7 @@ function MyOfferingScreen() {
       let discountTemp = discountList.rows.map((item) => {
         return {
           id: item.discountId,
-          title: `Discount ${item.DiscountData.value * 100}%`,
+          title: `${t("discount")} ${item.DiscountData.value * 100}%`,
           expireDate: new Date(item.DiscountData.expireDate),
           value: item.DiscountData.value * 100,
           minimumPriceToApply: item.DiscountData.minimumpricetoapply,
@@ -162,7 +164,7 @@ function MyOfferingScreen() {
         <View style={{ gap: 10 }}>
           <Text style={styles.discountTitle}>{itemData.item.title}</Text>
           <Text style={{ fontSize: 16, fontWeight: 400 }}>
-            Minimum invoice{" "}
+            {t("minimum-invoice")}{" "}
             <Text
               style={{
                 color: "red",
@@ -187,7 +189,8 @@ function MyOfferingScreen() {
                 fontSize: 13,
               }}
             >
-              Maximum {addDotsToNumber(itemData.item.maximumDiscountPrice)}VND
+              {t("maximum")}{" "}
+              {addDotsToNumber(itemData.item.maximumDiscountPrice)}VND
             </Text>
           </View>
           {numberOfDays <= 4 && (
@@ -199,7 +202,7 @@ function MyOfferingScreen() {
                 },
               ]}
             >
-              Expire date : {getDate(itemData.item.expireDate)}
+              {t("expire-date")} : {getDate(itemData.item.expireDate)}
               {" ("}
               {numberOfDays.toFixed(0)}
               {numberOfDays >= 2 ? " days)" : " day)"}
@@ -214,7 +217,7 @@ function MyOfferingScreen() {
                 },
               ]}
             >
-              Expire date : {getDate(itemData.item.expireDate)}
+              {t("expire-date")} : {getDate(itemData.item.expireDate)}
             </Text>
           )}
         </View>
@@ -227,7 +230,7 @@ function MyOfferingScreen() {
       {!isLoading && (
         <View style={{ flex: 1 }}>
           <Text style={styles.title}>
-            New Discount ({newDiscountList.length})
+            {t("new-discount")} ({newDiscountList.length})
           </Text>
           <FlatList
             data={newDiscountList}
@@ -241,7 +244,7 @@ function MyOfferingScreen() {
       {!isLoading && (
         <View style={{ flex: 1 }}>
           <Text style={[styles.title, { color: GlobalColors.validate }]}>
-            Prepare to expire ({prepareExpiredDiscountList.length})
+            {t("prepare-to-expire")} ({prepareExpiredDiscountList.length})
           </Text>
           <FlatList
             data={prepareExpiredDiscountList}
