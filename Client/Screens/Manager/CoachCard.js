@@ -137,11 +137,11 @@ const styles = StyleSheet.create({
     flex: 3,
     width: 120,
     height: 100,
-    resizeMode: "contain",
+    resizeMode: "cover",
     marginLeft: 10,
     borderRadius: 10,
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   info: {
     flex: 7,

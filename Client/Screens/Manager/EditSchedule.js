@@ -356,13 +356,19 @@ export default function EditSchedule({ navigation, route }) {
     } else {
       setValidateShuttleDate(true);
     }
+    if(ShuttleTime == ""){
+      setValidateShuttleTime(false);
+    } else {
+      setValidateShuttleTime(true);
+    }
     if (
       currentValueCoachShuttle != "" &&
       currentValueAssistShuttle != "" &&
       currentValueDriverShuttle != "" &&
       currentValueWard != "" &&
       place != "" &&
-      ShuttleDate != ""
+      ShuttleDate != "" &&
+      ShuttleTime != ""
     ) {
       if (currentValueFrom != "") {
         setIndicator(true);
@@ -382,6 +388,14 @@ export default function EditSchedule({ navigation, route }) {
 
         const res = await fecthLocation(location);
 
+        const date1DatePart = ShuttleDateData.toISOString().split("T")[0];
+        ShuttleTimeData.setHours(ShuttleTimeData.getHours() + 7);
+
+        const date2TimePart = ShuttleTimeData.toISOString().split("T")[1];
+
+        const combinedDate = new Date(`${date1DatePart}T${date2TimePart}`);
+        ShuttleTimeData.setHours(ShuttleTimeData.getHours() - 7);
+
         const newShuttle = {
           id: index,
           lat: res[0],
@@ -390,7 +404,7 @@ export default function EditSchedule({ navigation, route }) {
           coachId: currentValueCoachShuttle,
           driverId: currentValueDriverShuttle,
           coachAssistantId: currentValueAssistShuttle,
-          shuttleDate: ShuttleDateData
+          shuttleDate: combinedDate
         };
         setShuttlePlace([newShuttle, ...shuttlePlace]);
         setIndicator(false);
@@ -449,6 +463,16 @@ export default function EditSchedule({ navigation, route }) {
     } else {
       setValidateGate(true);
     }
+    if (ArrTime == "") {
+      setValidateArrTime(false);
+    } else {
+      setValidateArrTime(true);
+    }
+    if (DepTime == "") {
+      setValidateDepTime(false);
+    } else {
+      setValidateDepTime(true);
+    }
 
     if (
       price2 != "" &&
@@ -461,7 +485,9 @@ export default function EditSchedule({ navigation, route }) {
       currentValueTo != "" &&
       currentValueCoach != "" &&
       currentValueStatus != "" &&
-      currentValueGate != ""
+      currentValueGate != "" &&
+      ArrTime != "" &&
+      DepTime != ""
     ) {
       try {
         setIndicator(true);
@@ -476,6 +502,22 @@ export default function EditSchedule({ navigation, route }) {
             departureTime: shuttleDate
           })
         );
+
+        const date1DatePart = DepDateData.toISOString().split("T")[0];
+        DepTimeData.setHours(DepTimeData.getHours() + 7);
+
+        const date2TimePart = DepTimeData.toISOString().split("T")[1];
+
+        const combinedDate = new Date(`${date1DatePart}T${date2TimePart}`);
+        DepTimeData.setHours(DepTimeData.getHours() - 7);
+
+        const date1ArrDatePart = ArrDateData.toISOString().split("T")[0];
+        ArrTimeData.setHours(ArrTimeData.getHours() + 7);
+
+        const date2ArrTimePart = ArrTimeData.toISOString().split("T")[1];
+
+        const combinedArrDate = new Date(`${date1ArrDatePart}T${date2ArrTimePart}`);
+        ArrTimeData.setHours(ArrTimeData.getHours() - 7);
         
         const data = {
           shuttleInfo: shuttles,
@@ -487,8 +529,8 @@ export default function EditSchedule({ navigation, route }) {
           arrivalPlace: currentValueTo,
           price: parseInt(price2),
           gate: parseInt(currentValueGate),
-          departureTime: DepDateData,
-          arrivalTime: ArrDateData,
+          departureTime: combinedDate,
+          arrivalTime: combinedArrDate,
           status: parseInt(currentValueStatus)
         };
         // console.log(data);
@@ -507,18 +549,30 @@ export default function EditSchedule({ navigation, route }) {
 
   const arrival = new Date(arrivalTime)
   const [validateArrDate, setValidateArrDate] = useState(true);
-  const [ArrDate, setArrDate] = useState(arrival.toLocaleString());
+  const [ArrDate, setArrDate] = useState(arrival.toLocaleDateString());
   const ArrDateHandler = (val) => {
     setArrDate(val);
     setValidateArrDate(true);
   };
+  const [validateArrTime, setValidateArrTime] = useState(true);
+  const [ArrTime, setArrTime] = useState(arrival.toLocaleTimeString());
+  const ArrTimeHandler = (val) => {
+    setArrTime(val);
+    setValidateArrTime(true);
+  };
 
   const departure = new Date(departureTime);
   const [validateDepDate, setValidateDepDate] = useState(true);
-  const [DepDate, setDepDate] = useState(departure.toLocaleString());
+  const [DepDate, setDepDate] = useState(departure.toLocaleDateString());
   const DepDateHandler = (val) => {
     setDepDate(val);
     setValidateDepDate(true);
+  };
+  const [validateDepTime, setValidateDepTime] = useState(true);
+  const [DepTime, setDepTime] = useState(departure.toLocaleTimeString());
+  const DepTimeHandler = (val) => {
+    setDepTime(val);
+    setValidateDepTime(true);
   };
 
   const [validateShuttleDate, setValidateShuttleDate] = useState(true);
@@ -527,87 +581,158 @@ export default function EditSchedule({ navigation, route }) {
     setShuttleDate(val);
     setValidateShuttleDate(true);
   };
+  const [validateShuttleTime, setValidateShuttleTime] = useState(true);
+  const [ShuttleTime, setShuttleTime] = useState("");
+  const ShuttleTimeHandler = (val) => {
+    setShuttleTime(val);
+    setValidateShuttleTime(true);
+  };
 
-  const [DepDateData, setDepDateData] = useState(new Date());
-  const [ArrDateData, setArrDateData] = useState(new Date());
+  const [DepDateData, setDepDateData] = useState(new Date(departureTime));
+  const [ArrDateData, setArrDateData] = useState(new Date(arrivalTime));
   const [ShuttleDateData, setShuttleDateData] = useState(new Date());
+  const [DepTimeData, setDepTimeData] = useState(new Date(departureTime));
+  const [ArrTimeData, setArrTimeData] = useState(new Date(arrivalTime));
+  const [ShuttleTimeData, setShuttleTimeData] = useState(new Date());
 
   const [date, setDate] = useState(new Date());
   const [openPicker, setOpenPicker] = useState(false);
   const toggleDatepicker = () => {
-    if (mode == "date") {
-      setMode("time");
-    } else {
+    if (mode == "time") {
       setMode("date");
     }
     setOpenPicker(!openPicker);
   };
   const onChange = ({ type }, selectedDate) => {
+    toggleDatepicker();
     if (type == "set") {
       const currentDate = selectedDate;
       setDate(currentDate);
       if (Platform.OS === "android") {
-        toggleDatepicker();
         setDepDateData(currentDate);
-        setDepDate(currentDate.toLocaleString());
+        setDepDate(currentDate.toLocaleDateString());
       }
     } else {
       toggleDatepicker();
+    }
+  };
+  const [time, setTime] = useState(new Date());
+  const [openPickerTime, setOpenPickerTime] = useState(false);
+  const toggleTimepicker = () => {
+    if (modeTime == "date") {
+      setModeTime("time");
+    }
+    setOpenPickerTime(!openPickerTime);
+  };
+  const onChangeTime = ({ type }, selectedDate) => {
+    toggleTimepicker();
+    if (type == "set") {
+      const currentDate = selectedDate;
+      setTime(currentDate);
+      if (Platform.OS === "android") {
+        setDepTimeData(currentDate);
+        setDepTime(currentDate.toLocaleTimeString());
+      }
+    } else {
+      toggleTimepicker();
     }
   };
 
   const [dateShuttle, setDateShuttle] = useState(new Date());
   const [openPickerShuttle, setOpenPickerShuttle] = useState(false);
   const toggleDatepickerShuttle = () => {
-    if (modeShuttle == "date") {
-      setModeShuttle("time");
-    } else {
+    if (modeShuttle == "time") {
       setModeShuttle("date");
-    }
+    } 
     setOpenPickerShuttle(!openPickerShuttle);
   };
   const onChangeShuttle = ({ type }, selectedDate) => {
+    toggleDatepickerShuttle();
     if (type == "set") {
       const currentDate = selectedDate;
       setDateShuttle(currentDate);
       if (Platform.OS === "android") {
-        toggleDatepickerShuttle();
         setShuttleDateData(currentDate);
-        setShuttleDate(currentDate.toLocaleString());
+        setShuttleDate(currentDate.toLocaleDateString());
       }
     } else {
       toggleDatepickerShuttle();
+    }
+  };
+  const [timeShuttle, setTimeShuttle] = useState(new Date());
+  const [openPickerShuttleTime, setOpenPickerShuttleTime] = useState(false);
+  const toggleTimepickerShuttle = () => {
+    if (modeShuttleTime == "date") {
+      setModeShuttleTime("time");
+    } 
+    setOpenPickerShuttleTime(!openPickerShuttleTime);
+  };
+  const onChangeShuttleTime = ({ type }, selectedDate) => {
+    toggleTimepickerShuttle();
+    if (type == "set") {
+      const currentDate = selectedDate;
+      setTimeShuttle(currentDate);
+      if (Platform.OS === "android") {
+        setShuttleTimeData(currentDate);
+        setShuttleTime(currentDate.toLocaleTimeString());
+      }
+    } else {
+      toggleTimepickerShuttle();
     }
   };
 
   const [dateArr, setDateArr] = useState(new Date());
   const [openPickerArr, setOpenPickerArr] = useState(false);
   const toggleDatepickerArr = () => {
-    if (modeArr == "date") {
-      setModeArr("time");
-    } else {
+    if (modeArr == "time") {
       setModeArr("date");
-    }
+    } 
     setOpenPickerArr(!openPickerArr);
   };
   const onChangeArr = ({ type }, selectedDate) => {
+    toggleDatepickerArr();
     if (type == "set") {
       const currentDate = selectedDate;
       setDateArr(currentDate);
       if (Platform.OS === "android") {
-        toggleDatepickerArr();
         setArrDateData(currentDate);
 
-        setArrDate(currentDate.toLocaleString());
+        setArrDate(currentDate.toLocaleDateString());
       }
     } else {
       toggleDatepickerArr();
+    }
+  };
+  const [timeArr, setTimeArr] = useState(new Date());
+  const [openPickerArrTime, setOpenPickerArrTime] = useState(false);
+  const toggleTimepickerArr = () => {
+    if (modeArrTime == "date") {
+      setModeArrTime("time");
+    } 
+    setOpenPickerArrTime(!openPickerArrTime);
+  };
+  const onChangeArrTime = ({ type }, selectedDate) => {
+    toggleTimepickerArr();
+    if (type == "set") {
+      const currentDate = selectedDate;
+      setTimeArr(currentDate);
+      if (Platform.OS === "android") {
+        setArrTimeData(currentDate);
+
+        setArrTime(currentDate.toLocaleTimeString());
+      }
+    } else {
+      toggleTimepickerArr();
     }
   };
 
   const [mode, setMode] = useState("time");
   const [modeArr, setModeArr] = useState("time");
   const [modeShuttle, setModeShuttle] = useState("time");
+
+  const [modeTime, setModeTime] = useState("time");
+  const [modeArrTime, setModeArrTime] = useState("time");
+  const [modeShuttleTime, setModeShuttleTime] = useState("time");
 
   const reloadHandler = () => {
     setPrice("");
@@ -860,7 +985,7 @@ export default function EditSchedule({ navigation, route }) {
                   is24Hour={true}
                 />
               )}
-             <Text style={styles.textLabel}>Shuttle Time</Text>
+             <Text style={styles.textLabel}>Shuttle Date</Text>
             <Pressable onPress={toggleDatepickerShuttle}>
               <TextInput
                 editable={false}
@@ -869,12 +994,42 @@ export default function EditSchedule({ navigation, route }) {
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Shuttle Time"
+                placeholder="Enter Shuttle Date"
                 value={ShuttleDate}
                 onChangeText={ShuttleDateHandler}
                 onPressIn={toggleDatepickerShuttle}
               ></TextInput>
               {!validateShuttleDate && (
+                <Text style={styles.validateText}>
+                  This field can't be empty
+                </Text>
+              )}
+            </Pressable>
+
+            {openPickerShuttleTime && (
+                <DateTimePicker
+                  mode={modeShuttleTime}
+                  display="spinner"
+                  value={timeShuttle}
+                  onChange={onChangeShuttleTime}
+                  is24Hour={true}
+                />
+              )}
+             <Text style={styles.textLabel}>Shuttle Time</Text>
+            <Pressable onPress={toggleTimepickerShuttle}>
+              <TextInput
+                editable={false}
+                style={
+                  validateShuttleTime == true
+                    ? styles.textInput
+                    : styles.textInputWrong
+                }
+                placeholder="Enter Shuttle Time"
+                value={ShuttleTime}
+                onChangeText={ShuttleTimeHandler}
+                onPressIn={toggleTimepickerShuttle}
+              ></TextInput>
+              {!validateShuttleTime && (
                 <Text style={styles.validateText}>
                   This field can't be empty
                 </Text>
@@ -944,8 +1099,9 @@ export default function EditSchedule({ navigation, route }) {
               />
             </View>
           </View>
-          <Text style={styles.titleText}>Time</Text>
           <View>
+          <Text style={styles.titleText}>Departure</Text>
+
             {/* 2 date time picker */}
             {openPicker && (
               <DateTimePicker
@@ -956,7 +1112,7 @@ export default function EditSchedule({ navigation, route }) {
                 is24Hour={true}
               />
             )}
-            <Text style={styles.textLabel}>Departure Time</Text>
+            <Text style={styles.textLabel}>Departure Date</Text>
             <Pressable onPress={toggleDatepicker}>
               <TextInput
                 editable={false}
@@ -965,7 +1121,7 @@ export default function EditSchedule({ navigation, route }) {
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Departure Time"
+                placeholder="Enter Departure Date"
                 value={DepDate}
                 onChangeText={DepDateHandler}
                 onPressIn={toggleDatepicker}
@@ -977,6 +1133,38 @@ export default function EditSchedule({ navigation, route }) {
               )}
             </Pressable>
 
+            {openPickerTime && (
+              <DateTimePicker
+                mode={modeTime}
+                display="spinner"
+                value={time}
+                onChange={onChangeTime}
+                is24Hour={true}
+              />
+            )}
+            <Text style={styles.textLabel}>Departure Time</Text>
+            <Pressable onPress={toggleTimepicker}>
+              <TextInput
+                editable={false}
+                style={
+                  validateDepTime == true
+                    ? styles.textInput
+                    : styles.textInputWrong
+                }
+                placeholder="Enter Departure Time"
+                value={DepTime}
+                onChangeText={DepTimeHandler}
+                onPressIn={toggleTimepicker}
+              ></TextInput>
+              {!validateDepTime && (
+                <Text style={styles.validateText}>
+                  This field can't be empty
+                </Text>
+              )}
+            </Pressable>
+          <Text style={styles.titleText}>Arrival</Text>
+
+
             {openPickerArr && (
               <DateTimePicker
                 mode={modeArr}
@@ -986,7 +1174,7 @@ export default function EditSchedule({ navigation, route }) {
                 is24Hour={true}
               />
             )}
-            <Text style={styles.textLabel}>Arrival Time</Text>
+            <Text style={styles.textLabel}>Arrival Date</Text>
             <Pressable onPress={toggleDatepickerArr}>
               <TextInput
                 editable={false}
@@ -995,12 +1183,42 @@ export default function EditSchedule({ navigation, route }) {
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Arrival Time"
+                placeholder="Enter Arrival Date"
                 value={ArrDate}
                 onChangeText={ArrDateHandler}
                 onPressIn={toggleDatepickerArr}
               ></TextInput>
               {!validateArrDate && (
+                <Text style={styles.validateText}>
+                  This field can't be empty
+                </Text>
+              )}
+            </Pressable>
+
+            {openPickerArrTime && (
+              <DateTimePicker
+                mode={modeArrTime}
+                display="spinner"
+                value={timeArr}
+                onChange={onChangeArrTime}
+                is24Hour={true}
+              />
+            )}
+            <Text style={styles.textLabel}>Arrival Time</Text>
+            <Pressable onPress={toggleTimepickerArr}>
+              <TextInput
+                editable={false}
+                style={
+                  validateArrTime == true
+                    ? styles.textInput
+                    : styles.textInputWrong
+                }
+                placeholder="Enter Arrival Time"
+                value={ArrTime}
+                onChangeText={ArrTimeHandler}
+                onPressIn={toggleTimepickerArr}
+              ></TextInput>
+              {!validateArrTime && (
                 <Text style={styles.validateText}>
                   This field can't be empty
                 </Text>
