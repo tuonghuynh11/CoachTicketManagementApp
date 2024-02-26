@@ -143,11 +143,11 @@ const StatisticsScreen = function ({ navigation }) {
 
         <Text style={styles.headerText}>Statistics</Text>
       </View>
-      <ScrollView style={{ opacity: 0.7 }}>
+      <ScrollView style={{ opacity: 1 }}>
         {/* <Text style={styles.text}>Statistics</Text> */}
 
         <View>
-          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18}}>TICKETS SOLD BY MONTHS </Text>
+          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18, color: '#283663'}}>Tickets Sold By Months </Text>
 
           <LineChart
             width={Dimensions.get("window").width}
@@ -156,8 +156,8 @@ const StatisticsScreen = function ({ navigation }) {
             bezier
             chartConfig={{
               backgroundColor: "#e26a00",
-              backgroundGradientFrom: "#fb8c00",
-              backgroundGradientTo: "#ffa726",
+              backgroundGradientFrom: "#db8b2a",
+              backgroundGradientTo: "#f6b34e",
               decimalPlaces: 2, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -213,7 +213,7 @@ const StatisticsScreen = function ({ navigation }) {
           ></LineChart>
         </View>
         <View>
-          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18}}>TICKETS SOLD BY TRIPS </Text>
+          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18, color: '#283663'}}>Tickets Sold By Trips </Text>
           <ScrollView>
             <ScrollView horizontal={true}>
               <BarChart
@@ -222,8 +222,8 @@ const StatisticsScreen = function ({ navigation }) {
                 verticalLabelRotation={60}
                 chartConfig={{
                   backgroundColor: "pink",
-                  backgroundGradientFrom: "#9b00fb",
-                  backgroundGradientTo: "#ff74f3",
+                  backgroundGradientFrom: "#6e73d3",
+                  backgroundGradientTo: "#b3dcf0",
                   color: (opacity = 1) => `rgba(1, 1, 1, ${opacity})`,
                   labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 }}
@@ -241,7 +241,7 @@ const StatisticsScreen = function ({ navigation }) {
           </ScrollView>
         </View>
         <View>
-          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18}}>PIE CHART</Text>
+          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18, color: '#283663'}}>Revenue By Years</Text>
           <View >
             <PieChart
               data={piedata}
