@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, View, Text } from "react-native";
 
 function AboutUsScreen() {
+  const { t } = useTranslation();
   return (
     <View style={styles.root}>
       <Image
@@ -26,7 +28,7 @@ function AboutUsScreen() {
         today to learn more about our Coach Ticket Management App and start your
         journey towards greater efficiency and profitability.
       </Text>
-      <Text style={styles.text}>Version 1</Text>
+      <Text style={styles.text}>{t("version")} 1</Text>
     </View>
   );
 }

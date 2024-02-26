@@ -16,7 +16,9 @@ import GlobalColors from "../../Color/colors";
 import { TouchableWithoutFeedback } from "react-native";
 import { EmailValidation } from "../../Helper/Validation";
 import AuthInput from "../../Componets/Authentication/AuthInput";
+import { useTranslation } from "react-i18next";
 function FeedbackAppModal({ isVisible, onSubmit, onCancel, defaultEmail }) {
+  const { t } = useTranslation();
   const [content, setContent] = useState("");
   const [enteredEmail, setEnteredEmail] = useState(defaultEmail);
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
@@ -69,7 +71,7 @@ function FeedbackAppModal({ isVisible, onSubmit, onCancel, defaultEmail }) {
                 { color: GlobalColors.headerColor, fontSize: 25 },
               ]}
             >
-              Report
+              Feedback
             </Text>
           </View>
           <Image
@@ -89,7 +91,7 @@ function FeedbackAppModal({ isVisible, onSubmit, onCancel, defaultEmail }) {
           </View>
           <View style={{ width: "100%", zIndex: -1 }}>
             <TextInput
-              placeholder="Content"
+              placeholder={t("content")}
               style={styles.content}
               value={content}
               multiline={true}
@@ -106,7 +108,7 @@ function FeedbackAppModal({ isVisible, onSubmit, onCancel, defaultEmail }) {
                   { backgroundColor: "#f1aca9", flex: 1 },
                 ]}
               >
-                <Text style={styles.closeButtonText}>Cancel</Text>
+                <Text style={styles.closeButtonText}>{t("cancel")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 // onPress={callback}
@@ -116,7 +118,7 @@ function FeedbackAppModal({ isVisible, onSubmit, onCancel, defaultEmail }) {
                 ]}
                 onPress={submitHandler}
               >
-                <Text style={styles.closeButtonText}>Send</Text>
+                <Text style={styles.closeButtonText}>{t("send")}</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -18,6 +18,7 @@ function HomeNavigation() {
           bottom: 25,
           left: 20,
           right: 20,
+          height: 80,
           borderRadius: 15,
           justifyContent: "center",
           alignItems: "center",
