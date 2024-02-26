@@ -513,7 +513,7 @@ function ScanBarcode({ navigation }) {
   }
   if (hasPermission === false) {
     return (
-      <View style={[styles.container, { backgroundColor: "#ff7f50" }]}>
+      <View style={[styles.container, { backgroundColor: "#1f2c73" }]}>
         <Text>No access to camera</Text>
         <TouchableOpacity
           style={styles.button}
@@ -530,7 +530,7 @@ function ScanBarcode({ navigation }) {
       style={[
         styles.container,
         {
-          backgroundColor: "#ff7f50",
+          backgroundColor: "#1f2c73",
           justifyContent: "center",
         },
       ]}
