@@ -16,7 +16,10 @@ import { TouchableWithoutFeedback } from "react-native";
 import GlobalColors from "../../Color/colors";
 import AuthInput from "../Authentication/AuthInput";
 import { PasswordValidation } from "../../Helper/Validation";
+import { useTranslation } from "react-i18next";
 function ChangePasswordPopUp({ isVisible, onCancel, onChangePasswordHandler }) {
+  const { t } = useTranslation();
+
   const [enteredOldPassword, setEnteredOldPassword] = useState("");
   const [enteredNewPassword, setEnteredNewPassword] = useState("");
 
@@ -74,18 +77,15 @@ function ChangePasswordPopUp({ isVisible, onCancel, onChangePasswordHandler }) {
                 justifyContent: "center",
               }}
             >
-              <Text style={styles.title}>Change Password</Text>
+              <Text style={styles.title}>{t("change-password")}</Text>
             </View>
             <View style={{ width: "100%", marginTop: 10 }}>
-              <Text style={styles.subTitle}>
-                Please enter your old password again, then enter your new
-                password.
-              </Text>
+              <Text style={styles.subTitle}>{t("change-password-note")}</Text>
             </View>
 
             <View style={{ width: "100%" }}>
               <AuthInput
-                label="Old Password"
+                label={t("old-password")}
                 keyboardType="default"
                 onUpdateValue={updateInputValueHandler.bind(
                   this,
@@ -95,13 +95,13 @@ function ChangePasswordPopUp({ isVisible, onCancel, onChangePasswordHandler }) {
                 placeholder="M12345@udghg"
                 message={
                   enteredOldPassword === ""
-                    ? "Field is required"
-                    : "Old Password was wrong"
+                    ? t("field-required")
+                    : t("old-password-wrong")
                 }
                 secure
               />
               <AuthInput
-                label="New Password"
+                label={t("new-password")}
                 keyboardType="default"
                 secure
                 onUpdateValue={updateInputValueHandler.bind(
@@ -112,8 +112,8 @@ function ChangePasswordPopUp({ isVisible, onCancel, onChangePasswordHandler }) {
                 placeholder="M12345@udghg"
                 message={
                   enteredNewPassword === ""
-                    ? "Field is required"
-                    : "Password must be at least 8 characters long, 1 upper case character,1 lower case character and 1 special character"
+                    ? t("field-required")
+                    : t("password-rule")
                 }
               />
             </View>
@@ -129,7 +129,7 @@ function ChangePasswordPopUp({ isVisible, onCancel, onChangePasswordHandler }) {
                   { backgroundColor: "#f1aca9", flex: 1 },
                 ]}
               >
-                <Text style={styles.closeButtonText}>Cancel</Text>
+                <Text style={styles.closeButtonText}>{t("cancel")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 // onPress={callback}
@@ -139,7 +139,7 @@ function ChangePasswordPopUp({ isVisible, onCancel, onChangePasswordHandler }) {
                 ]}
                 onPress={changePasswordHandler}
               >
-                <Text style={styles.closeButtonText}>Submit</Text>
+                <Text style={styles.closeButtonText}>{t("submit")}</Text>
               </TouchableOpacity>
             </View>
           </View>

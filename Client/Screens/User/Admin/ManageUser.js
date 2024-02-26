@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import { MaterialIcons } from '@expo/vector-icons';
 
 import {
   StyleSheet,
@@ -157,6 +158,7 @@ function Screen({ navigation }) {
           style={styles.input2}
           placeholder="Search"
           value={searchValue}
+          placeholderTextColor="#FFFFFF"
           onChangeText={(query) => {
             handleSearch(query);
           }}
@@ -200,24 +202,26 @@ function Screen({ navigation }) {
                   });
                 }}
               >
-                <Text style={{ marginBottom: 10 }}>{item.userId}</Text>
+                {/* <Text style={{ marginBottom: 10, color: '#72C6A1' , fontSize: 20}}>{item.userId}</Text> */}
                 <View
                   style={[
                     styles.avatarContainer,
                     { justifyContent: "space-between" },
                   ]}
                 >
+                <Text style={{ marginBottom: 10, color: '#72C6A1' , fontSize: 20, marginRight: 5}}>{item.userId}</Text>
+
                   <View>
                     <Image
                       source={{ uri: item.UserAccountData.avatar }}
                       style={styles.avatar}
                     ></Image>
                   </View>
-                  <View style={{ flex: 7, paddingRight: 15 }}>
+                  <View style={{ flex: 7, paddingRight: 15 , marginLeft: 15}}>
                     <Text style={styles.text2}>
                       {" "}
                       Name:{" "}
-                      <Text style={{ fontWeight: "bold" }}>
+                      <Text style={{ fontWeight: "bold", fontSize: 15, color: '#283663' }}>
                         {item.fullName}
                       </Text>
                     </Text>
@@ -235,7 +239,7 @@ function Screen({ navigation }) {
                     style={{ flexDirection: "row", justifyContent: "flex-end" }}
                   >
                     {item.UserAccountData.roleId == 1 && (
-                      <AntDesign
+                      <MaterialIcons
                         onPress={() => {
                           Alert.alert(
                             "ALERT",
@@ -277,12 +281,12 @@ function Screen({ navigation }) {
                             ]
                           );
                         }}
-                        size={20}
-                        name="closecircle"
-                        color="#ff0000"
+                        size={30}
+                        name="delete"
+                        color="red"
                         backgroundColor="#D9D9D9"
                         style={{ backgroundColor: "transparent" }}
-                      ></AntDesign>
+                      ></MaterialIcons>
                     )}
                   </View>
                 </View>
@@ -719,15 +723,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 300,
     marginVertical: 10,
+    borderColor: '#283663',
+    color: '#283663'
   },
   input2: {
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
     width: 200,
-    marginVertical: 10,
+    // marginVertical: 10,
     flex: 1,
-    marginEnd: "10%"
+    marginEnd: "10%",
+    backgroundColor: '#283663',
+    color: 'white',
+    borderColor: '#283663',
+    marginBottom: -20
   },
   banner: {
     display: "flex",
@@ -754,7 +764,7 @@ const styles = StyleSheet.create({
   avatar: {
     height: 90,
     width: 90,
-    borderRadius: 40,
+    borderRadius: 45,
   },
   avatar2: {
     height: 190,
@@ -771,8 +781,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center",
+    color: '#283663'
   },
-  text2: { flex: 1, flexWrap: "wrap" },
+  text2: { flex: 1, flexWrap: "wrap" ,fontSize: 15, color: '#283663'},
   dumbass: {
     marginTop: 20,
     backgroundColor: "#6875B7",
@@ -781,9 +792,10 @@ const styles = StyleSheet.create({
   },
   flatlist: {
     borderRadius: 20,
-    backgroundColor: "#283663",
+    backgroundColor: "white",
     marginTop: 30,
     padding: 10,
+    marginBottom: 30
   },
   dumbass2: {
     height: "100%",

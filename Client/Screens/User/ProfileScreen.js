@@ -9,9 +9,11 @@ import {
   View,
   Linking,
   Platform,
+  ScrollView,
+  Switch,
 } from "react-native";
 import TimeOutBooking from "../../Componets/UI/TImeOutBooking";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useTransition } from "react";
 import { AuthContext } from "../../Store/authContex";
 import CircleImage from "../../Componets/UI/CircleImage";
 import GlobalColors from "../../Color/colors";
@@ -25,7 +27,10 @@ import UserAccountInfo from "../../Models/UserAccountInfo";
 import { sendFeedbackEmail } from "../../util/apiServices";
 import PopUp from "../../Componets/UI/PopUp";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
-
+import CustomSwitch from "../../Componets/UI/CustomSwitch";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
+import { LngContext } from "../../Store/languageContext";
 function ProfileScreen({ navigation, route }) {
   const [isLogoutVisible, setIsLogoutVisible] = useState(false);
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
@@ -35,9 +40,12 @@ function ProfileScreen({ navigation, route }) {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpType, setPopUpType] = useState("Success");
   const authCtx = useContext(AuthContext);
+  const lngCtx = useContext(LngContext);
 
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const isFocused = useIsFocused();
+
+  const { t } = useTranslation();
   useEffect(() => {
     //getMemberShip
     if (isFocused) {
@@ -176,6 +184,16 @@ function ProfileScreen({ navigation, route }) {
       }
     }
   }
+  function changeLng(index) {
+    console.log(index);
+    if (index === 1) {
+      i18next.changeLanguage("en");
+      lngCtx.setLng("en");
+    } else {
+      i18next.changeLanguage("vi");
+      lngCtx.setLng("vi");
+    }
+  }
   return (
     <>
       {isLoading && (
@@ -192,7 +210,7 @@ function ProfileScreen({ navigation, route }) {
             opacity: 0.9,
           }}
         >
-          <Loading message={"Logging out ..."} />
+          <Loading message={t("logging-out") + " ..."} />
         </View>
       )}
       <PopUp
@@ -200,17 +218,17 @@ function ProfileScreen({ navigation, route }) {
         isVisible={isPopUpVisible}
         title={
           popUpType == "Success"
-            ? "Successful"
+            ? t("successful")
             : popUpType == "Warning"
-            ? "Content or Email is required"
-            : "Something went wrong!!"
+            ? t("content-email-warning")
+            : t("something-was-wrong") + "!!"
         }
         textBody={
           popUpType == "Success"
-            ? "Your feedback has been sent."
+            ? t("feedback-sent")
             : popUpType == "Warning"
-            ? "Please enter all fields in the form"
-            : "Please check your internet connection!!"
+            ? t("required-entered-all-fields")
+            : t("check-internet-connection")
         }
         callback={() => {
           setIsPopUpVisible((curr) => !curr);
@@ -250,7 +268,7 @@ function ProfileScreen({ navigation, route }) {
           }, 2000);
         }}
       />
-      <SafeAreaView style={styles.root}>
+      <ScrollView style={[styles.root, { paddingTop: 40 }]}>
         <View style={styles.subRoot}>
           <View
             style={{
@@ -271,7 +289,9 @@ function ProfileScreen({ navigation, route }) {
                 borderRadius: 10,
               }}
             >
-              <Text style={{ fontWeight: "600", color: "white" }}>Member</Text>
+              <Text style={{ fontWeight: "600", color: "white" }}>
+                {t("member")}
+              </Text>
             </View>
             <Image
               style={{ width: 50, height: 70 }}
@@ -306,27 +326,27 @@ function ProfileScreen({ navigation, route }) {
           {/* <Text style={styles.subTitle}>0xxxxxxxxx</Text> */}
           <View style={styles.body}>
             <View style={{ marginTop: -20 }}>
-              <BodyItem title={"Information"}>
+              <BodyItem title={t("information")}>
                 <BodySubItem
-                  title={"My profile"}
+                  title={t("my-profile")}
                   onPress={editProfileHandler}
                 />
                 <BodySubItem
-                  title={"Ordered History"}
+                  title={t("ordered-history")}
                   onPress={() => navigation.navigate("HistoryScreenOldTicket")}
                 />
               </BodyItem>
             </View>
 
-            <BodyItem title={"Promotions and Offering"}>
+            <BodyItem title={t("promotions-offering")}>
               <BodySubItem
-                title={"My Offering"}
+                title={t("my-offering")}
                 onPress={() => {
                   navigation.navigate("MyOfferingScreen");
                 }}
               />
             </BodyItem>
-            <BodyItem title={"FAQ’s & Support"}>
+            <BodyItem title={"FAQ’s & " + t("support")}>
               <BodySubItem
                 onPress={makeCallHandler}
                 title={"HotLine"}
@@ -335,7 +355,7 @@ function ProfileScreen({ navigation, route }) {
                 hotline={"0123456789"}
               />
               <BodySubItem
-                title={"About Us"}
+                title={t("about-us")}
                 onPress={() => {
                   navigation.navigate("AboutUsScreen");
                 }}
@@ -348,6 +368,54 @@ function ProfileScreen({ navigation, route }) {
                 isNotSymbol
               />
             </BodyItem>
+            <View
+              style={[
+                {
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  padding: 10,
+                  backgroundColor: "#a8dfeb",
+                  borderRadius: 10,
+                  alignItems: "center",
+                },
+              ]}
+              onPress={() => {}}
+            >
+              <Text style={{ fontSize: 16, fontWeight: "500" }}>
+                {t("language")}
+              </Text>
+              {/* <Switch
+                trackColor={{ false: "purple", true: "#2877df" }}
+                value={true}
+                onValueChange={() => {
+                  // setIsRoundTrip((curr) => !curr);
+                  // setDateOfRoundTrip("");
+                }}
+                
+              /> */}
+              <CustomSwitch
+                selectionMode={2}
+                roundCorner={true}
+                option1={"EN"}
+                option2={"VI"}
+                onSelectSwitch={changeLng}
+                selectionColor={"white"}
+                defaultSelectionIndex={lngCtx.lng == "en" ? 1 : 2}
+              />
+
+              {/* {isHotLine && (
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "500",
+              color: "red",
+              paddingVertical: 3,
+            }}
+          >
+            {hotline}
+          </Text>
+        )} */}
+            </View>
             <View style={{ alignItems: "center" }}>
               <Pressable
                 style={({ pressed }) => [
@@ -372,7 +440,7 @@ function ProfileScreen({ navigation, route }) {
                   color="black"
                 />
                 <Text style={{ fontSize: 16, fontWeight: "500" }}>
-                  {"Log out"}
+                  {t("log-out")}
                 </Text>
               </Pressable>
             </View>
@@ -382,9 +450,10 @@ function ProfileScreen({ navigation, route }) {
             style={{ width: 50, height: 40 }}
             source={require("../../../assets/logoText.png")}
           /> */}
-          <Text style={{ marginBottom: -10 }}>Version 1.0</Text>
+          <Text style={{ marginBottom: -10 }}>{t("version")} 1.0</Text>
         </View>
-      </SafeAreaView>
+        <View style={{ height: 150 }} />
+      </ScrollView>
     </>
   );
 }

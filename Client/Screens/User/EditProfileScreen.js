@@ -30,8 +30,10 @@ import { resetPassword, updateUserInformation } from "../../util/databaseAPI";
 import { AuthContext } from "../../Store/authContex";
 import { TouchableOpacity } from "react-native";
 import Loading from "../../Componets/UI/Loading";
+import { useTranslation } from "react-i18next";
 function EditProfileScreen({ navigation, route }) {
   const authCtx = useContext(AuthContext);
+  const { t } = useTranslation();
 
   const [enteredFullName, setEnteredFullName] = useState("");
   const [enteredAddress, setEnteredAddress] = useState("");
@@ -248,10 +250,10 @@ function EditProfileScreen({ navigation, route }) {
         title={popUpType == "Success" ? "Success" : "Failure"}
         textBody={
           isUpdatePassword
-            ? "Password has been updated. Please sign in again!!"
+            ? t("password-updated")
             : popUpType == "Success"
-            ? "Your information has updated"
-            : "Connection Error!!"
+            ? t("information-updated")
+            : t("connection-error")
         }
         callback={() => setIsPopUpVisible((curr) => !curr)}
       />
@@ -284,7 +286,7 @@ function EditProfileScreen({ navigation, route }) {
             />
             <View style={{ width: "100%" }}>
               <AuthInput
-                label="Full Name"
+                label={t("full-name")}
                 keyboardType="default"
                 onUpdateValue={updateInputValueHandler.bind(this, "fullName")}
                 value={enteredFullName}
@@ -294,7 +296,7 @@ function EditProfileScreen({ navigation, route }) {
                 isDisabled={!isEdit}
               />
               <AuthInput
-                label="Address"
+                label={t("address")}
                 keyboardType="default"
                 onUpdateValue={updateInputValueHandler.bind(this, "address")}
                 value={enteredAddress}
@@ -314,7 +316,7 @@ function EditProfileScreen({ navigation, route }) {
                 isDisabled={!isEdit}
               />
               <AuthInput
-                label="Phone Number"
+                label={t("phone-number")}
                 keyboardType="number-pad"
                 onUpdateValue={updateInputValueHandler.bind(
                   this,
@@ -323,11 +325,11 @@ function EditProfileScreen({ navigation, route }) {
                 value={enteredPhoneNumber}
                 isInvalid={phoneNumberIsInvalid}
                 placeholder="0xxxxxxx"
-                message={"Phone Number is invalided"}
+                message={t("phone-number-invalid")}
                 isDisabled={!isEdit}
               />
               <AuthInput
-                label="User Name (*)"
+                label={`${t("username")} (*)`}
                 keyboardType="default"
                 onUpdateValue={updateInputValueHandler.bind(this, "userName")}
                 value={enteredUserName}
@@ -337,7 +339,7 @@ function EditProfileScreen({ navigation, route }) {
                 isDisabled
               />
               <AuthInput
-                label="Password (*)"
+                label={`${t("password")} (*)`}
                 keyboardType="default"
                 secure={true}
                 // onUpdateValue={updateInputValueHandler.bind(this, "password")}
@@ -350,7 +352,7 @@ function EditProfileScreen({ navigation, route }) {
                   onPress={() => setIsChangePasswordVisible((curr) => !curr)}
                 >
                   <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-                    Change Password ?
+                    {t("change-password")} ?
                   </Text>
                 </FlatButton>
               </View>
@@ -370,7 +372,7 @@ function EditProfileScreen({ navigation, route }) {
                       fontWeight: "bold",
                     }}
                   >
-                    Submit
+                    {t("submit")}
                   </Text>
                 </CustomButton>
               </View>

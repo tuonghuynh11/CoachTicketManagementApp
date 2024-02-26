@@ -31,7 +31,12 @@ import {
   Pressable,
   Platform,
   Modal,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Button,
 } from "react-native";
+import * as NewModal from "react-native-modal";
+
 import { SceneMap, TabView } from "react-native-tab-view";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -42,6 +47,8 @@ import axios from "axios";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { AuthContext } from "../../../Store/authContex";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Loading from "../../../Componets/UI/Loading";
+import MyModal from "../../../Componets/UI/MyModal";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
@@ -260,129 +267,300 @@ const EditDiscount = function ({ navigation }) {
       toggleDatePicker();
     }
   };
+  function confirmIOSDate() {
+    console.log("expired date:", expiredDate);
+    setExpiredDate(formatDate(date));
+    toggleDatePicker();
+  }
   return (
-    <SafeAreaView style={styles.container}>
-      <Pressable
-        style={{ left: 16, position: "absolute" }}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
-      </Pressable>
-      <View style={[styles.discountInfo, { position: "relative" }]}>
-        <TextInput
-          placeholder="Name"
-          value={name}
-          onChangeText={setName}
-          style={styles.input}
-        ></TextInput>
-        <DropDownPicker
-          placeholder="Select discount value"
-          style={styles.input}
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-        ></DropDownPicker>
-        <DropDownPicker
-          placeholder="Select quantity"
-          style={styles.input}
-          value={quantity}
-          setValue={setQuantity}
-          open={open2}
-          setOpen={setOpen2}
-          items={quantityItem}
-          setItems={setQuantityItems}
-        ></DropDownPicker>
-        <Pressable onPress={toggleDatePicker}>
-          <TextInput
-            placeholder="Expiration Date"
-            style={styles.input}
-            value={expiredDate}
-            onChangeText={setExpiredDate}
-            editable={false}
-          ></TextInput>
-        </Pressable>
-        {showDatePicker && (
-          <RNDateTimePicker
-            onChange={dateChange}
-            value={date}
-            minimumDate={new Date()}
-            disabled
-          ></RNDateTimePicker>
-        )}
-        <TextInput
-          placeholder="Minimum price to apply"
-          value={minimum + ""}
-          onChangeText={setMinimum}
-          style={styles.input}
-          keyboardType="numeric"
-        ></TextInput>
-        <TextInput
-          placeholder="Maximum discount price"
-          value={maximum + ""}
-          onChangeText={setMaximum}
-          style={styles.input}
-          keyboardType="numeric"
-        ></TextInput>
-      </View>
-      <View style={{ alignItems: "center", zIndex: -1 }}>
-        <TouchableOpacity
-          style={[styles.input, { backgroundColor: "#23f3a1", width: 100 }]}
-          disabled={value == null || quantity == null}
-          onPress={async () => {
-            const newDiscount2 = {
-              value: value,
-              title: name,
-              expireDate: date,
-              quantity: quantity,
-              minimumpricetoapply: minimum,
-              maximumdiscountprice: maximum,
-            };
-            const token = await AsyncStorage.getItem("token");
-            const config = {
-              headers: {
-                Authorization: token,
-              },
-            };
-            axios
-              .patch(
-                "https://coach-ticket-management-api.onrender.com/api/discounts/" +
-                  item.id,
-                newDiscount2,
-                config
-              )
-              .then((response) => {
-                console.log(response.data);
-                console.log("Update discount successfully");
-              })
-              .catch((error) => {
-                if (error.request) {
-                  console.log(error.request);
-                }
-                if (error.response) {
-                  console.log(error.response.data);
-                }
-              });
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <SafeAreaView style={styles.container}>
+        {/* <Pressable
+          style={{ top: 10, left: 16, position: "absolute", zIndex: 1000 }}
+          onPress={() => {
             navigation.goBack();
           }}
         >
-          <Text
-            style={{
-              fontSize: 20,
-              color: "#ffffff",
-              fontWeight: "900",
-              textAlign: "center",
+          <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
+        </Pressable> */}
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "600",
+            marginTop: 10,
+            marginBottom: -20,
+            alignSelf: "center",
+          }}
+        >
+          Edit Discount
+        </Text>
+        <View
+          style={[styles.discountInfo, { position: "relative", marginTop: 20 }]}
+        >
+          <TextInput
+            placeholder="Name"
+            value={name}
+            onChangeText={setName}
+            style={styles.input}
+          ></TextInput>
+          <DropDownPicker
+            placeholder="Select discount value"
+            style={styles.input}
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            containerStyle={{ zIndex: 1000, width: 340 }}
+          ></DropDownPicker>
+          <DropDownPicker
+            placeholder="Select quantity"
+            style={styles.input}
+            value={quantity}
+            setValue={setQuantity}
+            open={open2}
+            setOpen={setOpen2}
+            items={quantityItem}
+            setItems={setQuantityItems}
+            containerStyle={{ zIndex: 1, width: 340 }}
+          ></DropDownPicker>
+          <Pressable
+            onPress={(e) => {
+              toggleDatePicker();
+            }}
+            style={[styles.input]}
+          >
+            <Text
+              placeholder="Expiration Date"
+              // style={styles.input}
+              style={[
+                { paddingTop: 5 },
+                expiredDate
+                  ? { color: "black" }
+                  : {
+                      color: "black",
+                      opacity: 0.3,
+                    },
+              ]}
+              value={expiredDate}
+              onChangeText={setExpiredDate}
+              editable={false}
+            >
+              {expiredDate ? expiredDate : "Expiration Date"}
+            </Text>
+          </Pressable>
+          <View>
+            <Modal
+              visible={showDatePicker}
+              animationType="slide"
+              onRequestClose={() => setShowDatePicker(false)}
+              transparent={true}
+            >
+              <View
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    borderWidth: 1.3,
+                    borderColor: "green",
+                  }}
+                >
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date ? new Date(date) : new Date()}
+                    mode={"date"}
+                    onChange={dateChange}
+                    display="inline"
+                    accentColor="orange"
+                    textColor="black"
+                    themeVariant="light"
+                  />
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={toggleDatePicker}
+                      style={[
+                        {
+                          height: 50,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: 50,
+                          marginTop: 10,
+                          marginBottom: 15,
+                          backgroundColor: GlobalColors.button,
+                          paddingHorizontal: 20,
+                        },
+                        { backgroundColor: "#11182711" },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          {
+                            fontSize: 14,
+                            fontWeight: "500",
+                            color: "#fff",
+                          },
+                          { color: "#075985" },
+                        ]}
+                      >
+                        Cancel
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={confirmIOSDate}
+                      style={[
+                        {
+                          height: 50,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: 50,
+                          marginTop: 10,
+                          marginBottom: 15,
+                          backgroundColor: GlobalColors.button,
+                          paddingHorizontal: 20,
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          {
+                            fontSize: 14,
+                            fontWeight: "500",
+                            color: "#fff",
+                          },
+                        ]}
+                      >
+                        Confirm
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </View>
+          <TextInput
+            placeholder="Minimum price to apply"
+            value={minimum + ""}
+            onChangeText={setMinimum}
+            style={styles.input}
+            keyboardType="numeric"
+          ></TextInput>
+          <TextInput
+            placeholder="Maximum discount price"
+            value={maximum + ""}
+            onChangeText={setMaximum}
+            style={styles.input}
+            keyboardType="numeric"
+          ></TextInput>
+        </View>
+        <View
+          style={{
+            alignItems: "center",
+            zIndex: -1,
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <TouchableOpacity
+            style={[
+              styles.input,
+              {
+                backgroundColor: "#b9b306",
+                width: 100,
+                borderWidth: 0.5,
+                height: 40,
+                justifyContent: "center",
+              },
+            ]}
+            disabled={value == null || quantity == null}
+            onPress={() => navigation.goBack()}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                color: "#f9fdffff",
+                fontWeight: "900",
+                textAlign: "center",
+              }}
+            >
+              Back
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.input,
+              {
+                backgroundColor: "#3fe077",
+                width: 100,
+                borderWidth: 0.5,
+                height: 40,
+              },
+            ]}
+            disabled={value == null || quantity == null}
+            onPress={async () => {
+              const newDiscount2 = {
+                value: value,
+                title: name,
+                expireDate: date,
+                quantity: quantity,
+                minimumpricetoapply: minimum,
+                maximumdiscountprice: maximum,
+              };
+              const token = await AsyncStorage.getItem("token");
+              const config = {
+                headers: {
+                  Authorization: token,
+                },
+              };
+              axios
+                .patch(
+                  "https://coach-ticket-management-api.onrender.com/api/discounts/" +
+                    item.id,
+                  newDiscount2,
+                  config
+                )
+                .then((response) => {
+                  console.log(response.data);
+                  console.log("Update discount successfully");
+                })
+                .catch((error) => {
+                  if (error.request) {
+                    console.log(error.request);
+                  }
+                  if (error.response) {
+                    console.log(error.response.data);
+                  }
+                });
+              navigation.goBack();
             }}
           >
-            Save
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+            <Text
+              style={{
+                fontSize: 17,
+                color: "#f9fdffff",
+                fontWeight: "900",
+                textAlign: "center",
+              }}
+            >
+              Save
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -418,7 +596,7 @@ const User = function ({ navigation }) {
   let axiosBronzeUser = [];
   const [goldUser, setGoldUser] = useState(axiosGoldUser);
   const [silverUser, setSilverUser] = useState(axiosSilverUser);
-  const [bronzeUser, setBronzeUser] = useState(axiosBronzeUser);
+  const [bronzeUser, setBronzeUser] = useState([]);
 
   const [value, setValue] = useState(null);
   const [open, setOpen] = useState(false);
@@ -434,7 +612,7 @@ const User = function ({ navigation }) {
   const isFocused = useIsFocused();
   const [addDiscountFlag, setAddDiscountFlag] = useState(false);
   const reload = async () => {
-    getData().then(() => {
+    await getData().then(() => {
       allDiscounts = axiosDiscounts;
       getUsers()
         .then(() => {
@@ -449,6 +627,7 @@ const User = function ({ navigation }) {
             const bronze = axiosUsers.filter(
               (user) => user.UserAccountData.memberShipId == "1"
             );
+            axiosBronzeUser = [];
             axiosBronzeUser.push(bronze);
 
             setBronzeUser(bronze);
@@ -566,206 +745,299 @@ const User = function ({ navigation }) {
   const [silverAllChecked, setSilverAllChecked] = useState(false);
   const [goldAllChecked, setGoldAllChecked] = useState(false);
   return (
-    <ScrollView style={styles.container}>
-      <View
-        style={{
-          marginStart: 30,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <Modal
-          animationType="fade"
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(false);
+    <>
+      {modalVisible && (
+        <View
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            position: "absolute",
           }}
         >
-          <View style={styles.centeredView}>
-            <DropDownPicker
-              style={styles.input}
-              open={discountopen}
-              value={systemDiscountValue}
-              items={discountItems}
-              setItems={setDiscountItems}
-              setValue={setSystemDiscountValue}
-              setOpen={setdiscountopen}
-            ></DropDownPicker>
-            <TouchableOpacity
-              onPress={async () => {
-                const token = await AsyncStorage.getItem("token");
-                if (membershipFlag == 2) {
-                  silverUser.forEach((silver) => {
-                    if (!silver.isChecked) return;
-                    const x = silver.userId + "";
-                    const y = systemDiscountValue + "";
-                    const newUserDiscount = {
-                      userId: [`${x}`],
-                      discountId: [`${y}`],
-                    };
-
-                    axios
-                      .post(`${images.apiLink}userDiscounts`, newUserDiscount, {
-                        headers: {
-                          Authorization: token,
-                        },
-                      })
-                      .then((response) => {
-                        Alert.alert("Add successfully");
-                        axios
-                          .get(`${images.apiLink}userDiscounts`, {
-                            headers: {
-                              Authorization: token,
-                            },
-                            params: {
-                              userId: silver.userId,
-                              discountId: systemDiscountValue,
-                            },
-                          })
-                          .then((response) => {
-                            const newlyAdded =
-                              response.data.data.rows[0].DiscountData;
-                            silver.discountList.push(newlyAdded);
-                          })
-                          .catch((error) => {
-                            if (error.request) {
-                              console.log(error.request);
-                            }
-                            if (error.response) {
-                              console.log(error.response);
-                              Alert.alert(error.response.message);
-                            }
-                          });
-                        setModalVisible(!modalVisible);
-                      })
-                      .catch((error) => {
-                        if (error.request) {
-                          console.log(error.request);
-                        }
-                        if (error.response) {
-                          console.log(error.response);
-                          Alert.alert(error.response.message);
-                        }
-                      });
-                  });
-                } else if (membershipFlag == 3) {
-                  goldUser.forEach((gold) => {
-                    if (!gold.isChecked) return;
-                    const newUserDiscount = {
-                      userId: [`${gold.userId}`],
-                      discountId: [`${systemDiscountValue}`],
-                    };
-
-                    axios
-                      .post(`${images.apiLink}userDiscounts`, newUserDiscount, {
-                        headers: {
-                          Authorization: token,
-                        },
-                      })
-                      .then(async (response) => {
-                        Alert.alert("Add successfully");
-                        axios
-                          .get(`${images.apiLink}userDiscounts`, {
-                            headers: {
-                              Authorization: token,
-                            },
-                            params: {
-                              userId: gold.userId,
-                              discountId: systemDiscountValue,
-                            },
-                          })
-                          .then((response) => {
-                            console.log(response.data.data.rows);
-
-                            const newlyAdded =
-                              response.data.data.rows[0].DiscountData;
-                            gold.discountList =
-                              gold.discountList.concat(newlyAdded);
-                          })
-                          .catch((error) => {
-                            console.log(error);
-                            if (error.request) {
-                              console.log(error.request);
-                            }
-                            if (error.response) {
-                              console.log(error.response);
-                              Alert.alert(error.response.message);
-                            }
-                          });
-                        setModalVisible(!modalVisible);
-                        setAddDiscountFlag(!addDiscountFlag);
-                      })
-                      .catch((error) => {
-                        if (error.request) {
-                          console.log(error.request);
-                        }
-                        if (error.response) {
-                          console.log(error.response);
-                          Alert.alert(error.response.message);
-                        }
-                      });
-                  });
-                }
-              }}
-              style={[
-                styles.input,
-                {
-                  backgroundColor: "#23f3a1",
-                  width: 100,
-                  borderColor: "transparent",
-                },
-              ]}
-              disabled={systemDiscountValue == null}
-            >
-              <Text style={{ textAlign: "center", color: "#ffffff" }}>Add</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-              style={[
-                styles.input,
-                {
-                  backgroundColor: "red",
-                  width: 100,
-                  borderColor: "transparent",
-                },
-              ]}
-            >
-              <Text style={{ textAlign: "center", color: "#ffffff" }}>
-                Cancel
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
-        <Text style={{ textAlign: "center", fontSize: 33 }}>Memberships</Text>
-      </View>
-      <View style={{ padding: 20 }}>
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              margin: 20,
+          <NewModal.default
+            // animationType="fade"
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(false);
             }}
+            backdropOpacity={0.7}
           >
-            <TouchableOpacity>
-              <Text
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                flex: 1,
+              }}
+            >
+              <View
                 style={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  color: memberships[0].color,
-                }}
-                onPress={() => {
-                  setSilverOpen(false);
-                  setGoldOpen(!goldOpen);
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#fffafa",
+                  padding: 20,
+                  borderRadius: 30,
+                  width: 330,
+                  height: 260,
+                  zIndex: 1,
+                  borderWidth: 1.5,
+                  borderColor: "black",
                 }}
               >
-                {memberships[0].name}
+                <Text
+                  style={{ fontSize: 20, fontWeight: "bold", color: "blue" }}
+                >
+                  Discounts
+                </Text>
+                <View style={styles.centeredView}>
+                  <DropDownPicker
+                    style={styles.input}
+                    open={discountopen}
+                    value={systemDiscountValue}
+                    items={discountItems}
+                    setItems={setDiscountItems}
+                    setValue={setSystemDiscountValue}
+                    setOpen={setdiscountopen}
+                  ></DropDownPicker>
+                  <View style={{ flexDirection: "row-reverse" }}>
+                    <TouchableOpacity
+                      onPress={async () => {
+                        const token = await AsyncStorage.getItem("token");
+                        if (membershipFlag == 2) {
+                          silverUser.forEach((silver) => {
+                            if (!silver.isChecked) return;
+                            const x = silver.userId + "";
+                            const y = systemDiscountValue + "";
+                            const newUserDiscount = {
+                              userId: [`${x}`],
+                              discountId: [`${y}`],
+                            };
+
+                            axios
+                              .post(
+                                `${images.apiLink}userDiscounts`,
+                                newUserDiscount,
+                                {
+                                  headers: {
+                                    Authorization: token,
+                                  },
+                                }
+                              )
+                              .then((response) => {
+                                Alert.alert("Add successfully");
+                                axios
+                                  .get(`${images.apiLink}userDiscounts`, {
+                                    headers: {
+                                      Authorization: token,
+                                    },
+                                    params: {
+                                      userId: silver.userId,
+                                      discountId: systemDiscountValue,
+                                    },
+                                  })
+                                  .then((response) => {
+                                    const newlyAdded =
+                                      response.data.data.rows[0].DiscountData;
+                                    silver.discountList.push(newlyAdded);
+                                  })
+                                  .catch((error) => {
+                                    if (error.request) {
+                                      console.log(error.request);
+                                    }
+                                    if (error.response) {
+                                      console.log(error.response);
+                                      Alert.alert(error.response.message);
+                                    }
+                                  });
+                                setModalVisible(!modalVisible);
+                              })
+                              .catch((error) => {
+                                if (error.request) {
+                                  console.log(error.request);
+                                }
+                                if (error.response) {
+                                  console.log(error.response);
+                                  Alert.alert(error.response.message);
+                                }
+                              });
+                          });
+                        } else if (membershipFlag == 3) {
+                          goldUser.forEach((gold) => {
+                            if (!gold.isChecked) return;
+                            const newUserDiscount = {
+                              userId: [`${gold.userId}`],
+                              discountId: [`${systemDiscountValue}`],
+                            };
+
+                            axios
+                              .post(
+                                `${images.apiLink}userDiscounts`,
+                                newUserDiscount,
+                                {
+                                  headers: {
+                                    Authorization: token,
+                                  },
+                                }
+                              )
+                              .then(async (response) => {
+                                Alert.alert("Add successfully");
+                                axios
+                                  .get(`${images.apiLink}userDiscounts`, {
+                                    headers: {
+                                      Authorization: token,
+                                    },
+                                    params: {
+                                      userId: gold.userId,
+                                      discountId: systemDiscountValue,
+                                    },
+                                  })
+                                  .then((response) => {
+                                    console.log(response.data.data.rows);
+
+                                    const newlyAdded =
+                                      response.data.data.rows[0].DiscountData;
+                                    gold.discountList =
+                                      gold.discountList.concat(newlyAdded);
+                                  })
+                                  .catch((error) => {
+                                    console.log(error);
+                                    if (error.request) {
+                                      console.log(error.request);
+                                    }
+                                    if (error.response) {
+                                      console.log(error.response);
+                                      Alert.alert(error.response.message);
+                                    }
+                                  });
+                                setModalVisible(!modalVisible);
+                                setAddDiscountFlag(!addDiscountFlag);
+                              })
+                              .catch((error) => {
+                                if (error.request) {
+                                  console.log(error.request);
+                                }
+                                if (error.response) {
+                                  console.log(error.response);
+                                  Alert.alert(error.response.message);
+                                }
+                              });
+                          });
+                        }
+                      }}
+                      style={[
+                        styles.input,
+                        {
+                          backgroundColor: "#8ebf59",
+                          width: 100,
+                          borderColor: "transparent",
+                          height: 40,
+                        },
+                      ]}
+                      disabled={systemDiscountValue == null}
+                    >
+                      <Text style={{ textAlign: "center", color: "#ffffff" }}>
+                        Add
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setModalVisible(!modalVisible);
+                      }}
+                      style={[
+                        styles.input,
+                        {
+                          backgroundColor: "red",
+                          width: 100,
+                          height: 40,
+                          borderColor: "transparent",
+                        },
+                      ]}
+                    >
+                      <Text style={{ textAlign: "center", color: "#ffffff" }}>
+                        Cancel
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </NewModal.default>
+        </View>
+      )}
+
+      <ScrollView style={styles.container}>
+        <View
+          style={{
+            marginStart: 30,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            backgroundColor: "white",
+          }}
+        >
+          <View
+            style={{
+              marginLeft: -10,
+              padding: 5,
+              marginTop: 5,
+              borderRadius: 10,
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "purple",
+                padding: 5,
+                borderRadius: 10,
+                alignSelf: "center",
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: 18,
+                  color: "#f1e9e6",
+                  fontWeight: "bold",
+                }}
+              >
+                Memberships
               </Text>
-            </TouchableOpacity>
-            {/* <CheckBox
+            </View>
+          </View>
+        </View>
+        <View style={{ padding: 20, paddingTop: 0 }}>
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                margin: 20,
+                marginHorizontal: 10,
+                borderWidth: 2,
+                borderColor: "orange",
+                padding: 5,
+                borderRadius: 10,
+                marginLeft: 5,
+              }}
+            >
+              <TouchableOpacity>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    color: memberships[0].color,
+                  }}
+                  onPress={() => {
+                    setSilverOpen(false);
+                    setGoldOpen(!goldOpen);
+                  }}
+                >
+                  {memberships[0].name}
+                </Text>
+              </TouchableOpacity>
+              {/* <CheckBox
               style={{ marginLeft: 5 }}
               value={goldAllChecked}
               onValueChange={(value) => {
@@ -780,118 +1052,193 @@ const User = function ({ navigation }) {
                 setGoldAllChecked(!goldAllChecked);
               }}
             ></CheckBox> */}
-            <AntDesign
-              name="pluscircle"
-              size={24}
-              color={memberships[0].color}
-              onPress={() => {
-                if (
-                  goldUser.length == 0 ||
-                  goldUser.every((user) => user.isChecked == false)
-                ) {
-                  return;
-                }
-                setModalVisible(true);
-                setMembershipFlag(3);
-              }}
-            />
-          </View>
-          <View style={styles.flatlist}>
-            {goldOpen != 0 &&
-              goldUser.map((item, index) => {
-                return (
-                  <View
-                    key={index + item.userId}
-                    style={{
-                      flexDirection: "row",
-                      flex: 1,
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={styles.userItem}
-                      onPress={
-                        () => {
-                          navigation.navigate("User Discount", {
-                            userId: item.userId,
-                            discountList: item.discountList,
-                            username: item.UserAccountData.userName,
-                            avatar: item.UserAccountData.avatar,
-                            color: memberships[0].color,
-                          });
-                        }
-                        //
-                      }
-                    >
-                      <Text style={{ margin: 10 }}>{item.id}</Text>
-                      <View style={styles.avatarContainer}>
-                        <TouchableHighlight>
-                          <Image
-                            source={{ uri: item.UserAccountData.avatar }}
-                            style={styles.avatar}
-                          ></Image>
-                        </TouchableHighlight>
-                        <View>
-                          <Text style={styles.text2}>
-                            {" "}
-                            Name:{" "}
-                            <Text style={{ fontWeight: "bold" }}>
-                              {item.fullName}
-                            </Text>
-                          </Text>
-                          <Text style={styles.text2}>
-                            {" "}
-                            Phone number: {item.phoneNumber}
-                          </Text>
-                          <Text style={styles.text2}> Email: {item.email}</Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                    <CheckBox
-                      style={{ marginLeft: 5 }}
-                      value={item.isChecked}
-                      onValueChange={() => {
-                        setGoldUser((goldUser) =>
-                          goldUser.map((user) =>
-                            item.id === user.id
-                              ? {
-                                  ...user,
-                                  isChecked: !user.isChecked,
-                                }
-                              : user
-                          )
-                        );
-                      }}
-                    ></CheckBox>
-                  </View>
-                );
-              })}
-          </View>
-        </View>
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              margin: 20,
-            }}
-          >
-            <TouchableOpacity>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  color: memberships[1].color,
-                }}
+              <AntDesign
+                name="pluscircle"
+                size={24}
+                color={memberships[0].color}
                 onPress={() => {
-                  setSilverOpen(!silverOpen);
-                  setGoldOpen(false);
+                  if (
+                    goldUser.length == 0 ||
+                    goldUser.every((user) => user.isChecked == false)
+                  ) {
+                    return;
+                  }
+                  setModalVisible(true);
+                  setMembershipFlag(3);
+                }}
+              />
+            </View>
+            {goldOpen && goldUser.length === 0 && (
+              <View
+                style={{
+                  borderRadius: 5,
+                  padding: 3,
+                  backgroundColor: "#989393",
+                  width: "50%",
+                  alignSelf: "center",
                 }}
               >
-                {memberships[1].name}
-              </Text>
-            </TouchableOpacity>
-            {/* <CheckBox
+                <Text
+                  style={{
+                    color: "white",
+                    opacity: 0.6,
+                    fontSize: 16,
+                    fontWeight: "500",
+                    textAlign: "center",
+                  }}
+                >
+                  The list of gold members is empty!!!
+                </Text>
+              </View>
+            )}
+            {goldOpen && goldUser.length !== 0 && (
+              <View style={styles.flatlist}>
+                {goldOpen != 0 &&
+                  goldUser.map((item, index) => {
+                    return (
+                      <View
+                        key={item.userId + index}
+                        style={{
+                          flexDirection: "row",
+                          flex: 1,
+                          justifyContent: "space-around",
+                          gap: 5,
+                          alignItems: "center",
+                        }}
+                      >
+                        <TouchableOpacity
+                          style={styles.userItem}
+                          onPress={
+                            () => {
+                              navigation.navigate("User Discount", {
+                                userId: item.userId,
+                                discountList: item.discountList,
+                                username: item.UserAccountData.userName,
+                                avatar: item.UserAccountData.avatar,
+                                color: memberships[0].color,
+                              });
+                            }
+                            // navigation.navigate("User Discount", {
+                            //   discountList: item.discountList,
+                            //   username: item.Name,
+                            //   avatar: item.imageLink,
+                            // })
+                          }
+                        >
+                          <Text
+                            style={{
+                              margin: 10,
+                              position: "absolute",
+                              left: 0,
+                              top: 0,
+                              fontWeight: "600",
+                            }}
+                          >
+                            {item.userId}
+                          </Text>
+                          <View
+                            style={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                              marginTop: 5,
+                            }}
+                          >
+                            <TouchableHighlight>
+                              <Image
+                                source={{ uri: item.UserAccountData.avatar }}
+                                style={styles.avatar}
+                              ></Image>
+                            </TouchableHighlight>
+                          </View>
+                          <View
+                            style={[
+                              styles.avatarContainer,
+                              {
+                                marginTop: 5,
+                              },
+                            ]}
+                          >
+                            <View style={{ marginRight: 14, gap: 10 }}>
+                              <Text style={[styles.text2, { fontSize: 13 }]}>
+                                {" "}
+                                Name:{" "}
+                                <Text style={{ fontWeight: "bold" }}>
+                                  {item.fullName}
+                                </Text>
+                              </Text>
+                              <Text
+                                style={[
+                                  styles.text2,
+                                  { width: 200, fontSize: 13 },
+                                ]}
+                              >
+                                {" "}
+                                Phone number: {item.phoneNumber}
+                              </Text>
+                              <Text
+                                style={[
+                                  styles.text2,
+                                  { width: 220, fontSize: 13 },
+                                ]}
+                              >
+                                {" "}
+                                Email: {item.email}
+                              </Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+                        <CheckBox
+                          style={{ marginLeft: 5 }}
+                          value={item.isChecked}
+                          onValueChange={() => {
+                            setGoldUser((goldUser) =>
+                              goldUser.map((user) =>
+                                item.id === user.id
+                                  ? {
+                                      ...user,
+                                      isChecked: !user.isChecked,
+                                    }
+                                  : user
+                              )
+                            );
+                          }}
+                        ></CheckBox>
+                      </View>
+                    );
+                  })}
+              </View>
+            )}
+          </View>
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                margin: 20,
+                marginHorizontal: 10,
+                borderWidth: 2,
+                borderColor: "silver",
+                padding: 5,
+                borderRadius: 10,
+                marginLeft: 5,
+              }}
+            >
+              <TouchableOpacity>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    color: memberships[1].color,
+                  }}
+                  onPress={() => {
+                    setSilverOpen(!silverOpen);
+                    setGoldOpen(false);
+                  }}
+                >
+                  {memberships[1].name}
+                </Text>
+              </TouchableOpacity>
+              {/* <CheckBox
               style={{ marginLeft: 5 }}
               value={silverAllChecked}
               onValueChange={(value) => {
@@ -906,120 +1253,202 @@ const User = function ({ navigation }) {
                 setSilverAllChecked(!silverAllChecked);
               }}
             ></CheckBox> */}
-            <AntDesign
-              name="pluscircle"
-              size={24}
-              color={memberships[1].color}
-              onPress={() => {
-                if (
-                  silverUser.length == 0 ||
-                  silverUser.every((user) => user.isChecked == false)
-                ) {
-                  return;
-                }
-                setMembershipFlag(2);
+              <AntDesign
+                name="pluscircle"
+                size={24}
+                color={memberships[1].color}
+                onPress={() => {
+                  if (
+                    silverUser.length == 0 ||
+                    silverUser.every((user) => user.isChecked == false)
+                  ) {
+                    return;
+                  }
+                  setMembershipFlag(2);
 
-                setModalVisible(true);
-              }}
-            />
-          </View>
-
-          {silverOpen && <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10, marginLeft: 15}}>
-            <Text style={{alignSelf: 'center', marginLeft: 170, fontSize: 18, fontWeight: 700}}>All</Text>
-            <CheckBox
-              style={{ marginLeft: 5 }}
-              value={silverAllChecked}
-              onValueChange={(value) => {
-                setSilverUser((silverUser) =>
-                  silverUser.map((user) => {
-                    return {
-                      ...user,
-                      isChecked: value,
-                    };
-                  })
-                );
-                setSilverAllChecked(!silverAllChecked);
-              }}
-            ></CheckBox>
-          </View>}
-          <View style={styles.flatlist}>
-            {silverOpen &&
-              silverUser.map((item, index) => {
-                return (
-                  <View
-                    key={item.userId + index}
-                    style={{
-                      flexDirection: "row",
-                      flex: 1,
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={styles.userItem}
-                      onPress={
-                        () => {
-                          navigation.navigate("User Discount", {
-                            userId: item.userId,
-                            discountList: item.discountList,
-                            username: item.UserAccountData.userName,
-                            avatar: item.UserAccountData.avatar,
-                            color: memberships[1].color,
-                          });
-                        }
-                        // navigation.navigate("User Discount", {
-                        //   discountList: item.discountList,
-                        //   username: item.Name,
-                        //   avatar: item.imageLink,
-                        // })
-                      }
-                    >
-                      <Text style={{ margin: 10 }}>{item.userId}</Text>
-                      <View style={styles.avatarContainer}>
-                        <TouchableHighlight>
-                          <Image
-                            source={{ uri: item.UserAccountData.avatar }}
-                            style={styles.avatar}
-                          ></Image>
-                        </TouchableHighlight>
-                        <View style={{ marginRight: 14 }}>
-                          <Text style={styles.text2}>
-                            {" "}
-                            Name:{" "}
-                            <Text style={{ fontWeight: "bold" }}>
-                              {item.fullName}
-                            </Text>
-                          </Text>
-                          <Text style={styles.text2}>
-                            {" "}
-                            Phone number: {item.phoneNumber}
-                          </Text>
-                          <Text style={styles.text2}> Email: {item.email}</Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                    <CheckBox
-                      style={{ marginLeft: 1, marginTop: 80 }}
-                      value={item.isChecked}
-                      onValueChange={() => {
-                        setSilverUser((silverUser) =>
-                          silverUser.map((user) =>
-                            item.id === user.id
-                              ? {
-                                  ...user,
-                                  isChecked: !user.isChecked,
-                                }
-                              : user
-                          )
-                        );
+                  setModalVisible(true);
+                }}
+              />
+            </View>
+            {silverOpen && silverUser.length === 0 && (
+              <View
+                style={{
+                  borderRadius: 5,
+                  padding: 3,
+                  backgroundColor: "#989393",
+                  width: "50%",
+                  alignSelf: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    opacity: 0.6,
+                    fontSize: 16,
+                    fontWeight: "500",
+                    textAlign: "center",
+                  }}
+                >
+                  The list of silver members is empty!!!
+                </Text>
+              </View>
+            )}
+            {silverOpen && silverUser.length !== 0 && (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginHorizontal: 10,
+                  marginLeft: 15,
+                  marginBottom: -20,
+                }}
+              >
+                <Text
+                  style={{
+                    alignSelf: "center",
+                    marginLeft: 150,
+                    fontSize: 18,
+                    fontWeight: 700,
+                  }}
+                >
+                  All
+                </Text>
+                <CheckBox
+                  style={{ marginLeft: 5 }}
+                  value={silverAllChecked}
+                  onValueChange={(value) => {
+                    setSilverUser((silverUser) =>
+                      silverUser.map((user) => {
+                        return {
+                          ...user,
+                          isChecked: value,
+                        };
+                      })
+                    );
+                    setSilverAllChecked(!silverAllChecked);
+                  }}
+                ></CheckBox>
+              </View>
+            )}
+            <View style={styles.flatlist}>
+              {silverOpen &&
+                silverUser.map((item, index) => {
+                  return (
+                    <View
+                      key={item.userId + index}
+                      style={{
+                        flexDirection: "row",
+                        flex: 1,
+                        justifyContent: "space-around",
+                        gap: 5,
+                        alignItems: "center",
                       }}
-                    ></CheckBox>
-                  </View>
-                );
-              })}
+                    >
+                      <TouchableOpacity
+                        style={styles.userItem}
+                        onPress={
+                          () => {
+                            navigation.navigate("User Discount", {
+                              userId: item.userId,
+                              discountList: item.discountList,
+                              username: item.UserAccountData.userName,
+                              avatar: item.UserAccountData.avatar,
+                              color: memberships[1].color,
+                            });
+                          }
+                          // navigation.navigate("User Discount", {
+                          //   discountList: item.discountList,
+                          //   username: item.Name,
+                          //   avatar: item.imageLink,
+                          // })
+                        }
+                      >
+                        <Text
+                          style={{
+                            margin: 10,
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            fontWeight: "600",
+                          }}
+                        >
+                          {item.userId}
+                        </Text>
+                        <View
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginTop: 5,
+                          }}
+                        >
+                          <TouchableHighlight>
+                            <Image
+                              source={{ uri: item.UserAccountData.avatar }}
+                              style={styles.avatar}
+                            ></Image>
+                          </TouchableHighlight>
+                        </View>
+                        <View
+                          style={[
+                            styles.avatarContainer,
+                            {
+                              marginTop: 5,
+                            },
+                          ]}
+                        >
+                          <View style={{ marginRight: 14, gap: 10 }}>
+                            <Text style={[styles.text2, { fontSize: 13 }]}>
+                              {" "}
+                              Name:{" "}
+                              <Text style={{ fontWeight: "bold" }}>
+                                {item.fullName}
+                              </Text>
+                            </Text>
+                            <Text
+                              style={[
+                                styles.text2,
+                                { width: 200, fontSize: 13 },
+                              ]}
+                            >
+                              {" "}
+                              Phone number: {item.phoneNumber}
+                            </Text>
+                            <Text
+                              style={[
+                                styles.text2,
+                                { width: 220, fontSize: 13 },
+                              ]}
+                            >
+                              {" "}
+                              Email: {item.email}
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                      <CheckBox
+                        style={{ marginLeft: 1 }}
+                        value={item.isChecked}
+                        onValueChange={() => {
+                          setSilverUser((silverUser) =>
+                            silverUser.map((user) =>
+                              item.id === user.id
+                                ? {
+                                    ...user,
+                                    isChecked: !user.isChecked,
+                                  }
+                                : user
+                            )
+                          );
+                        }}
+                      ></CheckBox>
+                    </View>
+                  );
+                })}
+            </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
@@ -1047,15 +1476,47 @@ const renderDiscountItem = ({ item, navigation, discount, setDiscount }) => {
         key={item.key}
         style={[
           styles.discountitem,
-          { backgroundColor: getColor(item), padding: 20, margin: 20 },
+          {
+            backgroundColor: getColor(item),
+            padding: 20,
+            margin: 20,
+            borderTopLeftRadius: 10,
+            borderBottomRightRadius: 10,
+          },
+          item.quantity <= 2
+            ? { backgroundColor: "red" }
+            : { backgroundColor: "green" },
         ]}
       >
         <View>
-          <Text style={{ fontWeight: 600, fontSize: 40 }}>{item.title}</Text>
-          <Text>{item.value * 100}% discount</Text>
+          <Text
+            style={{
+              fontWeight: 600,
+              fontSize: 25,
+              maxWidth: 220,
+              marginBottom: 10,
+              color: "white",
+            }}
+          >
+            {item.title}
+          </Text>
+          <Text
+            style={{
+              color: "white",
+            }}
+          >
+            {item.value * 100}% discount
+          </Text>
         </View>
         <View style={{ flex: 1, justifyContent: "center" }}>
-          <Text style={{ textAlign: "right" }}>{item.quantity} remaining</Text>
+          <Text
+            style={[
+              { textAlign: "right" },
+              item.quantity <= 2 ? { color: "yellow" } : { color: "#0cdd74" },
+            ]}
+          >
+            {item.quantity} remaining
+          </Text>
         </View>
       </TouchableOpacity>
     </Swipeable>
@@ -1121,18 +1582,36 @@ const renderUserDiscountItem = ({
           key={item.key}
           style={[
             styles.discountitem,
-            { backgroundColor: color, padding: 20, margin: 20 },
+            {
+              backgroundColor: color,
+              padding: 20,
+              margin: 20,
+              borderTopLeftRadius: 10,
+              borderBottomRightRadius: 10,
+            },
+            item.quantity <= 2
+              ? { backgroundColor: "red" }
+              : { backgroundColor: "green" },
           ]}
           onPress={() => {
             console.log("Hello");
           }}
         >
-          <View>
-            <Text style={{ fontWeight: 600, fontSize: 20 }}>{item.title}</Text>
-            <Text>{item.value * 100}% discount</Text>
+          <View style={{ gap: 5 }}>
+            <Text style={{ fontWeight: 600, fontSize: 20, color: "white" }}>
+              {item.title}
+            </Text>
+            <Text style={{ color: "white", fontWeight: "500" }}>
+              {item.value * 100}% discount
+            </Text>
           </View>
           <View style={{ flex: 1, justifyContent: "center" }}>
-            <Text style={{ textAlign: "right" }}>
+            <Text
+              style={[
+                { textAlign: "right", fontWeight: "500" },
+                item.quantity <= 2 ? { color: "yellow" } : { color: "#0cdd74" },
+              ]}
+            >
               {item.quantity} remaining
             </Text>
           </View>
@@ -1229,19 +1708,19 @@ const UsersDiscount = function ({ navigation }) {
         }}
       >
         <Pressable
-          style={{ left: 16, position: "absolute" }}
+          style={{ left: 0, position: "absolute", top: 0 }}
           onPress={() => {
             navigation.goBack();
           }}
         >
           <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
         </Pressable>
-        <View style={{marginLeft: 130, alignItems: 'center'}}>
+        <View style={{ marginLeft: 125, alignItems: "center" }}>
           <Image
             source={{ uri: route.params.avatar }}
-            style={{ width: 50, height: 50, borderRadius: 70 }}
+            style={{ width: 70, height: 70, borderRadius: 70 }}
           ></Image>
-          <Text style={{ fontSize: 22, fontWeight: 800 }}>
+          <Text style={{ fontSize: 22, fontWeight: 800, marginTop: 10 }}>
             {route.params.username}
           </Text>
         </View>
@@ -1276,6 +1755,7 @@ const UsersDiscount = function ({ navigation }) {
           </Text>
         </TouchableOpacity> */}
         <FlatList
+          style={{ marginBottom: 100 }}
           data={discount}
           renderItem={({ item }) =>
             renderUserDiscountItem({
@@ -1295,8 +1775,9 @@ const UsersDiscount = function ({ navigation }) {
   );
 };
 const System = function () {
+  axiosDiscounts = [];
   const colors = ["#FFD700", "#a24fbc", "#bc6666"];
-  const [discount, setDiscount] = useState(axiosDiscounts);
+  const [discount, setDiscount] = useState([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -1326,7 +1807,7 @@ const System = function () {
           alignItems: "center",
           justifyContent: "space-between",
           paddingHorizontal: 20,
-          marginTop: 15
+          marginTop: 15,
         }}
       >
         <Text style={styles.text}>List of discounts</Text>
@@ -1344,21 +1825,31 @@ const System = function () {
           }
         />
       </View>
-      <SafeAreaView style={{ borderRadius: 30, marginBottom: 140 }}>
-        {/* {discount.map((item) =>
+      {
+        <SafeAreaView style={{ borderRadius: 30, marginBottom: 140 }}>
+          {/* {discount.map((item) =>
           renderDiscountItem({ item, navigation, discount, setDiscount })
         )} */}
-        <FlatList
-          data={discount}
-          renderItem={({ item }) =>
-            renderDiscountItem({ item, navigation, discount, setDiscount })
-          }
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 150, marginBottom: 140 }}
-          // renderLeftActions={renderLeftActions}
-          // renderRightActions={renderRightActions}
-        ></FlatList>
-      </SafeAreaView>
+          {discount.length === 0 && (
+            <View style={{ height: "100%", width: "100%" }}>
+              <Loading />
+            </View>
+          )}
+
+          {discount.length !== 0 && (
+            <FlatList
+              data={discount}
+              renderItem={({ item }) =>
+                renderDiscountItem({ item, navigation, discount, setDiscount })
+              }
+              keyExtractor={(item) => item.id + Date.now().toString()}
+              contentContainerStyle={{ paddingBottom: 150, marginBottom: 140 }}
+              // renderLeftActions={renderLeftActions}
+              // renderRightActions={renderRightActions}
+            ></FlatList>
+          )}
+        </SafeAreaView>
+      }
     </View>
   );
 };
@@ -1410,6 +1901,8 @@ function AddDiscount({ navigation }) {
     return `${day}-${month}-${year}`;
   };
   const toggleDatePicker = function () {
+    console.log("Clicked");
+    Keyboard.dismiss();
     setShowDatePicker(!showDatePicker);
   };
   const dateChange = ({ type }, selectedDate) => {
@@ -1421,6 +1914,7 @@ function AddDiscount({ navigation }) {
         toggleDatePicker();
         setExpiredDate(formatDate(currentDate));
       }
+      // setExpiredDate(formatDate(currentDate));
     } else {
       toggleDatePicker();
     }
@@ -1438,151 +1932,321 @@ function AddDiscount({ navigation }) {
     return result;
   };
   const [BTNdisabled, setBTNdisabled] = useState(true);
-
+  function confirmIOSDate() {
+    console.log("expired date:", expiredDate);
+    setExpiredDate(formatDate(date));
+    toggleDatePicker();
+  }
   return (
-    <SafeAreaView style={styles.container}>
-      <Pressable
-        style={{ left: 16, position: "absolute" }}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
-      </Pressable>
-      <View style={[styles.discountInfo, { position: "relative" }]}>
-        <TextInput
-          placeholder="Name"
-          onChangeText={setName}
-          style={styles.input}
-        ></TextInput>
-        <DropDownPicker
-          placeholder="Select discount value"
-          style={styles.input}
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-        ></DropDownPicker>
-        <DropDownPicker
-          placeholder="Select quantity"
-          style={styles.input}
-          value={quantity}
-          setValue={setQuantity}
-          open={open2}
-          setOpen={setOpen2}
-          items={quantityItem}
-          setItems={setQuantityItems}
-        ></DropDownPicker>
-        <Pressable onPress={toggleDatePicker}>
-          <TextInput
-            placeholder="Expiration Date"
-            style={styles.input}
-            value={expiredDate}
-            onChangeText={setExpiredDate}
-            editable={false}
-          ></TextInput>
-        </Pressable>
-        {showDatePicker && (
-          <RNDateTimePicker
-            onChange={dateChange}
-            value={date}
-            minimumDate={new Date()}
-            disabled
-          ></RNDateTimePicker>
-        )}
-        <TextInput
-          placeholder="Minimum price to apply"
-          onChangeText={setMinimum}
-          style={styles.input}
-          keyboardType="numeric"
-        ></TextInput>
-        <TextInput
-          placeholder="Maximum discount price"
-          onChangeText={setMaximum}
-          style={styles.input}
-          keyboardType="numeric"
-        ></TextInput>
-      </View>
-      <View style={{ alignItems: "center", zIndex: -1 }}>
-        <TouchableOpacity
-          style={[styles.input, { backgroundColor: "#23f3a1", width: 100 }]}
-          disabled={
-            value == null ||
-            quantity == null ||
-            minimum.trim() == "" ||
-            maximum.trim() == "" ||
-            dname.trim() == ""
-          }
-          onPress={async () => {
-            setCurrID(currID + 1);
-            console.log("count = " + discountKey);
-            let key = generateKey(14);
-            const newDiscount2 = {
-              value: value,
-              key: key,
-              title: dname,
-              status: 0,
-              expireDate: date,
-              quantity: quantity,
-              isSystem: 1,
-              minimumpricetoapply: Number(minimum),
-              maximumdiscountprice: Number(maximum),
-            };
-            const token = await AsyncStorage.getItem("token");
-
-            const config = {
-              headers: {
-                Authorization: token,
-              },
-            };
-            axios
-              .post(
-                "https://coach-ticket-management-api.onrender.com/api/discounts/",
-                newDiscount2,
-                config
-              )
-              .then((response) => {
-                console.log(response.data);
-                discountKey++;
-                // const newDiscount = {
-                //   id: currID,
-                //   title: name,
-                //   value: value,
-                //   color: "#abcdef",
-                //   quantity: quantity,
-                //   isChecked: false,
-                //   status: 0,
-                //   expireDate: date,
-                //   isSystem: 1,
-                // };
-                // addDiscount((discounts) => [...discounts, newDiscount]);
-              })
-              .catch((error) => {
-                if (error.request) {
-                  console.log(error.request);
-                }
-                if (error.response) {
-                  console.log(error.response.data);
-                }
-              });
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <SafeAreaView style={styles.container}>
+        {/* <Pressable
+          style={{ left: 16, position: "absolute" }}
+          onPress={() => {
             navigation.goBack();
           }}
         >
-          <Text
-            style={{
-              fontSize: 20,
-              color: "#ffffff",
-              fontWeight: "900",
-              textAlign: "center",
+          <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
+        </Pressable> */}
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "600",
+            marginTop: 10,
+            marginBottom: -10,
+            alignSelf: "center",
+          }}
+        >
+          Add New Discount
+        </Text>
+        <View style={[styles.discountInfo, { position: "relative" }]}>
+          <TextInput
+            placeholder="Name"
+            onChangeText={setName}
+            style={styles.input}
+          ></TextInput>
+          <DropDownPicker
+            placeholder="Select discount value"
+            style={styles.input}
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            containerStyle={{ zIndex: 1000, width: 340 }}
+          ></DropDownPicker>
+          <DropDownPicker
+            placeholder="Select quantity"
+            style={styles.input}
+            value={quantity}
+            setValue={setQuantity}
+            open={open2}
+            setOpen={setOpen2}
+            items={quantityItem}
+            setItems={setQuantityItems}
+            containerStyle={{ zIndex: 1, width: 340 }}
+          ></DropDownPicker>
+
+          <Pressable
+            onPress={(e) => {
+              toggleDatePicker();
+            }}
+            style={[styles.input, { width: 300 }]}
+          >
+            <Text
+              placeholder="Expiration Date"
+              // style={styles.input}
+              style={[
+                { paddingTop: 5 },
+                expiredDate
+                  ? { color: "black" }
+                  : {
+                      color: "black",
+                      opacity: 0.3,
+                    },
+              ]}
+              value={expiredDate}
+              onChangeText={setExpiredDate}
+              editable={false}
+            >
+              {expiredDate ? expiredDate : "Expiration Date"}
+            </Text>
+          </Pressable>
+
+          <View>
+            <Modal
+              visible={showDatePicker}
+              animationType="slide"
+              onRequestClose={() => setShowDatePicker(false)}
+              transparent={true}
+            >
+              <View
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    borderWidth: 1.3,
+                    borderColor: "green",
+                  }}
+                >
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date ? new Date(date) : new Date()}
+                    mode={"date"}
+                    onChange={dateChange}
+                    display="inline"
+                    accentColor="orange"
+                    textColor="black"
+                    themeVariant="light"
+                  />
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={toggleDatePicker}
+                      style={[
+                        {
+                          height: 50,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: 50,
+                          marginTop: 10,
+                          marginBottom: 15,
+                          backgroundColor: GlobalColors.button,
+                          paddingHorizontal: 20,
+                        },
+                        { backgroundColor: "#11182711" },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          {
+                            fontSize: 14,
+                            fontWeight: "500",
+                            color: "#fff",
+                          },
+                          { color: "#075985" },
+                        ]}
+                      >
+                        Cancel
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={confirmIOSDate}
+                      style={[
+                        {
+                          height: 50,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: 50,
+                          marginTop: 10,
+                          marginBottom: 15,
+                          backgroundColor: GlobalColors.button,
+                          paddingHorizontal: 20,
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          {
+                            fontSize: 14,
+                            fontWeight: "500",
+                            color: "#fff",
+                          },
+                        ]}
+                      >
+                        Confirm
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </View>
+
+          <TextInput
+            placeholder="Minimum price to apply"
+            onChangeText={setMinimum}
+            style={styles.input}
+            keyboardType="numeric"
+          ></TextInput>
+          <TextInput
+            placeholder="Maximum discount price"
+            onChangeText={setMaximum}
+            style={styles.input}
+            keyboardType="numeric"
+          ></TextInput>
+        </View>
+        <View
+          style={{
+            alignItems: "center",
+            zIndex: -1,
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <TouchableOpacity
+            style={[
+              styles.input,
+              {
+                backgroundColor: "#b9b306",
+                width: 100,
+                borderWidth: 0.5,
+                height: 40,
+                justifyContent: "center",
+              },
+            ]}
+            onPress={() => navigation.goBack()}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                color: "#f9fdffff",
+                fontWeight: "900",
+                textAlign: "center",
+              }}
+            >
+              Back
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.input,
+              {
+                backgroundColor: "#3fe077",
+                width: 100,
+                borderWidth: 0.5,
+                height: 40,
+              },
+            ]}
+            disabled={
+              value == null ||
+              quantity == null ||
+              minimum.trim() == "" ||
+              maximum.trim() == "" ||
+              dname.trim() == ""
+            }
+            onPress={async () => {
+              setCurrID(currID + 1);
+              console.log("count = " + discountKey);
+              let key = generateKey(14);
+              const newDiscount2 = {
+                value: value,
+                key: key,
+                title: dname,
+                status: 0,
+                expireDate: date,
+                quantity: quantity,
+                isSystem: 1,
+                minimumpricetoapply: Number(minimum),
+                maximumdiscountprice: Number(maximum),
+              };
+              const token = await AsyncStorage.getItem("token");
+
+              const config = {
+                headers: {
+                  Authorization: token,
+                },
+              };
+              axios
+                .post(
+                  "https://coach-ticket-management-api.onrender.com/api/discounts/",
+                  newDiscount2,
+                  config
+                )
+                .then((response) => {
+                  console.log(response.data);
+                  discountKey++;
+                  // const newDiscount = {
+                  //   id: currID,
+                  //   title: name,
+                  //   value: value,
+                  //   color: "#abcdef",
+                  //   quantity: quantity,
+                  //   isChecked: false,
+                  //   status: 0,
+                  //   expireDate: date,
+                  //   isSystem: 1,
+                  // };
+                  // addDiscount((discounts) => [...discounts, newDiscount]);
+                })
+                .catch((error) => {
+                  if (error.request) {
+                    console.log(error.request);
+                  }
+                  if (error.response) {
+                    console.log(error.response.data);
+                  }
+                });
+              navigation.goBack();
             }}
           >
-            Add
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+            <Text
+              style={{
+                fontSize: 18,
+                color: "#f9fdffff",
+                fontWeight: "900",
+                textAlign: "center",
+              }}
+            >
+              Add
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 function AddUserDiscount({ navigation }) {
@@ -1851,16 +2515,34 @@ const Tabs = function ({ navigation }) {
 };
 function SystemTab() {
   return (
-    <Stack.Navigator initialRouteName="System" screenOptions={{headerShown: false,}}>
+    <Stack.Navigator
+      initialRouteName="System"
+      screenOptions={{ headerShown: false }}
+    >
       <Stack.Screen name="System" component={System} />
-      <Stack.Screen name="Add Discount" component={AddDiscount} />
-      <Stack.Screen name="Edit Discount" component={EditDiscount} />
+      <Stack.Screen
+        name="Add Discount"
+        component={AddDiscount}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="Edit Discount"
+        component={EditDiscount}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
 function UserTab() {
   return (
-    <Stack.Navigator initialRouteName="User" screenOptions={{headerShown: false}}>
+    <Stack.Navigator
+      initialRouteName="User"
+      screenOptions={{ headerShown: false }}
+    >
       <Stack.Screen name="User" component={User} />
       <Stack.Screen name="User Discount" component={UsersDiscount} />
       <Stack.Screen name="Add Discount" component={AddUserDiscount} />
@@ -1888,9 +2570,13 @@ const styles = StyleSheet.create({
     margin: 20,
     padding: 10,
     borderWidth: 1,
-    borderRadius: 30,
+    borderRadius: 10,
     width: 300,
+    height: 50,
     zIndex: -1,
+    marginBottom: 0,
+    borderWidth: 1.1,
+    borderColor: "black",
   },
 
   avatarContainer: {
@@ -1902,8 +2588,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   avatar: {
-    height: 90,
-    width: 90,
+    height: 65,
+    width: 65,
     borderRadius: 40,
   },
 
@@ -1927,14 +2613,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   userItem: {
-    padding: 5,
+    flexDirection: "row",
+    padding: 15,
     borderRadius: 20,
-    backgroundColor: "#D9D9D9",
+    backgroundColor: "#39bd27",
     justifyContent: "space-between",
     borderColor: "rgba(237, 40, 145, 1)",
-    maxWidth: "84%",
+    maxWidth: "92%",
     marginVertical: 10,
     flex: 7,
+    gap: 5,
+    alignItems: "center",
   },
   centeredView: {
     flex: 1,

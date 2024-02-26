@@ -852,18 +852,27 @@ function HomeScreen({ navigation }) {
                     source={require("../../../icon/walk.png")}
                   />
                 </View>
-                <TextInput
-                  onPressIn={() => {
+                <Pressable
+                  style={styles.textInput}
+                  onPress={() => {
                     setPickPlaceOption(0);
                     setIsShowSearchLocations((curr) => !curr);
                   }}
-                  onChangeText={onChangeTextHandler.bind(this, "from")}
-                  style={styles.textInput}
-                  placeholder="from"
-                  value={departurePlace}
-                  autoCorrect={false}
-                  editable={false}
-                />
+                >
+                  <TextInput
+                    onPressIn={() => {
+                      setPickPlaceOption(0);
+                      setIsShowSearchLocations((curr) => !curr);
+                    }}
+                    onChangeText={onChangeTextHandler.bind(this, "from")}
+                    // style={styles.textInput}
+                    placeholder="from"
+                    style={{ color: "black" }}
+                    value={departurePlace}
+                    autoCorrect={false}
+                    editable={false}
+                  />
+                </Pressable>
               </View>
               <View
                 style={{
@@ -897,18 +906,26 @@ function HomeScreen({ navigation }) {
                     source={require("../../../icon/walking.png")}
                   />
                 </View>
-                <TextInput
-                  onPressIn={() => {
+                <Pressable
+                  style={styles.textInput}
+                  onPress={() => {
                     setPickPlaceOption(1);
                     setIsShowSearchLocations((curr) => !curr);
                   }}
-                  onChangeText={onChangeTextHandler.bind(this, "to")}
-                  style={styles.textInput}
-                  placeholder="to"
-                  value={arrivalPlace}
-                  autoCorrect={false}
-                  editable={false}
-                />
+                >
+                  <TextInput
+                    onPressIn={() => {
+                      setPickPlaceOption(1);
+                      setIsShowSearchLocations((curr) => !curr);
+                    }}
+                    onChangeText={onChangeTextHandler.bind(this, "to")}
+                    placeholder="to"
+                    style={{ color: "black" }}
+                    value={arrivalPlace}
+                    autoCorrect={false}
+                    editable={false}
+                  />
+                </Pressable>
               </View>
 
               <View style={styles.inputContainer}>
