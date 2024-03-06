@@ -8,7 +8,9 @@ import {
 import { Octicons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { getDate, getTime } from "../../Helper/Date";
+import { useTranslation } from "react-i18next";
 function HistoryTicketNextTripItem({ ticket, tripInfo, onPress }) {
+  const { t } = useTranslation();
   return (
     <Pressable
       onPress={onPress}
@@ -90,13 +92,13 @@ function HistoryTicketNextTripItem({ ticket, tripInfo, onPress }) {
               >
                 {ticket.reservationId.length +
                   (ticket.reservationId.length > 1
-                    ? " passengers"
-                    : " passenger")}
+                    ? ` ${t("passengers")}`
+                    : ` ${t("passenger")}`)}
               </Text>
             </View>
             <View style={[styles.rowStyle, { gap: 5 }]}>
               {ticket.RoundTripTicketData.length === 0 && (
-                <Text style={{ fontSize: 15 }}>One Way</Text>
+                <Text style={{ fontSize: 15 }}>{t("one-way")}</Text>
               )}
               {ticket.RoundTripTicketData.length === 0 && (
                 <Ionicons name="arrow-up-outline" size={24} color="black" />
@@ -111,7 +113,7 @@ function HistoryTicketNextTripItem({ ticket, tripInfo, onPress }) {
                 />
               )}
               {ticket.RoundTripTicketData.length !== 0 && (
-                <Text style={{ fontSize: 15 }}>Two Way</Text>
+                <Text style={{ fontSize: 15 }}>{t("two-way")}</Text>
               )}
             </View>
           </View>

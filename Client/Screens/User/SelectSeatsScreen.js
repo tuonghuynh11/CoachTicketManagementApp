@@ -24,6 +24,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { BookingContext } from "../../Store/bookingContext";
 import YesNoPopUp from "../../Componets/UI/YesNoPopUp";
 import SleeperSeatItem from "../../Componets/UI/SleeperSeatItem";
+import { useTranslation } from "react-i18next";
 
 function SelectSeatsScreen({ navigation, route }) {
   const [capacity, setCapacity] = useState(route.params.capacity); //15,30,55 ///route.params.capacity
@@ -37,7 +38,7 @@ function SelectSeatsScreen({ navigation, route }) {
 
   const isFocused = useIsFocused();
   const bookingCtx = useContext(BookingContext);
-
+  const { t } = useTranslation();
   const [optionIsVisible, setOptionIsVisible] = useState(false);
 
   useEffect(() => {
@@ -359,15 +360,15 @@ function SelectSeatsScreen({ navigation, route }) {
     <>
       <YesNoPopUp
         isVisible={optionIsVisible}
-        title={"Option"}
-        textBody={"Do you want to use shuttle service ?"}
+        title={t("option")}
+        textBody={t("do-you-want-to-use-shuttle-service")}
         NoHandler={NoOptionHandler}
         YesHandler={YesOptionHandler}
       />
       <PopUp
-        title={"Error"}
+        title={t("error")}
         type={"Error"}
-        textBody={"Please select a seat"}
+        textBody={t("require-select-seat")}
         isVisible={modalIsVisible}
         callback={() => setModalIsVisible(!modalIsVisible)}
       />
@@ -389,7 +390,7 @@ function SelectSeatsScreen({ navigation, route }) {
             style={styles.subRoot}
             showsVerticalScrollIndicator={false}
           >
-            <Text style={styles.title}>Pick your seat</Text>
+            <Text style={styles.title}>{t("pick-your-seat")}</Text>
             <View style={styles.seatType}>
               <SeatItem type={"empty"} label={"Vacant"} />
               <SeatItem type={"reserved"} label={"Busy"} />
@@ -593,7 +594,7 @@ function SelectSeatsScreen({ navigation, route }) {
             style={styles.subRoot}
             showsVerticalScrollIndicator={false}
           >
-            <Text style={styles.title}>Pick your seat</Text>
+            <Text style={styles.title}>{t("pick-your-seat")}</Text>
             <View style={styles.seatType}>
               <SleeperSeatItem type={"empty"} label={"Vacant"} />
               <SleeperSeatItem type={"reserved"} label={"Busy"} />
@@ -626,7 +627,7 @@ function SelectSeatsScreen({ navigation, route }) {
                       opacity: 0.5,
                     }}
                   >
-                    First Floor
+                    {t("first-floor")}
                   </Text>
 
                   <Image
@@ -713,7 +714,7 @@ function SelectSeatsScreen({ navigation, route }) {
                       opacity: 0.5,
                     }}
                   >
-                    Second Floor
+                    {t("second-floor")}
                   </Text>
                   <Image
                     style={[
@@ -765,7 +766,7 @@ function SelectSeatsScreen({ navigation, route }) {
                   textAlign: "center",
                 }}
               >
-                Your seats ({selectedSeats && selectedSeats.length})
+                {t("your-seats")} ({selectedSeats && selectedSeats.length})
               </Text>
             </View>
           )}
@@ -816,7 +817,7 @@ function SelectSeatsScreen({ navigation, route }) {
                       fontWeight: "bold",
                     }}
                   >
-                    Passengers Detail
+                    {t("passengers-detail")}
                   </Text>
                   <Entypo name="chevron-thin-right" size={24} color="white" />
                 </View>

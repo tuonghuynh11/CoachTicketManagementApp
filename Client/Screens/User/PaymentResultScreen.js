@@ -5,7 +5,9 @@ import GlobalColors from "../../Color/colors";
 import CustomButton from "../../Componets/UI/CustomButton";
 import { getDate, getTime } from "../../Helper/Date";
 import { BookingContext } from "../../Store/bookingContext";
+import { useTranslation } from "react-i18next";
 function PaymentResultScreen({ navigation, route }) {
+  const { t } = useTranslation();
   const [paymentInfo, setPaymentInfo] = useState({});
   const bookingCtx = useContext(BookingContext);
   useEffect(() => {
@@ -103,8 +105,8 @@ function PaymentResultScreen({ navigation, route }) {
           />
           <Text style={styles.headerTitle}>
             {paymentInfo.status === 1
-              ? "Your payment was successful!"
-              : "Your invoice has not been paid yet!!.\n Please go to ticket sales points to pay "}
+              ? `${t("payment-was-successful")}!`
+              : t("invoice-not-paid")}
           </Text>
           <View style={{ overflow: "hidden", marginTop: 15, width: "100%" }}>
             <View
@@ -121,22 +123,22 @@ function PaymentResultScreen({ navigation, route }) {
         </View>
         <View style={styles.body}>
           <SubBody
-            title1={"Invoice Number"}
+            title1={t("invoice-number")}
             subTitle1={paymentInfo.invoiceCode}
-            title2={"Payment Method"}
+            title2={t("payment-method")}
             subTitle2={paymentInfo.paymentMethod}
           />
           <SubBody
-            title1={"Date"}
+            title1={t("date")}
             subTitle1={getDate(paymentInfo.dateTime)}
-            title2={"Time"}
+            title2={t("time")}
             subTitle2={getTime(paymentInfo.dateTime)}
           />
           <SubBody
-            title1={"Amount Paid"}
+            title1={t("amount-paid")}
             subTitle1={addDotsToNumber(paymentInfo.cost) + " VND"}
             title2={"Status"}
-            subTitle2={paymentInfo.status === 1 ? "Successful" : "Unpaid"}
+            subTitle2={paymentInfo.status === 1 ? t("successful") : t("unpaid")}
           />
         </View>
         <View style={{ margin: 10 }}>
@@ -153,7 +155,7 @@ function PaymentResultScreen({ navigation, route }) {
                 fontWeight: "bold",
               }}
             >
-              View Ticket
+              {t("view-ticket")}
             </Text>
           </CustomButton>
         </View>
@@ -182,7 +184,7 @@ function PaymentResultScreen({ navigation, route }) {
               fontWeight: "bold",
             }}
           >
-            Return to home
+            {t("return-to-home")}
           </Text>
         </CustomButton>
       </View>

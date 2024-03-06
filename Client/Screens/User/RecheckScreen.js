@@ -29,6 +29,7 @@ import {
 import { useIsFocused } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Animated } from "react-native";
+import { useTranslation } from "react-i18next";
 
 import { LogBox } from "react-native";
 LogBox.ignoreLogs([
@@ -37,6 +38,8 @@ LogBox.ignoreLogs([
 const Tab = createMaterialTopTabNavigator();
 
 function RecheckScreen({ navigation, route }) {
+  const { t } = useTranslation();
+
   const [passengers, setPassengers] = useState([
     { adfdaf: "DevSettings", sd: "sdsd" },
   ]);
@@ -128,8 +131,8 @@ function RecheckScreen({ navigation, route }) {
                 );
                 if (!res) {
                   Alert.alert(
-                    "Connection Error",
-                    "Please check your internet connection"
+                    t("connection-error"),
+                    t("check-internet-connection")
                   );
                 }
                 console.log("Cancel Booking Response code", res);
@@ -205,7 +208,7 @@ function RecheckScreen({ navigation, route }) {
         createBookingSessionBody
       );
       if (!res) {
-        Alert.alert("Error", "Something went wrong");
+        Alert.alert(t("error"), t("something-was-wrong"));
         return;
       }
       //Get response
@@ -215,7 +218,7 @@ function RecheckScreen({ navigation, route }) {
         // shuttlePassenger: res?.shuttlePassenger?.map((item) => item.id),
         // shuttlePassengerRoundTrip: res?.shuttlePassengerRoundTrip?.map(
         //   (item) => item.id
-        // ),
+        // ),s
       };
       if (
         res?.reservationsRoundTrip &&
@@ -542,7 +545,7 @@ function RecheckScreen({ navigation, route }) {
     //RoundTrip
     const res = await confirmBookingTicket(authCtx.token, bodyRequest);
     if (!res) {
-      Alert.alert("Connection Error", "Please check your internet connection");
+      Alert.alert(t("connection-error"), t("check-internet-connection"));
       return null;
     }
     console.log("Confirm ticket: ", res);
@@ -639,7 +642,8 @@ function RecheckScreen({ navigation, route }) {
                   fontSize: 13,
                 }}
               >
-                Maximum {addDotsToNumber(itemData.item.maximumDiscountPrice)}VND
+                {t("maximum")}{" "}
+                {addDotsToNumber(itemData.item.maximumDiscountPrice)}VND
               </Text>
             </View>
             {numberOfDays <= 4 && (
@@ -651,7 +655,7 @@ function RecheckScreen({ navigation, route }) {
                   },
                 ]}
               >
-                Expire date : {getDate(itemData.item.expireDate)}
+                {t("expire-date")} : {getDate(itemData.item.expireDate)}
                 {" ("}
                 {numberOfDays.toFixed(0)}
                 {numberOfDays >= 2 ? " days)" : " day)"}
@@ -666,7 +670,7 @@ function RecheckScreen({ navigation, route }) {
                   },
                 ]}
               >
-                Expire date : {getDate(itemData.item.expireDate)}
+                {t("expire-date")} : {getDate(itemData.item.expireDate)}
               </Text>
             )}
           </View>
@@ -850,7 +854,7 @@ function RecheckScreen({ navigation, route }) {
                 marginTop: -20,
               }}
             >
-              Your Discounts
+              {t("your-discounts")}
             </Text>
             <View
               style={{
@@ -909,7 +913,7 @@ function RecheckScreen({ navigation, route }) {
                 marginBottom: 10,
               }}
             >
-              <Text style={styles.title}>Your Trip</Text>
+              <Text style={styles.title}>{t("your-trip")}</Text>
             </View>
             {/* Main Trip */}
 
@@ -953,7 +957,7 @@ function RecheckScreen({ navigation, route }) {
                         width: 160,
                       }}
                     >
-                      Seats Number:{" "}
+                      {t("seat-number")}:{" "}
                       {bookingCtx.bookingInfo?.mainTripSelectedSeats
                         .map((item) =>
                           item.number < 10 ? "0" + item.number : item.number
@@ -982,7 +986,7 @@ function RecheckScreen({ navigation, route }) {
                       color: "#289d67ff",
                     }}
                   >
-                    One Way
+                    {t("s-one-way")}
                   </Text>
                 </View>
                 {!isSelectMainTrip && (
@@ -1068,7 +1072,7 @@ function RecheckScreen({ navigation, route }) {
                           color: "white",
                         }}
                       >
-                        Passenger List (
+                        {t("passenger-list")} (
                         {bookingCtx.bookingInfo?.mainTripPassengers?.length})
                       </Text>
                     </View>
@@ -1137,7 +1141,7 @@ function RecheckScreen({ navigation, route }) {
                           maxWidth: 175,
                         }}
                       >
-                        Seats Number:{" "}
+                        {t("seat-number")}:{" "}
                         {bookingCtx.bookingInfo?.RoundTripSelectedSeats.map(
                           (item) =>
                             item.number < 10 ? "0" + item.number : item.number
@@ -1165,7 +1169,7 @@ function RecheckScreen({ navigation, route }) {
                         width: 72,
                       }}
                     >
-                      Round Way
+                      {t("s-round-way")}
                     </Text>
                   </View>
                   {!isSelectRoundTrip && (
@@ -1271,7 +1275,7 @@ function RecheckScreen({ navigation, route }) {
                             color: "white",
                           }}
                         >
-                          Passenger List (
+                          {t("passenger-list")} (
                           {bookingCtx.bookingInfo?.roundTripPassengers?.length})
                         </Text>
                       </View>
@@ -1313,7 +1317,7 @@ function RecheckScreen({ navigation, route }) {
                 alignItems: "center",
               }}
             >
-              <Text style={styles.title}>Receipt</Text>
+              <Text style={styles.title}>{t("receipt")}</Text>
             </View>
             <View
               style={[
@@ -1345,7 +1349,7 @@ function RecheckScreen({ navigation, route }) {
                     // color: "#115a87ff",
                   }}
                 >
-                  Ticket For One Way
+                  {t("ticket-for-one-way")}
                 </Text>
               </View>
               <View
@@ -1410,7 +1414,7 @@ function RecheckScreen({ navigation, route }) {
                       // color: "#115a87ff",
                     }}
                   >
-                    Ticket For Round Way
+                    {t("ticket-for-round-way")}
                   </Text>
                 </View>
                 <View
@@ -1489,7 +1493,7 @@ function RecheckScreen({ navigation, route }) {
                         alignItems: "center",
                       }}
                     >
-                      <Text style={styles.title}>Discount</Text>
+                      <Text style={styles.title}>{t("discount")}</Text>
                     </View>
                     <View
                       style={{
@@ -1506,10 +1510,10 @@ function RecheckScreen({ navigation, route }) {
                         ]}
                       >
                         {discountSelectedIndex !== null
-                          ? "Discount " +
+                          ? `${t("discount")} ` +
                             discountList[discountSelectedIndex].value +
                             "%"
-                          : "add voucher"}
+                          : t("add-voucher")}
                       </Text>
                       <FontAwesome name="angle-right" size={24} color="black" />
                     </View>
@@ -1572,7 +1576,7 @@ function RecheckScreen({ navigation, route }) {
                         alignItems: "center",
                       }}
                     >
-                      <Text style={styles.title}>Payment Method</Text>
+                      <Text style={styles.title}>{t("payment-method")}</Text>
                     </View>
                     <View style={styles.paymentContainer}>
                       <TouchableOpacity
@@ -1588,10 +1592,12 @@ function RecheckScreen({ navigation, route }) {
                             size={24}
                             color={GlobalColors.price}
                           />
-                          <Text style={{ fontWeight: "600" }}>Paylater</Text>
+                          <Text style={{ fontWeight: "600" }}>
+                            {t("pay-later")}
+                          </Text>
                         </View>
                         <CustomButton color={"#4bb5f6ff"}>
-                          Active Now
+                          {t("active-now")}
                         </CustomButton>
                       </TouchableOpacity>
 
@@ -1608,7 +1614,9 @@ function RecheckScreen({ navigation, route }) {
                             size={24}
                             color={GlobalColors.price}
                           />
-                          <Text style={{ fontWeight: "600" }}>Credit Card</Text>
+                          <Text style={{ fontWeight: "600" }}>
+                            {t("credit-card")}
+                          </Text>
                         </View>
                         <IconButton
                           icon={"chevron-down-outline"}
@@ -1769,7 +1777,7 @@ function RecheckScreen({ navigation, route }) {
                 textAlign: "center",
               }}
             >
-              Total Price
+              {t("total-price")}
             </Text>
             <Text
               style={[

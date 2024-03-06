@@ -13,6 +13,7 @@ import MyModal from "../../Componets/UI/MyModal";
 import GlobalColors from "../../Color/colors";
 import { getLocationInfo } from "../../util/apiServices";
 import { Image } from "react-native";
+import { useTranslation } from "react-i18next";
 function ShuttleTrackingScreen({ navigation, route }) {
   const [directionsData, setDirectionsData] = useState();
   const [startLocation, setStartLocation] = useState(null);
@@ -28,6 +29,8 @@ function ShuttleTrackingScreen({ navigation, route }) {
 
   const [selectedMaker, setSelectedMarker] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+
+  const { t } = useTranslation();
   useEffect(() => {
     async function getPosition() {
       const location = await getCurrentPositionAsync();
@@ -159,7 +162,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
   }, [isSimulator]);
   useEffect(() => {
     if (directionsData && positionIndex === 1) {
-      Alert.alert("Finished");
+      Alert.alert(t("finished"));
       setMyPosition({
         latitude: endLocation?.point?.coordinates[0],
         longitude: endLocation?.point?.coordinates[1],
@@ -238,7 +241,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
               latitude: startLocation?.point?.coordinates[0],
               longitude: startLocation?.point?.coordinates[1],
             }}
-            title="Start"
+            title={t("start")}
             description={route?.params?.startPlace}
             onPress={(event) => {
               event.stopPropagation();
@@ -258,7 +261,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
               longitude: endLocation?.point?.coordinates[1],
             }}
             image={require("../../../icon/headquarter.png")}
-            title="Destination"
+            title={t("destination")}
             description={route?.params?.arrivalPlace}
             onPress={(event) => {
               event.stopPropagation();
@@ -274,7 +277,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
           />
           <Marker
             coordinate={myPosition}
-            title="My Position"
+            title={t("my-position")}
             description={myPositionInfo?.name}
             icon={require("../../../icon/busSchool.png")}
             image={require("../../../icon/myLocation.png")}
@@ -291,7 +294,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
           />
           <Marker
             coordinate={coach}
-            title="Coach"
+            title={t("coach")}
             image={require("../../../icon/busSchool.png")}
             onPress={(event) => {
               event.stopPropagation();
@@ -567,7 +570,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
                         route?.params?.trackingInfo?.ShuttleRouteData
                           ?.ShuttleData?.CoachData?.capacity
                       }{" "}
-                      seats
+                      {t("seats")}
                     </Text>
                   </View>
                 </View>
@@ -585,7 +588,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
                   marginBottom: 10,
                 }}
               >
-                {"Location: "}
+                {`${t("location")}: `}
                 <Text
                   style={{
                     fontSize: 18,
@@ -606,7 +609,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
                     marginRight: 10,
                   }}
                 >
-                  {"Distance: "}
+                  {`${t("distance")}: `}
                   <Text
                     style={{
                       fontSize: 15,
@@ -630,7 +633,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
                     marginVertical: 10,
                   }}
                 >
-                  {"Duration: "}
+                  {`${t("duration")}: `}
                   <Text
                     style={{
                       fontSize: 15,
@@ -639,7 +642,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
                       alignSelf: "center",
                     }}
                   >
-                    {selectedMaker && selectedMaker.duration} hours
+                    {selectedMaker && selectedMaker.duration} {t("hours")}
                   </Text>
                 </Text>
               )}
@@ -676,7 +679,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
             color: "white",
           }}
         >
-          {"Distance: "}
+          {`${t("distance")}: `}
           <Text
             style={{
               fontSize: 13,
@@ -694,7 +697,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
             color: "white",
           }}
         >
-          {"Duration: "}
+          {`${t("duration")}: `}
           <Text
             style={{
               fontSize: 13,
@@ -702,7 +705,7 @@ function ShuttleTrackingScreen({ navigation, route }) {
               color: "orange",
             }}
           >
-            {duration} hours
+            {duration} {t("hours")}
           </Text>
         </Text>
       </View>

@@ -32,8 +32,9 @@ import { getShuttleRouteOfSchedule } from "../../util/databaseAPI";
 import { AuthContext } from "../../Store/authContex";
 import { BookingContext } from "../../Store/bookingContext";
 import IconButton from "../../Componets/UI/IconButton";
-
+import { useTranslation } from "react-i18next";
 function SelectPointScreen({ navigation, route }) {
+  const { t } = useTranslation();
   const authCtx = useContext(AuthContext);
   const [pickUpPlaces, setPickUpPlaces] = useState();
   const [pickUpSelectedIndex, setPickUpSelectedIndex] = useState();
@@ -139,7 +140,7 @@ function SelectPointScreen({ navigation, route }) {
                 fontWeight: 500,
               }}
             >
-              Skip
+              {t("skip")}
             </Text>
           </TouchableOpacity>
         );
@@ -217,7 +218,7 @@ function SelectPointScreen({ navigation, route }) {
         route?.params?.idTrip
       );
       if (!pickUpPlacesTemp) {
-        Alert.alert("Error", "Something went wrong");
+        Alert.alert(t("error"), t("something-was-wrong"));
         return;
       }
       let pickUpPlaces = pickUpPlacesTemp.rows.map((item) => {
@@ -328,10 +329,7 @@ function SelectPointScreen({ navigation, route }) {
     try {
       getDirections();
     } catch (error) {
-      Alert.alert(
-        "Connection Error: ",
-        "Please check your internet connection"
-      );
+      Alert.alert(`${t("connection-error")}: `, t("check-internet-connection"));
     }
   }, []);
   function ShuttleItem(itemData) {
@@ -571,7 +569,7 @@ function SelectPointScreen({ navigation, route }) {
                         latitude: item.lat,
                         longitude: item.lng,
                       }}
-                      title={"Coach Station"}
+                      title={t("coach-station")}
                       description={item.departurePlace}
                       image={require("../../../icon/headquarter.png")}
                       onPress={(event) => {
@@ -617,7 +615,7 @@ function SelectPointScreen({ navigation, route }) {
                   latitude: myPosition.latitude,
                   longitude: myPosition.longitude,
                 }}
-                title="My Position"
+                title={t("my-position")}
                 description={myPosition.name}
                 // icon={require("../../../icon/busSchool.png")}
                 image={require("../../../icon/myLocation.png")}
@@ -658,7 +656,7 @@ function SelectPointScreen({ navigation, route }) {
                 color: "white",
               }}
             >
-              {" Departure Date: "}
+              {` ${t("departure-date")}: `}
               <Text
                 style={{
                   fontSize: 13,
@@ -676,7 +674,7 @@ function SelectPointScreen({ navigation, route }) {
                 color: "white",
               }}
             >
-              {"Departure Time: "}
+              {`${t("departure-time")}: `}
               <Text
                 style={{
                   fontSize: 13,
@@ -756,7 +754,7 @@ function SelectPointScreen({ navigation, route }) {
                 marginBottom: 10,
               }}
             >
-              {"Location: "}
+              {`${t("location")}: `}
               <Text
                 style={{
                   fontSize: 18,
@@ -780,7 +778,7 @@ function SelectPointScreen({ navigation, route }) {
                   marginRight: 10,
                 }}
               >
-                {"Distance: "}
+                {`${t("distance")}: `}
                 <Text
                   style={{
                     fontSize: 15,
@@ -804,7 +802,7 @@ function SelectPointScreen({ navigation, route }) {
                   marginVertical: 10,
                 }}
               >
-                {"Duration: "}
+                {`${t("duration")}: `}
                 <Text
                   style={{
                     fontSize: 15,
@@ -813,7 +811,7 @@ function SelectPointScreen({ navigation, route }) {
                     alignSelf: "center",
                   }}
                 >
-                  {selectedMaker && selectedMaker.duration} hours
+                  {selectedMaker && selectedMaker.duration} {t("hours")}
                 </Text>
               </Text>
             )}
@@ -833,7 +831,7 @@ function SelectPointScreen({ navigation, route }) {
                       fontWeight: "bold",
                     }}
                   >
-                    Select This Point
+                    {t("select-this-point")}
                   </Text>
                 </CustomButton>
               )}

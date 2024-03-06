@@ -21,6 +21,7 @@ import { Ionicons } from "@expo/vector-icons";
 import FlatButton from "../UI/FlatButton";
 import * as ImagePicker from "expo-image-picker";
 import { Pressable } from "react-native";
+import { useTranslation } from "react-i18next";
 function TicketItemNew({
   tripInfo,
   ticket,
@@ -29,6 +30,7 @@ function TicketItemNew({
   shuttleHandler,
   onCancelTicket,
 }) {
+  const { t } = useTranslation();
   const captureRefHandler = useRef();
   const [galleryPermissionInformation, requestPermission] =
     ImagePicker.useMediaLibraryPermissions();
@@ -46,8 +48,8 @@ function TicketItemNew({
       ImagePicker.PermissionStatus.DENIED
     ) {
       Alert.alert(
-        "Insuficient Permission!",
-        "You need to grant gallery permissions to change avatar"
+        `${t("insufficient-permission")}!`,
+        t("grant-gallery-permissions-to-change-avatar")
       );
 
       return false;
@@ -70,7 +72,7 @@ function TicketItemNew({
 
       await MediaLibrary.saveToLibraryAsync(localUri);
       if (localUri) {
-        alert("Saved!");
+        alert(`${t("saved")}!`);
       }
     } catch (e) {
       console.log(e);
@@ -208,7 +210,7 @@ function TicketItemNew({
               ]}
             >
               <Text style={[styles.statusTitle]}>
-                {ticket.status == 0 ? "Unpaid" : "Paid"}
+                {ticket.status == 0 ? t("unpaid") : t("paid")}
               </Text>
             </View>
             <View style={{ gap: 5, alignSelf: "center", alignItems: "center" }}>
@@ -220,7 +222,7 @@ function TicketItemNew({
                   },
                 ]}
               >
-                Seat
+                {t("s-seat")}
               </Text>
               <Text
                 style={[styles.subTitle, { fontSize: 40, fontWeight: "bold" }]}
@@ -238,23 +240,25 @@ function TicketItemNew({
               }}
             >
               <SubBody
-                title1={"ID Number"}
+                title1={t("id-number")}
                 subTitle1={ticket.reservationId}
-                title2={"Full Name"}
+                title2={t("full-name")}
                 subTitle2={ticket.fullName}
               />
               <SubBody
-                title1={"Seat"}
+                title1={t("s-seat")}
                 subTitle1={ticket.seatNumber}
-                title2={"Coach Type"}
+                title2={t("coach-type")}
                 subTitle2={ticket.coachType}
               />
               <View>
                 <SubBody
-                  title2={"Shuttle"}
-                  title1={"Round-Trip"}
+                  title2={t("shuttle")}
+                  title1={t("s-round-trip")}
                   subTitle1={
-                    tripInfo?.roundTripDate ? tripInfo?.roundTripDate : "None"
+                    tripInfo?.roundTripDate
+                      ? tripInfo?.roundTripDate
+                      : t("none")
                   }
                 />
                 {tripInfo?.shuttleRoute && (
@@ -278,7 +282,7 @@ function TicketItemNew({
                     >
                       {tripInfo?.shuttleRoute
                         ? tripInfo?.shuttleRoute.departurePlace
-                        : "None"}
+                        : t("none")}
                     </Text>
                   </Pressable>
                 )}
@@ -303,7 +307,7 @@ function TicketItemNew({
                     >
                       {tripInfo?.shuttleRoute
                         ? tripInfo?.shuttleRoute.departurePlace
-                        : "None"}
+                        : t("none")}
                     </Text>
                   </Pressable>
                 )}
@@ -346,7 +350,7 @@ function TicketItemNew({
                   fontWeight: "bold",
                 }}
               >
-                Download Ticket
+                {t("download-ticket")}
               </Text>
             </CustomButton>
           </View>

@@ -23,6 +23,7 @@ import IconButton from "../../Componets/UI/IconButton";
 import { BookingContext } from "../../Store/bookingContext";
 import { getCurrentUser } from "../../util/databaseAPI";
 import Loading from "../../Componets/UI/Loading";
+import { useTranslation } from "react-i18next";
 function PassengerDetailsScreen({ navigation, route }) {
   //route.params.idSchedule
   //route.params.numberOfPassenger
@@ -38,6 +39,7 @@ function PassengerDetailsScreen({ navigation, route }) {
 
   const authCtx = useContext(AuthContext);
   const bookingCtx = useContext(BookingContext);
+  const { t } = useTranslation();
   // const [isDeleteTimer, setIsDeleteTimer] = useState(false);
 
   // useEffect(() => {
@@ -163,7 +165,7 @@ function PassengerDetailsScreen({ navigation, route }) {
   async function getCurrentUsers() {
     const res = await getCurrentUser(authCtx.token, authCtx.idUser);
     if (!res) {
-      Alert.alert("Error", "Something went wrong");
+      Alert.alert(t("error"), t("something-was-wrong"));
       return;
     }
     const temp = res.data;
@@ -284,7 +286,9 @@ function PassengerDetailsScreen({ navigation, route }) {
             alignItems: "center",
           }}
         >
-          <Text style={styles.title}>Passenger {itemData.index + 1}</Text>
+          <Text style={styles.title}>
+            {t("passenger")} {itemData.index + 1}
+          </Text>
           <Text
             style={[
               styles.title,
@@ -294,7 +298,7 @@ function PassengerDetailsScreen({ navigation, route }) {
             {itemData.item.seatNumber}
           </Text>
         </View>
-        <Text style={[styles.subTitle]}>Saved Passengers</Text>
+        <Text style={[styles.subTitle]}>{t("saved-passenger")}</Text>
         <FlatList
           horizontal
           data={savedPassengers}
@@ -304,11 +308,11 @@ function PassengerDetailsScreen({ navigation, route }) {
           }
           showsHorizontalScrollIndicator={false}
         />
-        <Text style={styles.subTitle}>New Passenger</Text>
+        <Text style={styles.subTitle}>{t("new-passenger")}</Text>
 
         <View style={styles.passengerInput}>
           <IconInput
-            label="Full Name"
+            label={t("full-name")}
             keyboardType="default"
             onUpdateValue={(text) => {
               passengers[itemData.index].fullName = text;
@@ -321,7 +325,7 @@ function PassengerDetailsScreen({ navigation, route }) {
             icon={"person-outline"}
           />
           <IconInput
-            label="Address"
+            label={t("address")}
             keyboardType="default"
             onUpdateValue={(text) => {
               passengers[itemData.index].address = text;
@@ -334,7 +338,7 @@ function PassengerDetailsScreen({ navigation, route }) {
             icon={"location-outline"}
           />
           <IconInput
-            label="Phone Number"
+            label={t("phone-number")}
             keyboardType="number-pad"
             onUpdateValue={(text) => {
               passengers[itemData.index].phoneNumber = text;
@@ -345,7 +349,7 @@ function PassengerDetailsScreen({ navigation, route }) {
               !PhoneNumberValidation(passengers[itemData.index].phoneNumber)
             }
             placeholder="+84"
-            message={"Phone Number is invalided"}
+            message={t("phone-number-invalid")}
             icon={"call-outline"}
           />
         </View>
@@ -374,7 +378,7 @@ function PassengerDetailsScreen({ navigation, route }) {
               fontWeight: "bold",
             }}
           >
-            Save this passenger
+            {t("save-this-passenger")}
           </Text>
         </Pressable>
       </View>
@@ -465,8 +469,8 @@ function PassengerDetailsScreen({ navigation, route }) {
       }
     } else {
       setPopUpType("Error");
-      setPopUpTextBody("Some fields are invalid.");
-      setPopUpTitle("Error!");
+      setPopUpTextBody(t("some-fields-invalid"));
+      setPopUpTitle(t("error") + "!");
       setModalIsVisible(true);
     }
     setPassengers([...passengerTemp]);
@@ -546,8 +550,8 @@ function PassengerDetailsScreen({ navigation, route }) {
           )
         ) {
           setPopUpType("Error");
-          setPopUpTextBody("The passenger already exists!");
-          setPopUpTitle("Failed!");
+          setPopUpTextBody(t("passenger-already-exists"));
+          setPopUpTitle(t("failed") + "!");
           setModalIsVisible(true);
           return;
         }
@@ -565,8 +569,8 @@ function PassengerDetailsScreen({ navigation, route }) {
       }
     } else {
       setPopUpType("Error");
-      setPopUpTextBody("Some fields are invalid.");
-      setPopUpTitle("Error!");
+      setPopUpTextBody(t("some-fields-invalid"));
+      setPopUpTitle(t("error") + "!");
       setModalIsVisible(true);
     }
   }
@@ -660,7 +664,7 @@ function PassengerDetailsScreen({ navigation, route }) {
                     fontWeight: "bold",
                   }}
                 >
-                  Recheck Information
+                  {t("recheck-information")}
                 </Text>
                 <Entypo name="chevron-thin-right" size={24} color="white" />
               </View>
