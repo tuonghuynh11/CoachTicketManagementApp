@@ -14,8 +14,12 @@ import {
   Modal,
 } from "react-native";
 import React, { useState } from "react";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function ChooseImageModal({ visible, hide, uploadImage }) {
+  const { t } = useTranslation();
+
   return (
     <Modal
       visible={visible}
@@ -33,7 +37,7 @@ export default function ChooseImageModal({ visible, hide, uploadImage }) {
             source={require("../../../../assets/cameraIcon.png")}
             style={styles.image}
           ></Image>
-          <Text style={styles.text}>Camera</Text>
+          <Text style={styles.text}>{t("camera")}</Text>
         </Pressable>
         <Pressable
           style={({ pressed }) => [styles.choose, pressed && { opacity: 0.85 }]}
@@ -43,7 +47,7 @@ export default function ChooseImageModal({ visible, hide, uploadImage }) {
             source={require("../../../../assets/galleryIcon.png")}
             style={styles.image}
           ></Image>
-          <Text style={styles.text}>Gallery</Text>
+          <Text style={styles.text}>{t("gallery")}</Text>
         </Pressable>
       </View>
     </Modal>

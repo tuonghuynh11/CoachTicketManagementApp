@@ -20,8 +20,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { getAllUsers } from "../../util/userService";
 import { useIsFocused } from "@react-navigation/native";
 import ModalFilterUser from "./Popup/ModalFilterUser";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function ManageUserTicket({ navigation }) {
+  const { t } = useTranslation();
+
   const openMenu = () => {
     navigation.openDrawer();
   };
@@ -186,14 +190,14 @@ export default function ManageUserTicket({ navigation }) {
           <Pressable style={styles.menuIcon} onPress={openMenu}>
             <Entypo name="menu" size={30} color="#283663" />
           </Pressable>
-          <Text style={styles.headerText}>List Of Users</Text>
+          <Text style={styles.headerText}>{t("list-user")}</Text>
         </View>
         <View style={styles.body}>
           <View style={{ flexDirection: "row" }}>
             <View style={styles.bodySearch}>
               <TextInput
                 style={styles.textInputSearch}
-                placeholder="Search for user"
+                placeholder={t("search-for-user")}
                 placeholderTextColor="#FFFFFF"
                 onChangeText={textHandler}
                 value={searchText}

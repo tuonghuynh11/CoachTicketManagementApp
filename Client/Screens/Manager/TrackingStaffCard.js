@@ -10,8 +10,12 @@ import {
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import placeholder from "../../../assets/peopleIcon.jpg";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function TrackingStaffCard({ item }) {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       {/*status*/}
@@ -24,9 +28,9 @@ export default function TrackingStaffCard({ item }) {
         />
 
         <View style={styles.info}>
-          <Text style={styles.text}>Full Name: {item.fullName}</Text>
-          <Text style={styles.text}>Phone: {item.phoneNumber}</Text>
-          <Text style={styles.text}>Position: {item.positionId=='2'?"Driver":"Coach Assistant"}</Text>
+          <Text style={styles.text}>{t("full-name")}: {item.fullName}</Text>
+          <Text style={styles.text}>{t("phone-number")}: {item.phoneNumber}</Text>
+          <Text style={styles.text}>{t("position")}: {item.positionId=='2'?"Driver":"Coach Assistant"}</Text>
         </View>
         {/* <View style={styles.edit}>
             <Pressable

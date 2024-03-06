@@ -20,8 +20,12 @@ import { getAllUserTickets } from "../../util/userTicketService";
 import ModalSuccess from "./Popup/ModalSuccess";
 import ModalFail from "./Popup/ModalFail";
 import ModalConfirm from "./Popup/ModalConfirm";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function TicketCurrentList() {
+  const { t } = useTranslation();
+
   const route = useRoute();
   const itemFromParent = route.params?.id;
   //console.log(itemFromParent);
@@ -53,8 +57,8 @@ export default function TicketCurrentList() {
     setVisibleFail(false);
   };
 
-  const contentS = "Success!";
-  const contentF = "Fail!";
+  const contentS = t("success");
+  const contentF = t("fail");
 
   const isFocused = useIsFocused();
 

@@ -23,8 +23,12 @@ import {
 } from "../../util/userTicketService";
 import ModalConfirm from "./Popup/ModalConfirm";
 import { addDotsToNumber } from "../../Helper/Date";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function TicketCard({ item, fecth, showSuccess, showFail }) {
+  const { t } = useTranslation();
+
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -218,9 +222,9 @@ export default function TicketCard({ item, fecth, showSuccess, showFail }) {
               item.reservationDate.indexOf("T")
             )}
           </Text>
-          <Text style={styles.text}>Phone: {item.reservationPhoneNumber}</Text>
+          <Text style={styles.text}>{t("phone-number")}: {item.reservationPhoneNumber}</Text>
           <Text style={styles.text}>
-            Price: {addDotsToNumber(item.totalPrice)} VND
+            {t("price")}: {addDotsToNumber(item.totalPrice)} VND
           </Text>
         </View>
         <View style={styles.edit}>
@@ -228,24 +232,24 @@ export default function TicketCard({ item, fecth, showSuccess, showFail }) {
             style={({ pressed }) => [styles.icon, pressed && { opacity: 0.6 }]}
             onPress={() => {
               showC();
-              setContent("Are you sure to accept?");
+              setContent(t("are-you-sure-accept"));
               setType("1");
             }}
           >
             <View style={styles.buttonTextAccept}>
-              <Text style={styles.textButton}>Accept</Text>
+              <Text style={styles.textButton}>{t("accept")}</Text>
             </View>
           </Pressable>
           <Pressable
             style={({ pressed }) => [styles.icon, pressed && { opacity: 0.6 }]}
             onPress={() => {
               showC();
-              setContent("Are you sure to cancel?");
+              setContent(t("are-you-sure-cancel"));
               setType("2");
             }}
           >
             <View style={styles.buttonTextCancel}>
-              <Text style={styles.textButton}>Cancel</Text>
+              <Text style={styles.textButton}>{t("cancel")}</Text>
             </View>
           </Pressable>
         </View>

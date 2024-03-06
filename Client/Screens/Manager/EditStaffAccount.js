@@ -17,9 +17,12 @@ import React, { useState } from "react";
 import ModalSuccess from "./Popup/ModalSuccess";
 import ModalFail from "./Popup/ModalFail";
 import { updateStaffPassword } from "../../util/staffService";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 
 export default function EditStaffAccount({route}) {
+  const { t } = useTranslation();
 
   const {UserAccountData} = route.params;
   const [validateUsername, setValidateUsername] = useState(true);
@@ -46,8 +49,8 @@ export default function EditStaffAccount({route}) {
     setVisibleFail(false);
   };
 
-  const contentS = "Update Account Successfully!";
-  const [contentF, setContentF] = useState("Update Account Fail!");
+  const contentS = t("update-account-success");
+  const [contentF, setContentF] = useState(t("update-account-fail"));
   const [validateOldPassword, setValidateOldPassword] = useState(true);
   const [oldpassword, setOldPassword] = useState('');
   const oldpasswordHandler = (val) => {
@@ -88,11 +91,11 @@ export default function EditStaffAccount({route}) {
     }
     if(username != '' && reNewpassword != '' && Newpassword != ''){
       if(oldpassword == Newpassword) {
-        setContentF('Old Password must different from New Password');
+        setContentF(t("old-pass-validation"));
         showFail();
       }
       else if(Newpassword != reNewpassword) {
-        setContentF('New Password and Re-Password must be the same');
+        setContentF(t("new-pass-validation"));
         showFail();
       }
       else {
@@ -129,35 +132,35 @@ export default function EditStaffAccount({route}) {
           decelerationRate={"fast"}
         >
           <View>
-            <Text style={styles.textLabel}>Username</Text>
+            <Text style={styles.textLabel}>{t("username")}</Text>
             <TextInput
               style={validateUsername == true ? styles.textInput:styles.textInputWrong}
-              placeholder="Enter Username"
+              placeholder={t("enter-username")}
               value={username}
               onChangeText={usernameHandler}
               editable={false}
             ></TextInput>
-            {!validateUsername && <Text style={styles.validateText}>This field can't be empty</Text>}
+            {!validateUsername && <Text style={styles.validateText}>{t("non-empty-field")}</Text>}
             
             
-            <Text style={styles.textLabel}>New Password</Text>
+            <Text style={styles.textLabel}>{t("new-password")}</Text>
             <TextInput
               style={validateNewPassword == true ? styles.textInput:styles.textInputWrong}
-              placeholder="Enter New Password"
+              placeholder={t("enter-new-password")}
               secureTextEntry={true}
               value={Newpassword}
               onChangeText={NewpasswordHandler}
             ></TextInput>
-            {!validateNewPassword && <Text style={styles.validateText}>This field can't be empty</Text>}
-            <Text style={styles.textLabel}>Repeat New Password</Text>
+            {!validateNewPassword && <Text style={styles.validateText}>{t("non-empty-field")}</Text>}
+            <Text style={styles.textLabel}>{t("repeat-new-password")}</Text>
             <TextInput
               style={validateReNewPassword == true ? styles.textInput:styles.textInputWrong}
-              placeholder="Re-Enter New Password"
+              placeholder={t("re-enter-new-password")}
               secureTextEntry={true}
               value={reNewpassword}
               onChangeText={reNewpasswordHandler}
             ></TextInput>
-            {!validateReNewPassword && <Text style={styles.validateText}>This field can't be empty</Text>}
+            {!validateReNewPassword && <Text style={styles.validateText}>{t("non-empty-field")}</Text>}
           </View>
           <Pressable
             style={({ pressed }) => [
@@ -166,7 +169,7 @@ export default function EditStaffAccount({route}) {
             ]}
             onPress={saveHadler}
           >
-            <Text style={styles.saveText}>SAVE</Text>
+            <Text style={styles.saveText}>{t("save-button")}</Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>

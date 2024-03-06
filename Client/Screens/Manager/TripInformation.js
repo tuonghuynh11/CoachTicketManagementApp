@@ -16,8 +16,12 @@ import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import PassengerCard from "./PassengerCard";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function TripInformation({ route, navigation }) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.goBack();
   };
@@ -66,7 +70,7 @@ export default function TripInformation({ route, navigation }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>Trip Information</Text>
+          <Text style={styles.headerText}>{t("trip-information")}</Text>
         </View>
         <ScrollView
           style={styles.body}
@@ -74,47 +78,47 @@ export default function TripInformation({ route, navigation }) {
           showsVerticalScrollIndicator={false}
           decelerationRate={"fast"}
         >
-          <Text style={styles.title}>General Information</Text>
+          <Text style={styles.title}>{t("general-information")}</Text>
           <View style={styles.infoContainer}>
-            <Text style={styles.text}>Driver: {DriverData.fullName}</Text>
+            <Text style={styles.text}>{t("driver")}: {DriverData.fullName}</Text>
             <Text style={styles.text}>
-              Coach Assistant: {CoachAssistantData.fullName}
+              {t("coach-assistant")}: {CoachAssistantData.fullName}
             </Text>
-            <Text style={styles.text}>From: {RouteData.departurePlace}</Text>
-            <Text style={styles.text}>To: {RouteData.arrivalPlace}</Text>
-            <Text style={styles.text}>Price: {price}</Text>
-            <Text style={styles.text}>Remaining Slot: {remainingSlot}</Text>
+            <Text style={styles.text}>{t("from")}: {RouteData.departurePlace}</Text>
+            <Text style={styles.text}>{t("to")}: {RouteData.arrivalPlace}</Text>
+            <Text style={styles.text}>{t("price")}: {price}</Text>
+            <Text style={styles.text}>{t("remaining-slot")}: {remainingSlot}</Text>
             <Text style={styles.text}>
-              Status: {status == 0 ? "Current" : "Done"}
+              {t("status")}: {status == 0 ? "Current" : "Done"}
             </Text>
           </View>
-          <Text style={styles.title}>Coach Information</Text>
+          <Text style={styles.title}>{t("coach-information")}</Text>
           <View style={styles.infoContainer}>
             <Text style={styles.text}>
-              Coach Number: {CoachData.coachNumber}
+              {t("coach-number")}: {CoachData.coachNumber}
             </Text>
             <Text style={styles.text}>
-              Coach Type: {CoachData.CoachTypeData.typeName}
+              {t("coach-type")}: {CoachData.CoachTypeData.typeName}
             </Text>
-            <Text style={styles.text}>Capacity: {CoachData.capacity}</Text>
+            <Text style={styles.text}>{t("capacity")}: {CoachData.capacity}</Text>
           </View>
-          <Text style={styles.title}>Time Information</Text>
+          <Text style={styles.title}>{t("time-information")}</Text>
 
           <View style={styles.infoContainer}>
             <Text style={styles.text}>
-              Departure Time: {departure.toLocaleString()}
+              {t("departure-time")}: {departure.toLocaleString()}
             </Text>
             <Text style={styles.text}>
-              Arrival Time: {arrival.toLocaleString()}
+              {t("arrival-time")}: {arrival.toLocaleString()}
             </Text>
           </View>
-          <Text style={styles.title}>Detail Place Information</Text>
+          <Text style={styles.title}>{t("detail-place-information")}</Text>
           <View style={styles.infoContainer}>
             <Text style={styles.text}>
-              Departure Place: {StartPlaceData.placeName}
+              {t("departure-place")}: {StartPlaceData.placeName}
             </Text>
             <Text style={styles.text}>
-              Arrival Place: {ArrivalPlaceData.placeName}
+              {t("arrival-place")}: {ArrivalPlaceData.placeName}
             </Text>
           </View>
           {/* <View style={styles.listContainer}>

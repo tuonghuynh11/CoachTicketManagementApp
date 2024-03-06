@@ -25,13 +25,17 @@ import ModalSuccess from "./Popup/ModalSuccess";
 import ModalFail from "./Popup/ModalFail";
 import ModalConfirm from "./Popup/ModalConfirm";
 import { deleteSchedule } from "../../util/scheduleService";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function DetailSchedule({route, navigation}) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.goBack();
   }
 
-  const contentC = "Are you sure to delete schedule?"
+  const contentC = t("are-you-sure-to-delete")
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -72,10 +76,10 @@ export default function DetailSchedule({route, navigation}) {
   const arrTime = new Date(arrivalTime);
 
   let statusName = '';
-  if(status == '0') statusName = 'Unready';
-  if(status == '1') statusName = 'Ready';
-  if(status == '2') statusName = 'Arriving';
-  if(status == '3') statusName = 'Finish';
+  if(status == '0') statusName = t("unready");
+  if(status == '1') statusName = t("ready");
+  if(status == '2') statusName = t("arriving");
+  if(status == '3') statusName = t("finish");
 
   const [staffList, setStaffList] = useState([DriverData, CoachAssistantData]);
 
@@ -93,8 +97,8 @@ export default function DetailSchedule({route, navigation}) {
   }
   const navigateScreen = 'EditSchedule';
 
-  const contentSuccess = "Delete schedule successfully!";
-  const contentFail = "Delete schedule fail!";
+  const contentSuccess = t("delete-schedule-success");
+  const contentFail = t("delete-schedule-fail");
 
   const deleteHandler = async () => {
     showC();
@@ -144,7 +148,7 @@ export default function DetailSchedule({route, navigation}) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>Detail Schedule</Text>
+          <Text style={styles.headerText}>{t("detail-schedule")}</Text>
           <Pressable style={({ pressed }) => [
               styles.settingIconStyle,
               pressed && { opacity: 0.85 },
@@ -165,16 +169,16 @@ export default function DetailSchedule({route, navigation}) {
           decelerationRate={"fast"}
         >
           <View style={styles.infoContainer}>
-            <Text style={styles.text}>Coach Number: {CoachData.coachNumber}</Text>
-            <Text style={styles.text}>From: {StartPlaceData.placeName},  {RouteData.departurePlace}</Text>
-            <Text style={styles.text}>To: {ArrivalPlaceData.placeName}, {RouteData.arrivalPlace}</Text>
-            <Text style={styles.text}>Start Time: {depTime.toLocaleString()}</Text>
-            <Text style={styles.text}>Arrival Time: {arrTime.toLocaleString()}</Text>
-            <Text style={styles.text}>Price: {price}</Text>
-            <Text style={styles.text}>Status: {statusName}</Text>
+            <Text style={styles.text}>{t("coach-number")}: {CoachData.coachNumber}</Text>
+            <Text style={styles.text}>{t("from")}: {StartPlaceData.placeName},  {RouteData.departurePlace}</Text>
+            <Text style={styles.text}>{t("to")}: {ArrivalPlaceData.placeName}, {RouteData.arrivalPlace}</Text>
+            <Text style={styles.text}>{t("start-time")}: {depTime.toLocaleString()}</Text>
+            <Text style={styles.text}>{t("arrival-time")}: {arrTime.toLocaleString()}</Text>
+            <Text style={styles.text}>{t("price")}: {price}</Text>
+            <Text style={styles.text}>{t("status")}: {statusName}</Text>
           </View>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Driver & Coach Assistant</Text>
+            <Text style={styles.title}>{t("driver-coach-assistant")}</Text>
             {/* <AntDesign
               name="pluscircle"
               size={30}
@@ -208,7 +212,7 @@ export default function DetailSchedule({route, navigation}) {
             />
           </View> */}
           <View>
-            <Text style={styles.title}>Coach</Text>
+            <Text style={styles.title}>{t("coach")}</Text>
           </View>
           <View style={styles.imageContainer}>
             <Image

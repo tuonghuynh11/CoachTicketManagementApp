@@ -15,6 +15,8 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function ModalRoute({
   visible,
@@ -22,6 +24,8 @@ export default function ModalRoute({
   navigation,
   navigateScreen,
 }) {
+  const { t } = useTranslation();
+
   return (
     <Modal
       visible={visible}
@@ -39,19 +43,19 @@ export default function ModalRoute({
           }}
         >
           <MaterialIcons name="edit" size={35} color="#72C6A1" />
-          <Text style={styles.text}>Edit</Text>
+          <Text style={styles.text}>{t("edit")}</Text>
         </Pressable>
         <Pressable
           style={({ pressed }) => [styles.choose, pressed && { opacity: 0.85 }]}
         >
           <MaterialIcons name="delete" size={35} color="#EB3223" />
-          <Text style={styles.text}>Delete</Text>
+          <Text style={styles.text}>{t("delete")}</Text>
         </Pressable>
         <Pressable
           style={({ pressed }) => [styles.choose, pressed && { opacity: 0.85 }]}
         >
           <MaterialIcons name="airport-shuttle" size={35} color="#f6ea64" />
-          <Text style={styles.text}>Manage Shuttle</Text>
+          <Text style={styles.text}>{t("manage-shuttle")}</Text>
         </Pressable>
       </View>
     </Modal>

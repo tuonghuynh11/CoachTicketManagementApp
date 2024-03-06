@@ -15,8 +15,11 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function ModalFilter({ visible, hide, textHandler, handlerTextCapa }) {
+  const { t } = useTranslation();
   const [flag, setFlag] = useState(0);
   const [flagCapa, setFlagCapa] = useState(0);
   return (
@@ -29,7 +32,7 @@ export default function ModalFilter({ visible, hide, textHandler, handlerTextCap
       <Pressable style={styles.upper} onPress={hide}></Pressable>
       <View style={styles.lower}>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.title}>Coach Type</Text>
+          <Text style={styles.title}>{t("coach-type")}</Text>
         </View>
         <Pressable
           style={flag == 1 ? styles.pressedButton : styles.choose}
@@ -47,7 +50,7 @@ export default function ModalFilter({ visible, hide, textHandler, handlerTextCap
           }}
         >
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>Normal</Text>
+          <Text style={styles.text}>{t("normal")}</Text>
         </Pressable>
         <Pressable
           style={flag == 0 ? styles.pressedButton : styles.choose}
@@ -56,10 +59,10 @@ export default function ModalFilter({ visible, hide, textHandler, handlerTextCap
           }}
         >
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>All</Text>
+          <Text style={styles.text}>{t("all")}</Text>
         </Pressable>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.title}>Coach Capacity</Text>
+          <Text style={styles.title}>{t("coach-capacity")}</Text>
         </View>
         <Pressable
           style={flagCapa == 1 ? styles.pressedButton : styles.choose}
@@ -95,7 +98,7 @@ export default function ModalFilter({ visible, hide, textHandler, handlerTextCap
           }}
         >
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>All</Text>
+          <Text style={styles.text}>{t("all")}</Text>
         </Pressable>
       </View>
     </Modal>

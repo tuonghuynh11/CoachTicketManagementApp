@@ -15,8 +15,12 @@ import ModalFail from "./Popup/ModalFail";
 import ModalSuccess from "./Popup/ModalSuccess";
 import ModalConfirm from "./Popup/ModalConfirm";
 import {deleteRoute} from "../../util/routeService"
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function RouteCard({ item, navigation, deleteHandler}) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.navigate("EditRoute", item);
   };
@@ -64,9 +68,9 @@ export default function RouteCard({ item, navigation, deleteHandler}) {
     }
   }
 
-  const contentS = "Delete Successfully!";
-  const contentF = "Delete Fail!";
-  const contentC = "Are you sure to delete route?";
+  const contentS = t("delete-route-success");
+  const contentF = t("delete-route-fail");
+  const contentC = t("are-you-sure-to-delete");
   return (
     <View style={styles.container}>
       <ModalSuccess visible={visibleSuccess} hide={hideSuccess} content={contentS}/>
@@ -82,11 +86,11 @@ export default function RouteCard({ item, navigation, deleteHandler}) {
 
         <View style={styles.info}>
           {/**coachnum, type */}
-          <Text style={styles.text}>Route Name: {item.routeName}</Text>
+          <Text style={styles.text}>{t("route-name")}: {item.routeName}</Text>
           <Text style={styles.text}>
-            Departure Place: {item.departurePlace}
+            {t("departure-place")}: {item.departurePlace}
           </Text>
-          <Text style={styles.text}>Arrival Place: {item.arrivalPlace}</Text>
+          <Text style={styles.text}>{t("arrival-place")}: {item.arrivalPlace}</Text>
         </View>
         <View style={styles.edit}>
           {/*icon edit and delete*/}

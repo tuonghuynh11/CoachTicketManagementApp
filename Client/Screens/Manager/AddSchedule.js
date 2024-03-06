@@ -35,10 +35,14 @@ import {
 import ShuttleCard from "./ShuttleCard";
 import { getLocation } from "../../util/bingMapService";
 import { createSchedule } from "../../util/scheduleService";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 DropDownPicker.setListMode("SCROLLVIEW");
 
 export default function AddSchedule({ navigation, route }) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.goBack();
   };
@@ -46,7 +50,7 @@ export default function AddSchedule({ navigation, route }) {
   const { id } = route.params;
   //console.log(id);
 
-  const contentC = "Are you sure to delete?";
+  const contentC = t("are-you-sure-to-delete");
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -77,8 +81,8 @@ export default function AddSchedule({ navigation, route }) {
     setVisibleFail(false);
   };
 
-  const contentS = "Add New Schedule Successfully!";
-  const contentF = "Add New Schedule Fail!";
+  const contentS = t("add-schedule-success");
+  const contentF = t("add-schedule-fail");
 
   const isFocused = useIsFocused();
 
@@ -260,9 +264,9 @@ export default function AddSchedule({ navigation, route }) {
   const [isOpenGate, setIsOpenGate] = useState(false);
   const [currentValueGate, setCurrentValueGate] = useState("");
   const itemsGate = [
-    { label: "Gate 1", value: "1" },
-    { label: "Gate 2", value: "2" },
-    { label: "Gate 3", value: "3" },
+    { label: t("gate-1"), value: "1" },
+    { label: t("gate-2"), value: "2" },
+    { label: t("gate-3"), value: "3" },
   ];
 
   const [isOpenType, setIsOpenType] = useState(false);
@@ -274,10 +278,10 @@ export default function AddSchedule({ navigation, route }) {
   const [isOpenStatus, setIsOpenStatus] = useState(false);
   const [currentValueStatus, setCurrentValueStatus] = useState("");
   const itemsStatus = [
-    { label: "Unready", value: "0" },
-    { label: "Ready", value: "1" },
-    { label: "Arriving", value: "2" },
-    { label: "Finish", value: "3" },
+    { label: t("unready"), value: "0" },
+    { label: t("ready"), value: "1" },
+    { label: t("arriving"), value: "2" },
+    { label: t("finish"), value: "3" },
   ];
 
   const [validatePrice, setValidatePrice] = useState(true);
@@ -819,7 +823,7 @@ export default function AddSchedule({ navigation, route }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>New Schedule</Text>
+          <Text style={styles.headerText}>{t("new-schedule")}</Text>
           <Pressable
             style={({ pressed }) => [
               styles.resetIconStyle,
@@ -836,9 +840,9 @@ export default function AddSchedule({ navigation, route }) {
           showsVerticalScrollIndicator={false}
           decelerationRate={"fast"}
         >
-          <Text style={styles.titleText}>Driver & Coach Assistant</Text>
+          <Text style={styles.titleText}>{t("driver-coach-assist")}</Text>
           <View>
-            <Text style={styles.textLabel}>Driver</Text>
+            <Text style={styles.textLabel}>{t("driver")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={staffList}
@@ -848,16 +852,16 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueDriver(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Driver"
+                placeholder={t("select-driver")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateDriver && (
-              <Text style={styles.validateText}>Please choose driver</Text>
+              <Text style={styles.validateText}>{t("please-choose-driver")}</Text>
             )}
-            <Text style={styles.textLabel}>Coach Assistant</Text>
+            <Text style={styles.textLabel}>{t("coach-assistant")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={staffListData}
@@ -867,19 +871,19 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueAssist(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Coach Assistant"
+                placeholder={t("select-coach-assistant")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateAssistant && (
-              <Text style={styles.validateText}>Please choose assistant</Text>
+              <Text style={styles.validateText}>{t("please-choose-assistant")}</Text>
             )}
           </View>
-          <Text style={styles.titleText}>Route</Text>
+          <Text style={styles.titleText}>{t("route")}</Text>
           <View>
-            <Text style={styles.textLabel}>From</Text>
+            <Text style={styles.textLabel}>{t("from")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={routeListData}
@@ -889,7 +893,7 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueFrom(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Start Location"
+                placeholder={t("select-start-location")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
@@ -898,10 +902,10 @@ export default function AddSchedule({ navigation, route }) {
             </View>
             {!validateFrom && (
               <Text style={styles.validateText}>
-                Please choose start location
+                {t("please-choose-start-location")}
               </Text>
             )}
-            <Text style={styles.textLabel}>To</Text>
+            <Text style={styles.textLabel}>{t("to")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={routeListDataDes}
@@ -911,7 +915,7 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueTo(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select End Location"
+                placeholder={t("select-end-location")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
@@ -919,7 +923,7 @@ export default function AddSchedule({ navigation, route }) {
             </View>
             {!validateTo && (
               <Text style={styles.validateText}>
-                Please choose end location
+                {t("please-choose-end-location")}
               </Text>
             )}
             {/* <Text style={styles.textLabel}>Departure Place</Text>
@@ -932,7 +936,7 @@ export default function AddSchedule({ navigation, route }) {
               style={styles.textInput}
               placeholder="Enter Arrival Place"
             ></TextInput> */}
-            <Text style={styles.textLabel}>Gate</Text>
+            <Text style={styles.textLabel}>{t("gate")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={itemsGate}
@@ -942,20 +946,20 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueGate(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Gate"
+                placeholder={t("select-gate")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateGate && (
-              <Text style={styles.validateText}>Please choose gate</Text>
+              <Text style={styles.validateText}>{t("please-choose-gate")}</Text>
             )}
           </View>
 
-          <Text style={styles.titleText}>Shuttle</Text>
+          <Text style={styles.titleText}>{t("shuttle")}</Text>
           <View>
-            <Text style={styles.textLabel}>Shuttle Driver</Text>
+            <Text style={styles.textLabel}>{t("shuttle-driver")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={staffList}
@@ -965,7 +969,7 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueDriverShuttle(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Shuttle Driver"
+                placeholder={t("select-shuttle-driver")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
@@ -973,10 +977,10 @@ export default function AddSchedule({ navigation, route }) {
             </View>
             {!validateDriverShuttle && (
               <Text style={styles.validateText}>
-                Please choose shuttle driver
+                {t("please-choose-shuttle-driver")}
               </Text>
             )}
-            <Text style={styles.textLabel}>Shuttle Coach Assistant</Text>
+            <Text style={styles.textLabel}>{t("shuttle-coach-assistant")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={staffListData}
@@ -986,7 +990,7 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueAssistShuttle(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Shuttle Coach Assistant"
+                placeholder={t("select-shuttle-coach-assistant")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
@@ -994,10 +998,10 @@ export default function AddSchedule({ navigation, route }) {
             </View>
             {!validateAssistantShuttle && (
               <Text style={styles.validateText}>
-                Please choose shuttle assistant
+                {t("please-choose-shuttle-assistant")}
               </Text>
             )}
-            <Text style={styles.textLabel}>Shuttle Coach</Text>
+            <Text style={styles.textLabel}>{t("shuttle-coach")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={coachListData}
@@ -1007,14 +1011,14 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueCoachShuttle(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Coach"
+                placeholder={t("select-coach")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateCoachShuttle && (
-              <Text style={styles.validateText}>Please choose coach</Text>
+              <Text style={styles.validateText}>{t("please-choose-coach")}</Text>
             )}
             {openPickerShuttle && (
               <DateTimePicker
@@ -1025,7 +1029,7 @@ export default function AddSchedule({ navigation, route }) {
                 is24Hour={true}
               />
             )}
-            <Text style={styles.textLabel}>Shuttle Date</Text>
+            <Text style={styles.textLabel}>{t("shuttle-date")}</Text>
             <Pressable onPress={toggleDatepickerShuttle}>
               <TextInput
                 editable={false}
@@ -1034,14 +1038,14 @@ export default function AddSchedule({ navigation, route }) {
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Shuttle Date"
+                placeholder={t("enter-shuttle-date")}
                 value={ShuttleDate}
                 onChangeText={ShuttleDateHandler}
                 onPressIn={toggleDatepickerShuttle}
               ></TextInput>
               {!validateShuttleDate && (
                 <Text style={styles.validateText}>
-                  This field can't be empty
+                  {t("non-empty-field")}
                 </Text>
               )}
             </Pressable>
@@ -1055,7 +1059,7 @@ export default function AddSchedule({ navigation, route }) {
                 is24Hour={true}
               />
             )}
-            <Text style={styles.textLabel}>Shuttle Time</Text>
+            <Text style={styles.textLabel}>{t("shuttle-time")}</Text>
             <Pressable onPress={toggleTimepickerShuttle}>
               <TextInput
                 editable={false}
@@ -1064,20 +1068,20 @@ export default function AddSchedule({ navigation, route }) {
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Shuttle Time"
+                placeholder={t("enter-shuttle-time")}
                 value={ShuttleTime}
                 onChangeText={ShuttleTimeHandler}
                 onPressIn={toggleTimepickerShuttle}
               ></TextInput>
               {!validateShuttleTime && (
                 <Text style={styles.validateText}>
-                  This field can't be empty
+                  {t("non-empty-field")}
                 </Text>
               )}
             </Pressable>
 
-            <Text style={styles.titleText}>Shuttle Place</Text>
-            <Text style={styles.textLabel}>Ward</Text>
+            <Text style={styles.titleText}>{t("shuttle-place")}</Text>
+            <Text style={styles.textLabel}>{t("ward")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={ward}
@@ -1087,7 +1091,7 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueWard(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Ward"
+                placeholder={t("select-ward")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
@@ -1095,19 +1099,19 @@ export default function AddSchedule({ navigation, route }) {
             </View>
 
             {!validateWard && (
-              <Text style={styles.validateText}>Please choose ward</Text>
+              <Text style={styles.validateText}>{t("please-choose-ward")}</Text>
             )}
-            <Text style={styles.textLabel}>Detail Place</Text>
+            <Text style={styles.textLabel}>{t("detail-place")}</Text>
             <TextInput
               style={
                 validatePlace == true ? styles.textInput : styles.textInputWrong
               }
-              placeholder="Enter Detail Place"
+              placeholder={t("enter-detail-place")}
               value={place}
               onChangeText={placeHandler}
             ></TextInput>
             {!validatePlace && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
             <Pressable
               style={({ pressed }) => [
@@ -1117,7 +1121,7 @@ export default function AddSchedule({ navigation, route }) {
               onPress={addHandler}
               //onPress={addDestinationHandler}
             >
-              <Text style={styles.addText}>Add Place</Text>
+              <Text style={styles.addText}>{t("add-place")}</Text>
             </Pressable>
             <View style={styles.listPlaces}>
               <FlatList
@@ -1140,7 +1144,7 @@ export default function AddSchedule({ navigation, route }) {
             </View>
           </View>
           <View>
-          <Text style={styles.titleText}>Departure</Text>
+          <Text style={styles.titleText}>{t("departure")}</Text>
             {/* 2 date time picker */}
             {openPicker && (
               <DateTimePicker
@@ -1151,7 +1155,7 @@ export default function AddSchedule({ navigation, route }) {
                 is24Hour={true}
               />
             )}
-            <Text style={styles.textLabel}>Departure Date</Text>
+            <Text style={styles.textLabel}>{t("departure-date")}</Text>
             <Pressable onPress={toggleDatepicker}>
               <TextInput
                 editable={false}
@@ -1160,14 +1164,14 @@ export default function AddSchedule({ navigation, route }) {
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Departure Date"
+                placeholder={t("enter-departure-date")}
                 value={DepDate}
                 onChangeText={DepDateHandler}
                 onPressIn={toggleDatepicker}
               ></TextInput>
               {!validateDepDate && (
                 <Text style={styles.validateText}>
-                  This field can't be empty
+                  {t("non-empty-field")}
                 </Text>
               )}
             </Pressable>
@@ -1181,7 +1185,7 @@ export default function AddSchedule({ navigation, route }) {
                 is24Hour={true}
               />
             )}
-            <Text style={styles.textLabel}>Departure Time</Text>
+            <Text style={styles.textLabel}>{t("departure-time")}</Text>
             <Pressable onPress={toggleTimepicker}>
               <TextInput
                 editable={false}
@@ -1190,19 +1194,19 @@ export default function AddSchedule({ navigation, route }) {
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Departure Time"
+                placeholder={t("enter-departure-time")}
                 value={DepTime}
                 onChangeText={DepTimeHandler}
                 onPressIn={toggleTimepicker}
               ></TextInput>
               {!validateDepTime && (
                 <Text style={styles.validateText}>
-                  This field can't be empty
+                  {t("non-empty-field")}
                 </Text>
               )}
             </Pressable>
 
-          <Text style={styles.titleText}>Arrival</Text>
+          <Text style={styles.titleText}>{t("arrival")}</Text>
 
 
             {openPickerArr && (
@@ -1214,7 +1218,7 @@ export default function AddSchedule({ navigation, route }) {
                 is24Hour={true}
               />
             )}
-            <Text style={styles.textLabel}>Arrival Date</Text>
+            <Text style={styles.textLabel}>{t("arrival-date")}</Text>
             <Pressable onPress={toggleDatepickerArr}>
               <TextInput
                 editable={false}
@@ -1223,14 +1227,14 @@ export default function AddSchedule({ navigation, route }) {
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Arrival Date"
+                placeholder={t("enter-arrival-date")}
                 value={ArrDate}
                 onChangeText={ArrDateHandler}
                 onPressIn={toggleDatepickerArr}
               ></TextInput>
               {!validateArrDate && (
                 <Text style={styles.validateText}>
-                  This field can't be empty
+                  {t("non-empty-field")}
                 </Text>
               )}
             </Pressable>
@@ -1244,7 +1248,7 @@ export default function AddSchedule({ navigation, route }) {
                 is24Hour={true}
               />
             )}
-            <Text style={styles.textLabel}>Arrival Time</Text>
+            <Text style={styles.textLabel}>{t("arrival-time")}</Text>
             <Pressable onPress={toggleTimepickerArr}>
               <TextInput
                 editable={false}
@@ -1253,21 +1257,21 @@ export default function AddSchedule({ navigation, route }) {
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Arrival Time"
+                placeholder={t("enter-arrival-time")}
                 value={ArrTime}
                 onChangeText={ArrTimeHandler}
                 onPressIn={toggleTimepickerArr}
               ></TextInput>
               {!validateArrTime && (
                 <Text style={styles.validateText}>
-                  This field can't be empty
+                  {t("non-empty-field")}
                 </Text>
               )}
             </Pressable>
           </View>
-          <Text style={styles.titleText}>Coach</Text>
+          <Text style={styles.titleText}>{t("coach")}</Text>
           <View>
-            <Text style={styles.textLabel}>Coach Available</Text>
+            <Text style={styles.textLabel}>{t("coach-available")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={coachListData}
@@ -1277,19 +1281,19 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueCoach(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Coach"
+                placeholder={t("select-coach")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateCoach && (
-              <Text style={styles.validateText}>Please choose coach</Text>
+              <Text style={styles.validateText}>{t("please-choose-coach")}</Text>
             )}
           </View>
-          <Text style={styles.titleText}>Status</Text>
+          <Text style={styles.titleText}>{t("status")}</Text>
           <View>
-            <Text style={styles.textLabel}>Status</Text>
+            <Text style={styles.textLabel}>{t("status")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={itemsStatus}
@@ -1299,31 +1303,31 @@ export default function AddSchedule({ navigation, route }) {
                 setValue={(val) => setCurrentValueStatus(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Coach Status"
+                placeholder={t("select-coach-status")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateCoachStatus && (
-              <Text style={styles.validateText}>Please choose status</Text>
+              <Text style={styles.validateText}>{t("please-choose-status")}</Text>
             )}
           </View>
-          <Text style={styles.titleText}>Price</Text>
+          <Text style={styles.titleText}>{t("price")}</Text>
           <View>
-            <Text style={styles.textLabel}>Price (VND)</Text>
+            <Text style={styles.textLabel}>{t("price")} (VND)</Text>
             <TextInput
               style={
                 validatePrice == true ? styles.textInput : styles.textInputWrong
               }
-              placeholder="Enter Price (VND)"
+              placeholder={t("enter-price")}
               value={price}
               keyboardType="numeric"
               onChangeText={priceHandler}
             ></TextInput>
             {!validatePrice && (
               <Text style={styles.validateText}>
-                Price must equal or greater than 150.000VND
+                {t("price-validation")}
               </Text>
             )}
           </View>
@@ -1334,7 +1338,7 @@ export default function AddSchedule({ navigation, route }) {
             ]}
             onPress={saveHadler}
           >
-            <Text style={styles.saveText}>SAVE</Text>
+            <Text style={styles.saveText}>{t("save-button")}</Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>

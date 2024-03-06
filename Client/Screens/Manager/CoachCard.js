@@ -14,15 +14,19 @@ import { deleteCoach } from "../../util/coachService";
 import ModalSuccess from "./Popup/ModalSuccess";
 import ModalFail from "./Popup/ModalFail";
 import ModalConfirm from "./Popup/ModalConfirm";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function CoachCard({ item, navigation, fecth, showSuccess, showFail }) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.navigate('EditCoach', item);
   }
 
   const [itemid, setItemid] = useState();
   
-  const contentC = "Are you sure to delete coach?"
+  const contentC = t("are-you-sure-to-delete")
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -47,9 +51,9 @@ export default function CoachCard({ item, navigation, fecth, showSuccess, showFa
     }
   }
   
-  let nameStatus = 'Arriving';
+  let nameStatus = t("arriving");
   if(item.status == false){
-    nameStatus = 'Ready';
+    nameStatus = t("ready");
   }
   const deleteHandler = async () => {
     showC();
@@ -74,9 +78,9 @@ export default function CoachCard({ item, navigation, fecth, showSuccess, showFa
 
         <View style={styles.info}>
           {/**coachnum, type */}
-          <Text style={styles.text}>Coach Number: {item.coachNumber}</Text>
-          <Text style={styles.text}>Coach Type: {item.CoachTypeData.typeName}</Text>
-          <Text style={styles.text}>Coach Capacity: {item.capacity}</Text>
+          <Text style={styles.text}>{t("coach-number")}: {item.coachNumber}</Text>
+          <Text style={styles.text}>{t("coach-type")}: {item.CoachTypeData.typeName}</Text>
+          <Text style={styles.text}>{t("coach-capacity")}: {item.capacity}</Text>
         </View>
         <View style={styles.edit}>
           {/*icon edit and delete*/}
