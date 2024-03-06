@@ -18,7 +18,9 @@ import { getAllTicketsOfUser } from "../../util/databaseAPI";
 import { TicketHistoryModel } from "../../Models/TicketHistoryModel";
 import Loading from "../../Componets/UI/Loading";
 import EmptyTrip from "../../Componets/UI/EmptyTrip";
+import { useTranslation } from "react-i18next";
 function HistoryScreenOldTicket({ navigation }) {
+  const { t } = useTranslation();
   const authCtx = useContext(AuthContext);
   const [historyTicket, setHistoryTicket] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -120,7 +122,7 @@ function HistoryScreenOldTicket({ navigation }) {
   return (
     <>
       {historyTicket.length === 0 && (
-        <EmptyTrip title="You don't have any reservations" message="" />
+        <EmptyTrip title={t("not-have-any-reservations")} message="" />
       )}
       {historyTicket.length !== 0 && (
         <View style={styles.root}>

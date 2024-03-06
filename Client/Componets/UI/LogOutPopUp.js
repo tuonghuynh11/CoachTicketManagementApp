@@ -14,7 +14,9 @@ import {
 import Modal from "react-native-modal";
 import { TouchableWithoutFeedback } from "react-native";
 import GlobalColors from "../../Color/colors";
+import { useTranslation } from "react-i18next";
 function LogOutPopUp({ isVisible, onCancel, onLogout }) {
+  const { t } = useTranslation();
   return (
     <Modal isVisible={isVisible} backdropOpacity={0.7}>
       <TouchableWithoutFeedback
@@ -29,7 +31,7 @@ function LogOutPopUp({ isVisible, onCancel, onLogout }) {
               fontWeight: "600",
             }}
           >
-            Logging out ...
+            {t("logging-out")} ...
           </Text>
           <Text
             style={{
@@ -37,9 +39,7 @@ function LogOutPopUp({ isVisible, onCancel, onLogout }) {
               fontSize: 14.5,
             }}
           >
-            Oh no! You'll miss out on a lot of things when you log in: Bonus
-            points, Notifications of fares, trips, and other member-only
-            benefits. Are you sure you still want to sign out?
+            {t("log-out-message")}
           </Text>
           <View style={{ width: "100%", gap: 10 }}>
             <TouchableOpacity
@@ -49,7 +49,7 @@ function LogOutPopUp({ isVisible, onCancel, onLogout }) {
               ]}
               onPress={onLogout}
             >
-              <Text style={styles.closeButtonText}>Yes</Text>
+              <Text style={styles.closeButtonText}>{t("yes")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -60,7 +60,7 @@ function LogOutPopUp({ isVisible, onCancel, onLogout }) {
               <Text
                 style={[styles.closeButtonText, { color: GlobalColors.price }]}
               >
-                No
+                {t("no")}
               </Text>
             </TouchableOpacity>
           </View>

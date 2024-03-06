@@ -56,6 +56,7 @@ import UserTicketStackNavigate from "./Client/Screens/Manager/UserTicketStackNav
 import StaffStackNavigate from "./Client/Screens/Manager/StaffStackNavigate";
 import { FontAwesome } from "@expo/vector-icons";
 import LngContextProvider from "./Client/Store/languageContext";
+import { useTranslation } from "react-i18next";
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -142,6 +143,8 @@ export default function App() {
     if (!roleId) {
       return;
     }
+    const { t } = useTranslation();
+
     if (roleId == 1) {
       return (
         <BookingContextProvider>
@@ -170,7 +173,7 @@ export default function App() {
               component={SelectSeatsScreen}
               options={{
                 gestureEnabled: false,
-                title: "Pick your seat",
+                title: t("pick-your-seat"),
                 headerStyle: {
                   backgroundColor: GlobalColors.headerColor,
                 },
@@ -191,7 +194,7 @@ export default function App() {
               name="SelectPointScreen"
               component={SelectPointScreen}
               options={{
-                title: "Select Pick Up Point",
+                title: t("select-pick-up-point"),
                 gestureEnabled: false,
 
                 headerStyle: {
@@ -215,7 +218,7 @@ export default function App() {
               name="PassengerDetailsScreen"
               component={PassengerDetailsScreen}
               options={{
-                title: "Passenger Details",
+                title: t("passenger-details"),
                 gestureEnabled: false,
 
                 headerStyle: {
@@ -238,7 +241,7 @@ export default function App() {
               name="RecheckScreen"
               component={RecheckScreen}
               options={{
-                title: "Recheck Information",
+                title: t("recheck-information"),
                 gestureEnabled: false,
 
                 headerStyle: {
@@ -262,7 +265,7 @@ export default function App() {
               name="PaymentScreen"
               component={PaymentScreen}
               options={{
-                title: "Payment",
+                title: t("payment"),
                 gestureEnabled: false,
 
                 headerStyle: {
@@ -286,7 +289,7 @@ export default function App() {
               component={PaymentResultScreen}
               options={{
                 gestureEnabled: false,
-                title: "Payment Status",
+                title: t("payment-status"),
                 headerStyle: {
                   backgroundColor: GlobalColors.headerColor,
                 },
@@ -307,7 +310,7 @@ export default function App() {
               name="ElectronicTicketScreen"
               component={ElectronicTicketScreen}
               options={{
-                title: "E-Tickets",
+                title: t("e-ticket"),
                 gestureEnabled: false,
 
                 headerStyle: {
@@ -331,7 +334,7 @@ export default function App() {
               name="TicketDetailScreen"
               component={TicketDetailScreen}
               options={{
-                title: "Ticket Detail",
+                title: t("ticket-detail"),
                 headerStyle: {
                   backgroundColor: GlobalColors.headerColor,
                 },
@@ -394,7 +397,7 @@ export default function App() {
               name="EditProfileScreen"
               component={EditProfileScreen}
               options={{
-                title: "Edit Profile",
+                title: t("edit-profile"),
                 headerStyle: {
                   backgroundColor: GlobalColors.contentBackground,
                 },
@@ -415,7 +418,7 @@ export default function App() {
               name="MyOfferingScreen"
               component={MyOfferingScreen}
               options={{
-                title: "Offering",
+                title: t("offering"),
                 headerStyle: {
                   backgroundColor: "white",
                 },
@@ -437,7 +440,7 @@ export default function App() {
               name="AboutUsScreen"
               component={AboutUsScreen}
               options={{
-                title: "About Us",
+                title: t("about-us"),
                 headerStyle: {
                   backgroundColor: "white",
                 },
@@ -459,7 +462,7 @@ export default function App() {
               name="HistoryScreenOldTicket"
               component={HistoryScreenOldTicket}
               options={{
-                title: "Ordered History",
+                title: t("ordered-history"),
                 headerStyle: {
                   backgroundColor: GlobalColors.background,
                 },
@@ -514,7 +517,7 @@ export default function App() {
                 component={SelectSeatsScreen}
                 options={{
                   gestureEnabled: false,
-                  title: "Pick your seat",
+                  title: t("pick-your-seats"),
                   headerStyle: {
                     backgroundColor: GlobalColors.headerColor,
                   },
@@ -535,7 +538,7 @@ export default function App() {
                 name="SelectPointScreen"
                 component={SelectPointScreen}
                 options={{
-                  title: "Select Pick Up Point",
+                  title: t("select-pick-up-point"),
                   headerStyle: {
                     backgroundColor: GlobalColors.headerColor,
                   },
@@ -557,7 +560,7 @@ export default function App() {
                 name="PassengerDetailsScreen"
                 component={PassengerDetailsScreen}
                 options={{
-                  title: "Passenger Details",
+                  title: t("passenger-details"),
                   headerStyle: {
                     backgroundColor: GlobalColors.headerColor,
                   },
@@ -578,7 +581,7 @@ export default function App() {
                 name="RecheckScreen"
                 component={RecheckScreen}
                 options={{
-                  title: "Recheck Information",
+                  title: t("recheck-information"),
                   headerStyle: {
                     backgroundColor: GlobalColors.headerColor,
                   },
@@ -600,7 +603,7 @@ export default function App() {
                 name="PaymentScreen"
                 component={PaymentScreen}
                 options={{
-                  title: "Payment",
+                  title: t("payment"),
                   headerStyle: {
                     backgroundColor: GlobalColors.headerColor,
                   },
@@ -622,7 +625,7 @@ export default function App() {
                 component={PaymentResultScreen}
                 options={{
                   gestureEnabled: false,
-                  title: "Payment Status",
+                  title: t("payment-status"),
                   headerStyle: {
                     backgroundColor: GlobalColors.headerColor,
                   },
@@ -643,7 +646,7 @@ export default function App() {
                 name="ElectronicTicketScreen"
                 component={ElectronicTicketScreen}
                 options={{
-                  title: "E-Tickets",
+                  title: t("e-ticket"),
                   headerStyle: {
                     backgroundColor: GlobalColors.headerColor,
                   },
@@ -665,7 +668,7 @@ export default function App() {
                 name="TicketDetailScreen"
                 component={TicketDetailScreen}
                 options={{
-                  title: "Ticket Detail",
+                  title: t("ticket-detail"),
                   headerStyle: {
                     backgroundColor: GlobalColors.headerColor,
                   },
@@ -728,7 +731,7 @@ export default function App() {
                 name="EditProfileScreen"
                 component={EditProfileScreen}
                 options={{
-                  title: "Edit Profile",
+                  title: t("edit-profile"),
                   headerStyle: {
                     backgroundColor: GlobalColors.contentBackground,
                   },
@@ -749,7 +752,7 @@ export default function App() {
                 name="MyOfferingScreen"
                 component={MyOfferingScreen}
                 options={{
-                  title: "Offering",
+                  title: t("offering"),
                   headerStyle: {
                     backgroundColor: "white",
                   },
@@ -771,7 +774,7 @@ export default function App() {
                 name="AboutUsScreen"
                 component={AboutUsScreen}
                 options={{
-                  title: "About Us",
+                  title: t("about-us"),
                   headerStyle: {
                     backgroundColor: "white",
                   },
@@ -793,7 +796,7 @@ export default function App() {
                 name="HistoryScreenOldTicket"
                 component={HistoryScreenOldTicket}
                 options={{
-                  title: "Ordered History",
+                  title: t("ordered-history"),
                   headerStyle: {
                     backgroundColor: GlobalColors.background,
                   },
@@ -833,6 +836,7 @@ export default function App() {
               name="Manage User Ticket"
               component={UserTicketStackNavigate}
               options={{
+                title: t("manage-user-ticket"),
                 drawerIcon: ({ focused, size }) => (
                   <FontAwesome
                     name="ticket"
@@ -846,6 +850,7 @@ export default function App() {
               name="Manage Staff"
               component={StaffStackNavigate}
               options={{
+                title: t("manage-staff"),
                 drawerIcon: ({ focused, size }) => (
                   <Ionicons
                     name="person"
@@ -942,11 +947,11 @@ export default function App() {
     <>
       <StatusBar style="light" />
 
-      <AuthContextProvider>
-        <LngContextProvider>
+      <LngContextProvider>
+        <AuthContextProvider>
           <Root />
-        </LngContextProvider>
-      </AuthContextProvider>
+        </AuthContextProvider>
+      </LngContextProvider>
     </>
   );
 }
