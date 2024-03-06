@@ -18,6 +18,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 const tickets = [
   {
     barcode: "T1245f33",
@@ -39,7 +40,7 @@ function CheckScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState("Not yet scanned");
-
+  const { t } = useTranslation();
   const route = useRoute();
   return (
     <SafeAreaView style={styles.container}>
@@ -51,7 +52,7 @@ function CheckScreen({ navigation }) {
       >
         <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
       </Pressable> */}
-      <Text style={styles.text}>Ticket Information</Text>
+      <Text style={styles.text}>{t("ticket-info")}</Text>
       <View style={styles.body}>
         <View style={styles.item}>
           <View style={styles.avatarContainer}>
@@ -61,13 +62,15 @@ function CheckScreen({ navigation }) {
               <Text style={styles.avatar}> {route.params.seatNum}</Text>
             </TouchableHighlight>
             <View style={{ marginStart: 30 }}>
-              <Text style={{ marginTop: 10 }}>Name: {route.params.name}</Text>
+              <Text style={{ marginTop: 10 }}>
+                {t("name")}: {route.params.name}
+              </Text>
 
               <Text style={{ marginTop: 10 }}>
-                Gender: {route.params.gender}
+                {t("gender")}: {route.params.gender}
               </Text>
               <Text style={{ marginTop: 10 }}>
-                Phone number: {route.params.phone}{" "}
+                {t("phone-number")}: {route.params.phone}{" "}
               </Text>
             </View>
           </View>
@@ -79,14 +82,14 @@ function CheckScreen({ navigation }) {
               borderBottomWidth: StyleSheet.hairlineWidth,
             }}
           />
-          <Text style={styles.text2}>Ticket</Text>
+          <Text style={styles.text2}>{t("ticket")}</Text>
 
           <View style={styles.ticket}>
             <Text style={{ marginStart: 30, marginTop: 10 }}>
-              Ticket code: {route.params.id}
+              {t("ticket-code")}: {route.params.id}
             </Text>
             <Text style={{ marginStart: 30, marginVertical: 10 }}>
-              Price: {addDotsToNumber(route.params.price)}Đ{" "}
+              {t("price")}: {addDotsToNumber(route.params.price)}Đ{" "}
             </Text>
             {/* <BarCodeScanner
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}

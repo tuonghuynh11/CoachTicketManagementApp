@@ -42,5 +42,72 @@
   "prepare-to-expire": "Prepare to expire",
   "minimum-invoice": "Minimum invoice",
   "maximum": "Maximum",
-  "expire-date": "Expire date"
+  "expire-date": "Expire date",
+
+  "coach-id": "Coach ID",
+  "driver-name": "Driver",
+  "assistant-name": "Coach Assistant",
+  "start": "Start",
+  "end": "End",
+  "route": "Route",
+  "passengers-num": "Number of passengers",
+
+  "seats": "Seats",
+  "end-trip": "End trip",
+  "trip-has-ended": "Trip has ended",
+  "name": "Name",
+  "phone": "Phone",
+  "success": "Success",
+  "trip-has-ended-confirmed": "Successfully confirm the trip has ended",
+
+  "ticket-info": "Ticket Information",
+  "gender": "Gender",
+  "ticket": "Ticket",
+  "ticket-code": "Ticket Code",
+  "price": "Price",
+
+  "select-discount-value": "Select discount value",
+  "select-quantity": "Select quantity",
+  "expiration-date": "Expiration Date",
+  "minimum-price": "Minimum price to apply",
+  "maximum-price": "Maximum discount price",
+
+  "delete-success": "Delete successfully",
+
+  "edit-discount": "Edit Discount",
+  "confirm": "Confirm",
+
+  "discounts": "Discount",
+
+  "remaining": "remaining",
+
+  "add-quantity": "Add quantity",
+  "list-of-discounts": "List of discounts",
+
+  "add-success": "Add successfully",
+  "manage-discount": "Manage discount",
+
+  "add-new-discount": "Add New Discount",
+
+  "customer": "Customer",
+  "staff": "Staff",
+
+  "manage-user": "Manage User",
+  "role": "Role",
+
+  "alert-capital": "ALERT",
+  "delete-user": "Do you want to delete this user?",
+  "delete": "Delete",
+  "cant-update-user": "Unable to update this user",
+  "add": "Add",
+
+  "gold": "Gold",
+  "silver": "Silver",
+  "bronze": "Bronze",
+  "memberships": "Memberships",
+
+  "not-yet-scanned": "Not yet scanned",
+  "want-to-continue": "Do you want to continue?",
+  "failed-to-scan": "Failed to scan this ticket. Do you want to continue?",
+  "has-been-scanned": "Ticket has been scanned. Do you want to continue?"
 }

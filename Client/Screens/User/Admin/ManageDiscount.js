@@ -43,12 +43,13 @@ import DropDownPicker from "react-native-dropdown-picker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import CheckBox from "expo-checkbox";
 import { LogBox } from "react-native";
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { AuthContext } from "../../../Store/authContex";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loading from "../../../Componets/UI/Loading";
 import MyModal from "../../../Componets/UI/MyModal";
+import { useTranslation } from "react-i18next";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
@@ -207,6 +208,7 @@ const init = () => {
 const Stack = createNativeStackNavigator();
 
 const EditDiscount = function ({ navigation }) {
+  const { t } = useTranslation();
   const route = useRoute();
   const item = route.params;
   const [open, setOpen] = useState(false);
@@ -292,19 +294,19 @@ const EditDiscount = function ({ navigation }) {
             alignSelf: "center",
           }}
         >
-          Edit Discount
+          {t("edit-discount")}
         </Text>
         <View
           style={[styles.discountInfo, { position: "relative", marginTop: 20 }]}
         >
           <TextInput
-            placeholder="Name"
+            placeholder={t("name")}
             value={name}
             onChangeText={setName}
             style={styles.input}
           ></TextInput>
           <DropDownPicker
-            placeholder="Select discount value"
+            placeholder={t("select-discount-value")}
             style={styles.input}
             open={open}
             value={value}
@@ -315,7 +317,7 @@ const EditDiscount = function ({ navigation }) {
             containerStyle={{ zIndex: 1000, width: 340 }}
           ></DropDownPicker>
           <DropDownPicker
-            placeholder="Select quantity"
+            placeholder={t("select-quantity")}
             style={styles.input}
             value={quantity}
             setValue={setQuantity}
@@ -332,7 +334,7 @@ const EditDiscount = function ({ navigation }) {
             style={[styles.input]}
           >
             <Text
-              placeholder="Expiration Date"
+              placeholder={t("expiration-date")}
               // style={styles.input}
               style={[
                 { paddingTop: 5 },
@@ -347,7 +349,7 @@ const EditDiscount = function ({ navigation }) {
               onChangeText={setExpiredDate}
               editable={false}
             >
-              {expiredDate ? expiredDate : "Expiration Date"}
+              {expiredDate ? expiredDate : t("expiration-date")}
             </Text>
           </Pressable>
           <View>
@@ -415,7 +417,7 @@ const EditDiscount = function ({ navigation }) {
                           { color: "#075985" },
                         ]}
                       >
-                        Cancel
+                        {t("cancel")}
                       </Text>
                     </TouchableOpacity>
 
@@ -443,7 +445,7 @@ const EditDiscount = function ({ navigation }) {
                           },
                         ]}
                       >
-                        Confirm
+                        {t("confirm")}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -452,14 +454,14 @@ const EditDiscount = function ({ navigation }) {
             </Modal>
           </View>
           <TextInput
-            placeholder="Minimum price to apply"
+            placeholder={t("minimum-price")}
             value={minimum + ""}
             onChangeText={setMinimum}
             style={styles.input}
             keyboardType="numeric"
           ></TextInput>
           <TextInput
-            placeholder="Maximum discount price"
+            placeholder={t("maximum-price")}
             value={maximum + ""}
             onChangeText={setMaximum}
             style={styles.input}
@@ -567,6 +569,7 @@ const EditDiscount = function ({ navigation }) {
 const deleteDiscount = async function (discount, item, setDiscount) {
   //discount is the list of discounts
   const token = await AsyncStorage.getItem("token");
+  const { t } = useTranslation();
 
   const delConfig = {
     headers: {
@@ -576,7 +579,7 @@ const deleteDiscount = async function (discount, item, setDiscount) {
   axios
     .delete(`${images.apiLink}discounts/${item.id}`, delConfig)
     .then((response) => {
-      Alert.prompt("Delete successfully");
+      Alert.prompt(t("delete-success"));
       const updateDiscount = discount.filter((i) => i.id != item.id);
       setDiscount(updateDiscount);
     })
@@ -590,6 +593,7 @@ const deleteDiscount = async function (discount, item, setDiscount) {
 };
 let allDiscounts = [];
 const User = function ({ navigation }) {
+  const { t } = useTranslation();
   let axiosGoldUser = [];
 
   let axiosSilverUser = [];
@@ -727,17 +731,17 @@ const User = function ({ navigation }) {
   const memberships = [
     {
       id: 3,
-      name: "Gold",
+      name: t("gold"),
       color: "#ffd700",
     },
     {
       id: 2,
-      name: "Silver",
+      name: t("silver"),
       color: "#c0c0c0",
     },
     {
       id: 1,
-      name: "Bronze",
+      name: t("bronze"),
       color: "#cd7f32",
     },
   ];
@@ -827,7 +831,7 @@ const User = function ({ navigation }) {
                                 }
                               )
                               .then((response) => {
-                                Alert.alert("Add successfully");
+                                Alert.alert(t("add-success"));
                                 axios
                                   .get(`${images.apiLink}userDiscounts`, {
                                     headers: {
@@ -883,7 +887,7 @@ const User = function ({ navigation }) {
                                 }
                               )
                               .then(async (response) => {
-                                Alert.alert("Add successfully");
+                                Alert.alert(t("add-success"));
                                 axios
                                   .get(`${images.apiLink}userDiscounts`, {
                                     headers: {
@@ -939,7 +943,7 @@ const User = function ({ navigation }) {
                       disabled={systemDiscountValue == null}
                     >
                       <Text style={{ textAlign: "center", color: "#ffffff" }}>
-                        Add
+                        {t("add")}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -957,7 +961,7 @@ const User = function ({ navigation }) {
                       ]}
                     >
                       <Text style={{ textAlign: "center", color: "#ffffff" }}>
-                        Cancel
+                        {t("cancel")}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -1002,7 +1006,7 @@ const User = function ({ navigation }) {
                   fontWeight: "bold",
                 }}
               >
-                Memberships
+                {t("memberships")}
               </Text>
             </View>
           </View>
@@ -1161,7 +1165,7 @@ const User = function ({ navigation }) {
                             <View style={{ marginRight: 14, gap: 10 }}>
                               <Text style={[styles.text2, { fontSize: 13 }]}>
                                 {" "}
-                                Name:{" "}
+                                {t("name")}:{" "}
                                 <Text style={{ fontWeight: "bold" }}>
                                   {item.fullName}
                                 </Text>
@@ -1173,7 +1177,7 @@ const User = function ({ navigation }) {
                                 ]}
                               >
                                 {" "}
-                                Phone number: {item.phoneNumber}
+                                {t("phone-number")}: {item.phoneNumber}
                               </Text>
                               <Text
                                 style={[
@@ -1399,7 +1403,7 @@ const User = function ({ navigation }) {
                           <View style={{ marginRight: 14, gap: 10 }}>
                             <Text style={[styles.text2, { fontSize: 13 }]}>
                               {" "}
-                              Name:{" "}
+                              {t("name")}:{" "}
                               <Text style={{ fontWeight: "bold" }}>
                                 {item.fullName}
                               </Text>
@@ -1411,7 +1415,7 @@ const User = function ({ navigation }) {
                               ]}
                             >
                               {" "}
-                              Phone number: {item.phoneNumber}
+                              {t("phone-number")}: {item.phoneNumber}
                             </Text>
                             <Text
                               style={[
@@ -1456,6 +1460,7 @@ const getColor = (item) => {
   return item.color;
 };
 const renderDiscountItem = ({ item, navigation, discount, setDiscount }) => {
+  const { t } = useTranslation();
   return (
     <Swipeable
       renderRightActions={(item2) => (
@@ -1465,7 +1470,7 @@ const renderDiscountItem = ({ item, navigation, discount, setDiscount }) => {
           }}
           style={{ backgroundColor: "transparent", padding: 20 }}
         >
-          <Text style={{ color: "red" }}>Delete</Text>
+          <Text style={{ color: "red" }}>{t("delete")}</Text>
         </TouchableOpacity>
       )}
     >
@@ -1515,7 +1520,7 @@ const renderDiscountItem = ({ item, navigation, discount, setDiscount }) => {
               item.quantity <= 2 ? { color: "yellow" } : { color: "#0cdd74" },
             ]}
           >
-            {item.quantity} remaining
+            {item.quantity} {t("remaining")}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1530,6 +1535,7 @@ const renderUserDiscountItem = ({
   color,
   userId,
 }) => {
+  const { t } = useTranslation();
   return (
     <Swipeable
       renderRightActions={() => (
@@ -1556,7 +1562,7 @@ const renderUserDiscountItem = ({
                   (dc) => dc.id != item.id
                 );
                 setDiscount(updatedUserDiscount);
-                Alert.alert("Delete successfully!");
+                Alert.alert(t("delete-success"));
               })
               .catch((error) => {
                 if (error.request) {
@@ -1573,7 +1579,7 @@ const renderUserDiscountItem = ({
             borderRadius: 20,
           }}
         >
-          <Text style={{ color: "red" }}>Delete</Text>
+          <Text style={{ color: "red" }}>{t("delete")}</Text>
         </TouchableOpacity>
       )}
     >
@@ -1612,7 +1618,7 @@ const renderUserDiscountItem = ({
                 item.quantity <= 2 ? { color: "yellow" } : { color: "#0cdd74" },
               ]}
             >
-              {item.quantity} remaining
+              {item.quantity} {t("remaining")}
             </Text>
           </View>
         </TouchableOpacity>
@@ -1621,6 +1627,7 @@ const renderUserDiscountItem = ({
   );
 };
 const UsersDiscount = function ({ navigation }) {
+  const { t } = useTranslation();
   const route = useRoute();
   console.log(route);
   const [discount, setDiscount] = useState(
@@ -1676,7 +1683,7 @@ const UsersDiscount = function ({ navigation }) {
             disabled={quantity == ""}
           >
             <Text style={{ textAlign: "center", color: "#ffffff" }}>
-              Add quantity
+              {t("add-quantity")}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -1693,7 +1700,7 @@ const UsersDiscount = function ({ navigation }) {
             ]}
           >
             <Text style={{ textAlign: "center", color: "#ffffff" }}>
-              Cancel
+              {t("cancel")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -1778,7 +1785,7 @@ const System = function () {
   axiosDiscounts = [];
   const colors = ["#FFD700", "#a24fbc", "#bc6666"];
   const [discount, setDiscount] = useState([]);
-
+  const { t } = useTranslation();
   useFocusEffect(
     useCallback(() => {
       async function fetch() {
@@ -1810,7 +1817,7 @@ const System = function () {
           marginTop: 15,
         }}
       >
-        <Text style={styles.text}>List of discounts</Text>
+        <Text style={styles.text}>{t("list-of-discounts")}</Text>
         <AntDesign
           style={{}}
           name="pluscircle"
@@ -1854,6 +1861,7 @@ const System = function () {
   );
 };
 function AddDiscount({ navigation }) {
+  const { t } = useTranslation();
   const [dname, setName] = useState("");
   const [value, setValue] = useState(null);
   const [open, setOpen] = useState(false);
@@ -1957,16 +1965,16 @@ function AddDiscount({ navigation }) {
             alignSelf: "center",
           }}
         >
-          Add New Discount
+          {t("add-new-discount")}
         </Text>
         <View style={[styles.discountInfo, { position: "relative" }]}>
           <TextInput
-            placeholder="Name"
+            placeholder={t("name")}
             onChangeText={setName}
             style={styles.input}
           ></TextInput>
           <DropDownPicker
-            placeholder="Select discount value"
+            placeholder={t("select-discount-value")}
             style={styles.input}
             open={open}
             value={value}
@@ -1977,7 +1985,7 @@ function AddDiscount({ navigation }) {
             containerStyle={{ zIndex: 1000, width: 340 }}
           ></DropDownPicker>
           <DropDownPicker
-            placeholder="Select quantity"
+            placeholder={t("select-quantity")}
             style={styles.input}
             value={quantity}
             setValue={setQuantity}
@@ -1995,7 +2003,7 @@ function AddDiscount({ navigation }) {
             style={[styles.input, { width: 300 }]}
           >
             <Text
-              placeholder="Expiration Date"
+              placeholder={t("expiration-date")}
               // style={styles.input}
               style={[
                 { paddingTop: 5 },
@@ -2010,7 +2018,7 @@ function AddDiscount({ navigation }) {
               onChangeText={setExpiredDate}
               editable={false}
             >
-              {expiredDate ? expiredDate : "Expiration Date"}
+              {expiredDate ? expiredDate : t("expiration-date")}
             </Text>
           </Pressable>
 
@@ -2079,7 +2087,7 @@ function AddDiscount({ navigation }) {
                           { color: "#075985" },
                         ]}
                       >
-                        Cancel
+                        {t("cancel")}
                       </Text>
                     </TouchableOpacity>
 
@@ -2107,7 +2115,7 @@ function AddDiscount({ navigation }) {
                           },
                         ]}
                       >
-                        Confirm
+                        {t("confirm")}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -2117,13 +2125,13 @@ function AddDiscount({ navigation }) {
           </View>
 
           <TextInput
-            placeholder="Minimum price to apply"
+            placeholder={t("minimum-price")}
             onChangeText={setMinimum}
             style={styles.input}
             keyboardType="numeric"
           ></TextInput>
           <TextInput
-            placeholder="Maximum discount price"
+            placeholder={t("maximum-price")}
             onChangeText={setMaximum}
             style={styles.input}
             keyboardType="numeric"
@@ -2241,7 +2249,7 @@ function AddDiscount({ navigation }) {
                 textAlign: "center",
               }}
             >
-              Add
+              {t("add")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -2315,6 +2323,7 @@ function AddUserDiscount({ navigation }) {
     }
   };
   const [BTNdisabled, setBTNdisabled] = useState(true);
+  const { t } = useTranslation();
   //Select a discount name will automatic
   return (
     <SafeAreaView style={styles.container}>
@@ -2328,12 +2337,12 @@ function AddUserDiscount({ navigation }) {
       </Pressable>
       <View style={[styles.discountInfo, { position: "relative" }]}>
         <TextInput
-          placeholder="Name"
+          placeholder={t("name")}
           onChangeText={setName}
           style={styles.input}
         ></TextInput>
         <DropDownPicker
-          placeholder="Select discount value"
+          placeholder={t("select-discount-value")}
           style={styles.input}
           open={open}
           value={value}
@@ -2343,7 +2352,7 @@ function AddUserDiscount({ navigation }) {
           setItems={setItems}
         ></DropDownPicker>
         <DropDownPicker
-          placeholder="Select quantity"
+          placeholder={t("select-quantity")}
           style={styles.input}
           value={quantity}
           setValue={setQuantity}
@@ -2354,7 +2363,7 @@ function AddUserDiscount({ navigation }) {
         ></DropDownPicker>
         <Pressable onPress={toggleDatePicker}>
           <TextInput
-            placeholder="Expiration Date"
+            placeholder={t("expiration-date")}
             style={styles.input}
             value={expiredDate}
             onChangeText={setExpiredDate}
@@ -2370,13 +2379,13 @@ function AddUserDiscount({ navigation }) {
           ></RNDateTimePicker>
         )}
         <TextInput
-          placeholder="Minimum price to apply"
+          placeholder={t("minimum-price")}
           onChangeText={setMinimum}
           style={styles.input}
           keyboardType="numeric"
         ></TextInput>
         <TextInput
-          placeholder="Maximum discount price"
+          placeholder={t("maximum-price")}
           onChangeText={setMaximum}
           style={styles.input}
           keyboardType="numeric"
@@ -2448,7 +2457,7 @@ function AddUserDiscount({ navigation }) {
               textAlign: "center",
             }}
           >
-            Add
+            {t("add")}
           </Text>
         </TouchableOpacity>
       </View>

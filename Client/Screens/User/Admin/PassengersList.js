@@ -19,8 +19,10 @@ import {
 } from "react-native";
 import CheckBox from "expo-checkbox";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 function Passengers({ navigation }) {
+  const { t } = useTranslation();
   const route = useRoute();
   console.log(route);
   async function getPosition() {
@@ -123,7 +125,7 @@ function Passengers({ navigation }) {
           <Ionicons name="arrow-back" size={30} color="#283663"></Ionicons>
         </Pressable>
         <Text style={[styles.text, { flex: 4 }]}>
-          Seats {" ("} id = {tripId + ")"}
+          {t("seats")} {" ("} id = {tripId + ")"}
         </Text>
       </View>
       <TouchableOpacity
@@ -151,7 +153,7 @@ function Passengers({ navigation }) {
             navigation.goBack();
           }}
         >
-          End trip
+          {t("end-trip")}
         </Text>
       </TouchableOpacity>
       <View
@@ -186,10 +188,7 @@ function Passengers({ navigation }) {
                     }
                   )
                   .then(() => {
-                    Alert.alert(
-                      "Success",
-                      "Successfully confirm the trip has ended"
-                    );
+                    Alert.alert(t("success"), t("trip-has-ended-confirmed"));
                     setStatus(3);
                   })
                   .catch((error) => {
@@ -203,7 +202,7 @@ function Passengers({ navigation }) {
                   });
               }}
             >
-              Trip has ended
+              {t("trip-has-ended")}
             </Text>
           </TouchableOpacity>
         )}
@@ -264,8 +263,14 @@ function Passengers({ navigation }) {
                 </View>
 
                 <View style={{ margin: 20 }}>
-                  <Text> Name: {item.name}</Text>
-                  <Text> Phone: {item.phone}</Text>
+                  <Text>
+                    {" "}
+                    {t("name")}: {item.name}
+                  </Text>
+                  <Text>
+                    {" "}
+                    {t("phone")}: {item.phone}
+                  </Text>
                 </View>
                 <CheckBox
                   style={{ backgroundColor: "#ffffff", margin: 20 }}

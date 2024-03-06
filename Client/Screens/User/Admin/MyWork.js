@@ -33,6 +33,7 @@ import { Alert } from "react-native";
 import ModalSuccess from "../../Manager/Popup/ModalSuccess";
 import ModalConfirm from "../../Manager/Popup/ModalConfirm";
 import YesNoPopUp from "../../../Componets/UI/YesNoPopUp";
+import { useTranslation } from "react-i18next";
 const config = {
   headers: {
     Authorization: "Bearer " + images.adminToken,
@@ -168,6 +169,7 @@ const translateDate = function (rawDate) {
 };
 const Stack = createNativeStackNavigator();
 function App({ navigation }) {
+  const { t } = useTranslation();
   const [current, setCurrent] = useState(currentTrips);
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -281,16 +283,31 @@ function App({ navigation }) {
                 <View>
                   <Text>
                     {" "}
-                    ID of bus:{" "}
+                    {t("coach-id")}:{" "}
                     <Text style={{ fontWeight: "bold" }}>
                       {item.CoachData.id}
                     </Text>
                   </Text>
-                  <Text> Driver: {item.DriverData.fullName}</Text>
-                  <Text> Assistant: {item.CoachAssistantData.fullName}</Text>
-                  <Text> Start: {translateDate(item.departureTime)}</Text>
-                  <Text> End: {translateDate(item.arrivalTime)}</Text>
-                  <Text> Route: {item.RouteData.routeName}</Text>
+                  <Text>
+                    {" "}
+                    {t("driver-name")}: {item.DriverData.fullName}
+                  </Text>
+                  <Text>
+                    {" "}
+                    {t("assistant-name")}: {item.CoachAssistantData.fullName}
+                  </Text>
+                  <Text>
+                    {" "}
+                    {t("start")}: {translateDate(item.departureTime)}
+                  </Text>
+                  <Text>
+                    {" "}
+                    {t("end")}: {translateDate(item.arrivalTime)}
+                  </Text>
+                  <Text>
+                    {" "}
+                    {t("route")}: {item.RouteData.routeName}
+                  </Text>
                 </View>
               </View>
               <View
@@ -301,7 +318,7 @@ function App({ navigation }) {
               />
               <View>
                 <Text style={{ marginStart: 70 }}>
-                  Number of passengers:{" "}
+                  {t("passengers-num")}:{" "}
                   {Number(item.CoachData.capacity) - item.remainingSlot}
                   {"\n"}
                 </Text>
@@ -324,7 +341,7 @@ function History({ navigation }) {
       setHistory(historyTrips);
     }, [])
   );
-
+  const { t } = useTranslation();
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -378,16 +395,29 @@ function History({ navigation }) {
                 <View>
                   <Text>
                     {" "}
-                    ID of bus:{" "}
+                    {t("coach-id")}:{" "}
                     <Text style={{ fontWeight: "bold" }}>
                       {item.CoachData.id}
                     </Text>
                   </Text>
-                  <Text>Driver: {item.DriverData.fullName}</Text>
-                  <Text>Assistant: {item.CoachAssistantData.fullName}</Text>
-                  <Text> Start: {translateDate(item.departureTime)}</Text>
-                  <Text> End: {translateDate(item.arrivalTime)}</Text>
-                  <Text> Route: {item.RouteData.routeName}</Text>
+                  <Text>
+                    {t("driver-name")}: {item.DriverData.fullName}
+                  </Text>
+                  <Text>
+                    {t("assistant-name")}: {item.CoachAssistantData.fullName}
+                  </Text>
+                  <Text>
+                    {" "}
+                    {t("start")}: {translateDate(item.departureTime)}
+                  </Text>
+                  <Text>
+                    {" "}
+                    {t("end")}: {translateDate(item.arrivalTime)}
+                  </Text>
+                  <Text>
+                    {" "}
+                    {t("route")}: {item.RouteData.routeName}
+                  </Text>
                 </View>
               </View>
               <View
@@ -398,7 +428,7 @@ function History({ navigation }) {
               />
               <View>
                 <Text style={{ marginStart: 70 }}>
-                  Number of passengers:{" "}
+                  {t("passengers-num")}:{" "}
                   {Number(item.CoachData.capacity) - item.remainingSlot}
                   {"\n"}
                   {/* Service: */}
@@ -413,16 +443,18 @@ function History({ navigation }) {
   );
 }
 function ScanBarcode({ navigation }) {
+  const { t } = useTranslation();
+
   const route = useRoute();
   const ticketList = route.params;
   const [hasPermission, setHasPermission] = useState(null);
-  const [text, setText] = useState("Not yet scanned");
+  const [text, setText] = useState(t("not-yet-scanned"));
   const [sound, setSound] = useState();
   const authCtx = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const [contentCf, setContentCf] = useState("Do you want to continue?");
-  const [contentF, setContentF] = useState("Failedte to scan this ticket");
+  const [contentCf, setContentCf] = useState(t("want-to-continue"));
+  const [contentF, setContentF] = useState(t("failed-to-scan"));
   const [barCodeVisible, setBarcodeVisible] = useState(true);
   console.log(ticketList);
   const hideFail = () => {
@@ -486,11 +518,8 @@ function ScanBarcode({ navigation }) {
           return;
         } else {
           if (ticket.status == 4) {
-            setContentCf("Ticket has been scanned. Do you want to continue?");
-          } else
-            setContentCf(
-              "Failed to scan this ticket. Do you want to continue?"
-            );
+            setContentCf(t("has-been-scanned"));
+          } else setContentCf(t("failed-to-scan"));
           console.log("This is not te right ticket!");
           setConfirmVisible(true);
           setBarcodeVisible(false);

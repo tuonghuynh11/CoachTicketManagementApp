@@ -42,5 +42,72 @@
   "prepare-to-expire": "Sắp hết hạn",
   "minimum-invoice": "Hóa đơn tối thiểu",
   "maximum": "Tối đa",
-  "expire-date": "Ngày hết hạn"
+  "expire-date": "Ngày hết hạn",
+
+  "coach-id": "ID xe khách",
+  "driver-name": "Tài xế",
+  "assistant-name": "Phụ xe",
+  "start": "Xuất phát",
+  "end": "Đến nơi",
+  "route": "Tuyến đường",
+  "passengers-num": "Số hành khách",
+
+  "seats": "Chỗ ngồi",
+  "end-trip": "Kết thúc chuyến",
+  "trip-has-ended": "Chuyến đi kết thúc",
+  "name": "Tên",
+  "phone": "SĐT",
+  "success": "Thành công",
+  "trip-has-ended-confirmed": "Xác nhận chuyến đi đã kết thúc",
+
+  "ticket-info": "Thông tin vé",
+  "gender": "Giới tính",
+  "ticket": "Vé",
+  "ticket-code": "Mã vé",
+  "price": "Giá",
+
+  "select-discount-value": "Lựa chọn % discount",
+  "select-quantity": "Chọn số lượng",
+  "expiration-date": "Ngày hết hạn",
+  "minimum-price": "Giá thấp nhất để discount",
+  "maximum-price": "Số tiền discount cao nhất",
+
+  "delete-success": "Đã xoá",
+
+  "edit-discount": "Chỉnh sửa Discount",
+  "confirm": "Xác nhận",
+
+  "discounts": "Discount",
+
+  "remaining": "còn lại",
+
+  "add-quantity": "Thêm số lượng",
+  "list-of-discounts": "Danh sách discount",
+
+  "add-success": "Thêm thành công",
+  "manage-discount": "Quản lý discount",
+
+  "add-new-discount": "Thêm discount",
+
+  "customer": "Khách hàng",
+  "staff": "Staff",
+
+  "manage-user": "Quản lý User",
+  "role": "Vai trò",
+
+  "alert-capital": "CẢNH BÁO",
+  "delete-user": "Bạn có muốn xoá user này không?",
+  "delete": "Xoá",
+  "cant-update-user": "Không thể update user này",
+  "add": "Thêm",
+
+  "gold": "Vàng",
+  "silver": "Bạc",
+  "bronze": "Đồng",
+  "memberships": "Memberships",
+
+  "not-yet-scanned": "Chưa scan",
+  "want-to-continue": "Tiếp tục không?",
+  "failed-to-scan": "Scan thất bại. Tiếp tục không?",
+  "has-been-scanned": "Vé đã scan rồi. Tiếp tục không?"
 }
