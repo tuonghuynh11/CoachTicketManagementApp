@@ -13,8 +13,12 @@ import ModalFail from "./Popup/ModalFail";
 import ModalSuccess from "./Popup/ModalSuccess";
 import ModalConfirm from "./Popup/ModalConfirm";
 import { deleteSchedule } from "../../util/scheduleService";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function ScheduleCard({ item, navigation, deleteHandler }) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.navigate("EditSchedule", item);
   };
@@ -64,17 +68,17 @@ export default function ScheduleCard({ item, navigation, deleteHandler }) {
   
 
   let statusName = "";
-  if (item.status == "0") statusName = "Unready";
-  if (item.status == "1") statusName = "Ready";
-  if (item.status == "2") statusName = "Arriving";
-  if (item.status == "3") statusName = "Finish";
+  if (item.status == "0") statusName = t("unready");
+  if (item.status == "1") statusName = t("ready");
+  if (item.status == "2") statusName = t("arriving");
+  if (item.status == "3") statusName = t("finish");
 
   const depTime = new Date(item.departureTime);
   const arrTime = new Date(item.arrivalTime);
 
-  const contentS = "Delete Successfully!";
-  const contentF = "Delete Fail!";
-  const contentC = "Are you sure to delete route?";
+  const contentS = t("delete-route-success");
+  const contentF = t("delete-route-fail");
+  const contentC = t("are-you-sure-to-delete");
 
   return (
     <View style={styles.container}>
@@ -104,11 +108,11 @@ export default function ScheduleCard({ item, navigation, deleteHandler }) {
 
         <View style={styles.info}>
           {/**coachnum, type */}
-          <Text style={styles.text}>From: {item.StartPlaceData.placeName}</Text>
-          <Text style={styles.text}>Start Time: {depTime.toLocaleString()}</Text>
-          <Text style={styles.text}>To: {item.ArrivalPlaceData.placeName}</Text>
-          <Text style={styles.text}>Arrival Time: {arrTime.toLocaleString()}</Text>
-          <Text style={styles.text}>Price: {item.price}</Text>
+          <Text style={styles.text}>{t("from")}: {item.StartPlaceData.placeName}</Text>
+          <Text style={styles.text}>{t("start-time")}: {depTime.toLocaleString()}</Text>
+          <Text style={styles.text}>{t("to")}: {item.ArrivalPlaceData.placeName}</Text>
+          <Text style={styles.text}>{t("arrival-time")}: {arrTime.toLocaleString()}</Text>
+          <Text style={styles.text}>{t("time")}: {item.price}</Text>
         </View>
         <View style={styles.edit}>
           {/*icon edit and delete*/}

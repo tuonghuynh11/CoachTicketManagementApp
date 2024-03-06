@@ -31,10 +31,13 @@ import { createRoute } from "../../util/routeService";
 import ModalFail from "./Popup/ModalFail";
 import ModalSuccess from "./Popup/ModalSuccess";
 import ModalConfirm from "./Popup/ModalConfirm";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 DropDownPicker.setListMode("SCROLLVIEW");
 
 export default function AddRoute({ navigation }) {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const show = () => {
     setVisible(true);
@@ -59,10 +62,10 @@ export default function AddRoute({ navigation }) {
     setVisibleFail(false);
   };
 
-  const contentS = "Add Route Successfully!";
-  const [contentF, setContentF] = useState("Add Route Fail!");
+  const contentS = t("add-route-success");
+  const [contentF, setContentF] = useState(t("add-route-fail"));
 
-  const contentC = "Are you sure to delete?"
+  const contentC = t("are-you-sure-to-delete");
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -510,7 +513,7 @@ export default function AddRoute({ navigation }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>New Route</Text>
+          <Text style={styles.headerText}>{t("new-route")}</Text>
           <Pressable
             style={({ pressed }) => [
               styles.resetIconStyle,
@@ -546,23 +549,23 @@ export default function AddRoute({ navigation }) {
             hide={hide}
             uploadImage={uploadImage}
           /> */}
-          <Text style={styles.titleText}>Route Information</Text>
+          <Text style={styles.titleText}>{t("route-info")}</Text>
           <View>
-            <Text style={styles.textLabel}>Route Name</Text>
+            <Text style={styles.textLabel}>{t("route-name")}</Text>
             <TextInput
               style={
                 validateRouteName == true
                   ? styles.textInput
                   : styles.textInputWrong
               }
-              placeholder="Enter Route Name"
+              placeholder={t("enter-route-name")}
               value={RouteName}
               onChangeText={RouteNameHandler}
             ></TextInput>
             {!validateRouteName && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Departure Province: </Text>
+            <Text style={styles.textLabel}>{t("depature-province")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={itemsDepProvince}
@@ -574,7 +577,7 @@ export default function AddRoute({ navigation }) {
                 }}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Province"
+                placeholder={t("select-province")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
@@ -583,9 +586,9 @@ export default function AddRoute({ navigation }) {
               />
             </View>
             {!validateDepProvince && (
-              <Text style={styles.validateText}>Please choose province</Text>
+              <Text style={styles.validateText}>{t("please-choose-province")}</Text>
             )}
-            <Text style={styles.textLabel}>Destination Province:</Text>
+            <Text style={styles.textLabel}>{t("destination-province")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={itemsDesProvince}
@@ -595,7 +598,7 @@ export default function AddRoute({ navigation }) {
                 setValue={(val) => setCurrentValueDesProvince(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Province"
+                placeholder={t("select-province")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
@@ -603,12 +606,12 @@ export default function AddRoute({ navigation }) {
               />
             </View>
             {!validateDesProvince && (
-              <Text style={styles.validateText}>Please choose province</Text>
+              <Text style={styles.validateText}>{t("please-choose-province")}</Text>
             )}
-            <Text style={styles.titleText}>Departure Places</Text>
+            <Text style={styles.titleText}>{t("departure-places")}</Text>
             <View>
               {/* 2 textinput, row flatlist */}
-              <Text style={styles.textLabel}>Depature District: </Text>
+              <Text style={styles.textLabel}>{t("departure-district")}</Text>
               <View style={styles.dropDownStyle}>
                 <DropDownPicker
                   items={itemsDepDistrict}
@@ -620,7 +623,7 @@ export default function AddRoute({ navigation }) {
                   }}
                   maxHeight={150}
                   autoScroll
-                  placeholder="Select District"
+                  placeholder={t("select-district")}
                   showTickIcon={true}
                   style={styles.startDropDown}
                   nestedScrollEnabled={true}
@@ -629,9 +632,9 @@ export default function AddRoute({ navigation }) {
                 />
               </View>
               {!validateDepDistrict && (
-                <Text style={styles.validateText}>Please choose district</Text>
+                <Text style={styles.validateText}>{t("please-choose-district")}</Text>
               )}
-              <Text style={styles.textLabel}>Depature Ward: </Text>
+              <Text style={styles.textLabel}>{t("departure-ward")}</Text>
               <View style={styles.dropDownStyle}>
                 <DropDownPicker
                   items={itemsDepWard}
@@ -643,7 +646,7 @@ export default function AddRoute({ navigation }) {
                   }}
                   maxHeight={150}
                   autoScroll
-                  placeholder="Select Ward"
+                  placeholder={t("select-ward")}
                   showTickIcon={true}
                   style={styles.startDropDown}
                   nestedScrollEnabled={true}
@@ -652,22 +655,22 @@ export default function AddRoute({ navigation }) {
                 />
               </View>
               {!validateDepWard && (
-                <Text style={styles.validateText}>Please choose ward</Text>
+                <Text style={styles.validateText}>{t("please-choose-ward")}</Text>
               )}
-              <Text style={styles.textLabel}>Departure Place</Text>
+              <Text style={styles.textLabel}>{t("departure-place")}</Text>
               <TextInput
                 style={
                   validateDeparturePlace == true
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Detail Place"
+                placeholder={t("enter-detail-place")}
                 value={DeparturePlace}
                 onChangeText={DeparturePlaceHandler}
               ></TextInput>
               {!validateDeparturePlace && (
                 <Text style={styles.validateText}>
-                  This field can't be empty
+                  {t("non-empty-field")}
                 </Text>
               )}
             </View>
@@ -678,7 +681,7 @@ export default function AddRoute({ navigation }) {
               ]}
               onPress={addDepartureHandler}
             >
-              <Text style={styles.addText}>Add Place</Text>
+              <Text style={styles.addText}>{t("add-place")}</Text>
             </Pressable>
             <View style={styles.listPlaces}>
               <FlatList
@@ -698,10 +701,10 @@ export default function AddRoute({ navigation }) {
                 keyExtractor={(item, index) => index}
               />
             </View>
-            <Text style={styles.titleText}>Destination Places</Text>
+            <Text style={styles.titleText}>{t("destination-places")}</Text>
             <View>
               {/* 2 textinput, row flatlist */}
-              <Text style={styles.textLabel}>Destination District: </Text>
+              <Text style={styles.textLabel}>{t("destination-district")}</Text>
               <View style={styles.dropDownStyle}>
                 <DropDownPicker
                   items={itemsDesDistrict}
@@ -713,7 +716,7 @@ export default function AddRoute({ navigation }) {
                   }}
                   maxHeight={150}
                   autoScroll
-                  placeholder="Select District"
+                  placeholder={t("select-district")}
                   showTickIcon={true}
                   style={styles.startDropDown}
                   nestedScrollEnabled={true}
@@ -722,9 +725,9 @@ export default function AddRoute({ navigation }) {
                 />
               </View>
               {!validateDesDistrict && (
-                <Text style={styles.validateText}>Please choose district</Text>
+                <Text style={styles.validateText}>{t("please-choose-district")}</Text>
               )}
-              <Text style={styles.textLabel}>Destination Ward: </Text>
+              <Text style={styles.textLabel}>{t("destination-ward")}</Text>
               <View style={styles.dropDownStyle}>
                 <DropDownPicker
                   items={itemsDesWard}
@@ -736,7 +739,7 @@ export default function AddRoute({ navigation }) {
                   }}
                   maxHeight={150}
                   autoScroll
-                  placeholder="Select Ward"
+                  placeholder={t("select-ward")}
                   showTickIcon={true}
                   style={styles.startDropDown}
                   nestedScrollEnabled={true}
@@ -745,22 +748,22 @@ export default function AddRoute({ navigation }) {
                 />
               </View>
               {!validateDesWard && (
-                <Text style={styles.validateText}>Please choose ward</Text>
+                <Text style={styles.validateText}>{t("please-choose-ward")}</Text>
               )}
-              <Text style={styles.textLabel}>Destination Place</Text>
+              <Text style={styles.textLabel}>{t("destination-place")}</Text>
               <TextInput
                 style={
                   validateDestinationPlace == true
                     ? styles.textInput
                     : styles.textInputWrong
                 }
-                placeholder="Enter Enter Detail Place"
+                placeholder={t("enter-detail-place")}
                 value={DestinationPlace}
                 onChangeText={DestinationPlaceHandler}
               ></TextInput>
               {!validateDestinationPlace && (
                 <Text style={styles.validateText}>
-                  This field can't be empty
+                  {t("non-empty-field")}
                 </Text>
               )}
             </View>
@@ -771,7 +774,7 @@ export default function AddRoute({ navigation }) {
               ]}
               onPress={addDestinationHandler}
             >
-              <Text style={styles.addText}>Add Place</Text>
+              <Text style={styles.addText}>{t("add-place")}</Text>
             </Pressable>
             <View style={styles.listPlaces}>
               <FlatList
@@ -799,7 +802,7 @@ export default function AddRoute({ navigation }) {
             ]}
             onPress={saveHadler}
           >
-            <Text style={styles.saveText}>SAVE</Text>
+            <Text style={styles.saveText}>{t("save-button")}</Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>

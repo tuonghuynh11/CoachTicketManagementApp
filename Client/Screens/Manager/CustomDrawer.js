@@ -29,8 +29,25 @@ import Loading from "../../Componets/UI/Loading";
 import { AuthContext } from "../../Store/authContex";
 import { getCurrentUser } from "../../util/databaseAPI";
 const { width } = Dimensions.get("screen");
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
+import CustomSwitch from "../../Componets/UI/CustomSwitch";
+import { LngContext } from "../../Store/languageContext";
 
 export default function CustomDrawer(props) {
+  const { t } = useTranslation();
+  const lngCtx = useContext(LngContext);
+  function changeLng(index) {
+    console.log(index);
+    if (index === 1) {
+      i18next.changeLanguage("en");
+      lngCtx.setLng("en");
+    } else {
+      i18next.changeLanguage("vi");
+      lngCtx.setLng("vi");
+    }
+  }
+
   const [image, setImage] = useState();
   const [name, setName] = useState("username");
   const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +93,7 @@ export default function CustomDrawer(props) {
             opacity: 0.9,
           }}
         >
-          <Loading message={"Logging out ..."} />
+          <Loading message={t("logging-out") + " ..."} />
         </View>
       )}
       <LogOutPopUp
@@ -118,6 +135,43 @@ export default function CustomDrawer(props) {
           </View>
         </DrawerContentScrollView>
 
+        <View
+          style={{
+            flexDirection: "row",
+            paddingVertical: 20,
+            justifyContent: "space-between",
+            backgroundColor: "white",
+            borderColor: "#283663",
+            borderTopWidth: 1,
+            paddingRight: 30,
+          }}
+        >
+          <View style={{flexDirection: "row"}}>
+            <MaterialIcons
+              name="language"
+              size={24}
+              color="#283663"
+              style={{ marginLeft: 15 }}
+            />
+
+            <Text
+              style={{ fontWeight: "500", color: "#283663", marginLeft: 35 }}
+            >
+              {t("language")}
+            </Text>
+          </View>
+
+          <CustomSwitch
+            selectionMode={2}
+            roundCorner={true}
+            option1={"EN"}
+            option2={"VI"}
+            onSelectSwitch={changeLng}
+            selectionColor={"white"}
+            defaultSelectionIndex={lngCtx.lng == "en" ? 1 : 2}
+          />
+        </View>
+
         <Pressable
           style={({ pressed }) => [
             styles.press,
@@ -128,7 +182,7 @@ export default function CustomDrawer(props) {
         >
           <MaterialIcons name="logout" size={24} color="#283663" />
           <Text style={{ fontWeight: "500", color: "#283663", marginLeft: 30 }}>
-            Logout
+            {t("log-out")}
           </Text>
         </Pressable>
       </View>
@@ -156,7 +210,7 @@ const styles = StyleSheet.create({
   botView: {
     flex: 2,
     backgroundColor: "white",
-    paddingTop: 55
+    paddingTop: 55,
   },
   custom: {
     padding: 20,

@@ -14,8 +14,11 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 export default function ModalConfirm({ visible, hide, content, confirm }) {
+  const { t } = useTranslation();
+
   return (
     <Modal transparent visible={visible}>
       <View style={styles.modalBackground}>
@@ -39,10 +42,10 @@ export default function ModalConfirm({ visible, hide, content, confirm }) {
           <Text style={styles.text}>{content}</Text>
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
             <Pressable style={{...styles.button, backgroundColor: '#72C6A1'}} onPress={confirm}>
-                <Text style={styles.buttonText}>Confirm</Text>
+                <Text style={styles.buttonText}>{t("confirm")}</Text>
             </Pressable>
             <Pressable style={{...styles.button, backgroundColor: '#EB3223'}} onPress={hide}>
-                <Text style={styles.buttonText}>Cancel</Text>
+                <Text style={styles.buttonText}>{t("cancel")}</Text>
             </Pressable>
           </View>
         </View>

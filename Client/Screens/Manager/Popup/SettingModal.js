@@ -16,8 +16,10 @@ import {
   import React, { useState } from "react";
   import { MaterialIcons } from "@expo/vector-icons";
 import { deleteCoach } from "../../../util/coachService";
+import { useTranslation } from "react-i18next";
 
   export default function FilterModal({ visible, hide, navigation, navigateScreen, item, deleteCoach}){
+  const { t } = useTranslation();
 
     
     return (
@@ -34,14 +36,14 @@ import { deleteCoach } from "../../../util/coachService";
             onPress={() => { hide(); navigation.navigate(navigateScreen, item); }}
           >
             <MaterialIcons name="edit" size={35} color="#72C6A1" />
-            <Text style={styles.text}>Edit</Text>
+            <Text style={styles.text}>{t("edit")}</Text>
           </Pressable>
           <Pressable
             style={({ pressed }) => [styles.choose, pressed && { opacity: 0.85 }]}
             onPress={deleteCoach}
           >
             <MaterialIcons name="delete" size={35} color="#EB3223" />
-            <Text style={styles.text}>Delete</Text>
+            <Text style={styles.text}>{t("delete")}</Text>
           </Pressable>
         </View>
       </Modal>

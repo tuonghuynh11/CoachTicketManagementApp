@@ -27,7 +27,9 @@ import TimeOutBooking from "../../Componets/UI/TImeOutBooking";
 import { AuthContext } from "../../Store/authContex";
 import { BookingContext } from "../../Store/bookingContext";
 import { getDate } from "../../Helper/Date";
+import { useTranslation } from "react-i18next";
 function PaymentScreen({ navigation, route }) {
+  const { t } = useTranslation();
   const authCtx = useContext(AuthContext);
   const [cost, setCost] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -243,7 +245,7 @@ function PaymentScreen({ navigation, route }) {
       Alert.alert(`Error code: ${error.code}`, error.message);
       console.log(error.message);
     } else {
-      Alert.alert(`Success`, "The payment was confirm successfully");
+      Alert.alert(t("successful"), t("payment-confirm-successfully"));
       //Them ve vao database voi status la 1
       //Lay thong tin tickets moi them vao database
       bookingCtx.stopTimeout();
@@ -436,7 +438,7 @@ function PaymentScreen({ navigation, route }) {
                 marginTop: -20,
               }}
             >
-              Your Discounts
+              {t("your-discounts")}
             </Text>
             <View
               style={{
@@ -544,7 +546,7 @@ function PaymentScreen({ navigation, route }) {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.title}>Discount</Text>
+                <Text style={styles.title}>{t("discount")}</Text>
               </View>
               <View
                 style={{
@@ -579,7 +581,7 @@ function PaymentScreen({ navigation, route }) {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.title}>Payment Method</Text>
+                <Text style={styles.title}>{t("payment-method")}</Text>
               </View>
               <View style={styles.paymentContainer}>
                 <TouchableOpacity
@@ -595,9 +597,11 @@ function PaymentScreen({ navigation, route }) {
                       size={24}
                       color={GlobalColors.price}
                     />
-                    <Text style={{ fontWeight: "600" }}>Paylater</Text>
+                    <Text style={{ fontWeight: "600" }}>{t("pay-later")}</Text>
                   </View>
-                  <CustomButton color={"#4bb5f6ff"}>Active Now</CustomButton>
+                  <CustomButton color={"#4bb5f6ff"}>
+                    {t("active-now")}
+                  </CustomButton>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -613,7 +617,9 @@ function PaymentScreen({ navigation, route }) {
                       size={24}
                       color={GlobalColors.price}
                     />
-                    <Text style={{ fontWeight: "600" }}>Credit Card</Text>
+                    <Text style={{ fontWeight: "600" }}>
+                      {t("credit-card")}
+                    </Text>
                   </View>
                   <IconButton
                     icon={"chevron-down-outline"}
@@ -710,7 +716,7 @@ function PaymentScreen({ navigation, route }) {
                   textAlign: "center",
                 }}
               >
-                Total Price
+                {t("total-price")}
               </Text>
               <Text
                 style={[
@@ -769,7 +775,7 @@ function PaymentScreen({ navigation, route }) {
                     fontWeight: "bold",
                   }}
                 >
-                  {paymentOption === 0 ? "Pay Later" : "Pay Now"}
+                  {paymentOption === 0 ? t("pay-later") : t("pay-now")}
                 </Text>
               </CustomButton>
             </View>

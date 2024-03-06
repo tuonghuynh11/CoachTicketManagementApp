@@ -24,7 +24,9 @@ import Loading from "../../Componets/UI/Loading";
 import IconButton from "../../Componets/UI/IconButton";
 import EmptyTrip from "../../Componets/UI/EmptyTrip";
 import { useIsFocused } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 function HistoryScreen({ navigation }) {
+  const { t } = useTranslation();
   const authCtx = useContext(AuthContext);
   const { width: screenWidth } = Dimensions.get("window");
   function calculateTimeDifference(date1, date2) {
@@ -50,10 +52,10 @@ function HistoryScreen({ navigation }) {
   const [isSortVisible, setIsSortVisible] = useState(false);
   //Sort
   const sortOptions = [
-    { id: 0, value: "Earliest departure time" },
-    { id: 1, value: "Latest departure time" },
-    { id: 2, value: "One Way" },
-    { id: 3, value: "Round Trip" },
+    { id: 0, value: t("earliest-departure-time") },
+    { id: 1, value: t("latest-departure-time") },
+    { id: 2, value: t("one-way") },
+    { id: 3, value: t("two-way") },
   ];
   useEffect(() => {
     navigation.setOptions({
@@ -215,7 +217,7 @@ function HistoryScreen({ navigation }) {
   return (
     <>
       {groupCurrentTickets.length === 0 && (
-        <EmptyTrip title="You don't have any reservations" message="" />
+        <EmptyTrip title={t("not-have-any-reservations")} message="" />
       )}
       <Modal
         visible={isSortVisible}
@@ -254,7 +256,9 @@ function HistoryScreen({ navigation }) {
                 paddingBottom: 10,
               }}
             >
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>Sort By</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                {t("sort-by")}
+              </Text>
               <TouchableOpacity
                 style={{
                   alignSelf: "flex-end",

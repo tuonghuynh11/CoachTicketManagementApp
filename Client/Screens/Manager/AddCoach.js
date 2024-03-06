@@ -26,10 +26,13 @@ import { createCoach, createCoachWithImage } from "../../util/coachService";
 import ModalSuccess from "./Popup/ModalSuccess";
 import ModalFail from "./Popup/ModalFail";
 import ModalConfirm from "./Popup/ModalConfirm";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 DropDownPicker.setListMode("SCROLLVIEW");
 
 export default function AddCoach({ navigation }) {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const show = () => {
     setVisible(true);
@@ -40,7 +43,7 @@ export default function AddCoach({ navigation }) {
 
   const [itemid, setItemid] = useState();
 
-  const contentC = "Are you sure to delete?";
+  const contentC = t("are-you-sure-to-delete");
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -120,16 +123,16 @@ export default function AddCoach({ navigation }) {
   const [isOpenService, setIsOpenService] = useState(false);
   const [currentValueService, setCurrentValueService] = useState("");
   const itemsService = [
-    { label: "Air Conditioner", value: "1" },
+    { label: t("air-conditioner"), value: "1" },
     { label: "Wifi", value: "2" },
     { label: "TV", value: "3" },
-    { label: "Blanket", value: "4" },
-    { label: "Charging Socket", value: "5" },
-    { label: "Mattress", value: "6" },
-    { label: "Earphone", value: "7" },
-    { label: "Toilet", value: "8" },
-    { label: "Food", value: "9" },
-    { label: "Drink", value: "11" },
+    { label: t("blanket"), value: "4" },
+    { label: t("charging-socket"), value: "5" },
+    { label: t("mattress"), value: "6" },
+    { label: t("earphone"), value: "7" },
+    { label: t("toilet"), value: "8" },
+    { label: t("food"), value: "9" },
+    { label: t("drink"), value: "11" },
   ];
   const [validateService, setValidateService] = useState(true);
   const [validateCapa, setValidateCapa] = useState(true);
@@ -233,8 +236,8 @@ export default function AddCoach({ navigation }) {
     setServiceList([newSer, ...serviceList]);
   };
 
-  const content = "Add New Coach Successfully!";
-  const contentFail = "Add New Coach Fail!";
+  const content = t("add-coach-success");
+  const contentFail = t("add-coach-fail");
 
   const [indicator, setIndicator] = useState(false);
 
@@ -276,7 +279,7 @@ export default function AddCoach({ navigation }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>New Coach</Text>
+          <Text style={styles.headerText}>{t("new-coach")}</Text>
           <Pressable
             style={({ pressed }) => [
               styles.resetIconStyle,
@@ -312,24 +315,24 @@ export default function AddCoach({ navigation }) {
             hide={hide}
             uploadImage={uploadImage}
           />
-          <Text style={styles.titleText}>Coach Information</Text>
+          <Text style={styles.titleText}>{t("coach-information")}</Text>
           <View style={styles.coachInfoContainer}>
             {/* 3 textinput */}
-            <Text style={styles.textLabel}>Coach Number</Text>
+            <Text style={styles.textLabel}>{t("coach-number")}</Text>
             <TextInput
               style={
                 validateCoachNum == true
                   ? styles.textInput
                   : styles.textInputWrong
               }
-              placeholder="Enter Coach Number"
+              placeholder= {t("enter-coach-number")}
               value={coachNum}
               onChangeText={coachNumHandler}
             ></TextInput>
             {!validateCoachNum && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Type</Text>
+            <Text style={styles.textLabel}>{t("type")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={itemsType}
@@ -339,16 +342,16 @@ export default function AddCoach({ navigation }) {
                 setValue={(val) => setCurrentValueType(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Type"
+                placeholder={t("select-type")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateType && (
-              <Text style={styles.validateText}>Please choose coach type</Text>
+              <Text style={styles.validateText}>{t("please-choose-coach-type")}</Text>
             )}
-            <Text style={styles.textLabel}>Capacity</Text>
+            <Text style={styles.textLabel}>{t("capacity")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={itemsCapa}
@@ -358,20 +361,20 @@ export default function AddCoach({ navigation }) {
                 setValue={(val) => setCurrentValueCapa(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Capacity"
+                placeholder={t("select-capacity")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateCapa && (
-              <Text style={styles.validateText}>Please choose capacity</Text>
+              <Text style={styles.validateText}>{t("please-choose-capacity")}</Text>
             )}
           </View>
-          <Text style={styles.titleText}>Services</Text>
+          <Text style={styles.titleText}>{t("services")}</Text>
           <View>
             {/* 2 textinput, row flatlist */}
-            <Text style={styles.textLabel}>Service Name</Text>
+            <Text style={styles.textLabel}>{t("service-name")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={itemsService}
@@ -381,14 +384,14 @@ export default function AddCoach({ navigation }) {
                 setValue={(val) => setCurrentValueService(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Service"
+                placeholder={t("select-service")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateService && (
-              <Text style={styles.validateText}>Please choose service</Text>
+              <Text style={styles.validateText}>{t("please-choose-service")}</Text>
             )}
           </View>
           <Pressable
@@ -398,7 +401,7 @@ export default function AddCoach({ navigation }) {
             ]}
             onPress={addHandler}
           >
-            <Text style={styles.addText}>Add Service</Text>
+            <Text style={styles.addText}>{t("add-service")}</Text>
           </Pressable>
           <View style={styles.listService}>
             <FlatList
@@ -427,7 +430,7 @@ export default function AddCoach({ navigation }) {
             ]}
             onPress={saveHadler}
           >
-            <Text style={styles.saveText}>SAVE</Text>
+            <Text style={styles.saveText}>{t("save-button")}</Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>

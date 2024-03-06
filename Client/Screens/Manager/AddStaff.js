@@ -22,10 +22,14 @@ import ChooseImageModal from "./Popup/ChooseImageModal";
 import ModalSuccess from "./Popup/ModalSuccess";
 import ModalFail from "./Popup/ModalFail";
 import { createStaff, createStaffWithImage } from "../../util/staffService";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 DropDownPicker.setListMode("SCROLLVIEW");
 
 export default function AddStaff({ navigation }) {
+  const { t } = useTranslation();
+
   const [visible, setVisible] = useState(false);
   const show = () => {
     setVisible(true);
@@ -50,8 +54,8 @@ export default function AddStaff({ navigation }) {
     setVisibleFail(false);
   };
 
-  const contentS = "Add Staff Successfully!";
-  const [contentF, setContentF] = useState("Add Staff Fail!");
+  const contentS = t("add-staff-success");
+  const [contentF, setContentF] = useState(t("add-staff-fail"));
 
   const [image, setImage] = useState();
   const uploadImage = async (mode) => {
@@ -98,16 +102,16 @@ export default function AddStaff({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState("");
   const items = [
-    { label: "Driver", value: "2" },
-    { label: "Coach Assistant", value: "3" },
-    { label: "Manager", value: "4" },
+    { label: t("driver"), value: "2" },
+    { label: t("coach-assistant"), value: "3" },
+    { label: t("manager"), value: "4" },
   ];
 
   const [isOpenGender, setIsOpenGender] = useState(false);
   const [currentValueGender, setCurrentValueGender] = useState("");
   const itemsGender = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
+    { label: t("male"), value: "male" },
+    { label: t("female"), value: "female" },
   ];
 
   const [validatePosition, setValidatePostion] = useState(true);
@@ -204,7 +208,7 @@ export default function AddStaff({ navigation }) {
       currentValueGender != ""
     ) {
       if (repassword != password) {
-        setContentF("Password and Re-Password must be the same");
+        setContentF(t("password-validation"));
         showFail();
       } else {
         try {
@@ -259,7 +263,7 @@ export default function AddStaff({ navigation }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>New Staff</Text>
+          <Text style={styles.headerText}>{t("new-staff")}</Text>
           <Pressable
             style={({ pressed }) => [
               pressed && { opacity: 0.85 },
@@ -296,48 +300,48 @@ export default function AddStaff({ navigation }) {
             hide={hide}
             uploadImage={uploadImage}
           />
-          <Text style={styles.titleText}>Staff Information</Text>
+          <Text style={styles.titleText}>{t("staff-information")}</Text>
           <View>
-            <Text style={styles.textLabel}>Full Name</Text>
+            <Text style={styles.textLabel}>{t("full-name")}</Text>
             <TextInput
               style={
                 validateFullName == true
                   ? styles.textInput
                   : styles.textInputWrong
               }
-              placeholder="Enter Full Name"
+              placeholder={t("enter-full-name")}
               value={fullName}
               onChangeText={fullNameHandler}
             ></TextInput>
             {!validateFullName && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Email</Text>
+            <Text style={styles.textLabel}>{t("email")}</Text>
             <TextInput
               style={
                 validateEmail == true ? styles.textInput : styles.textInputWrong
               }
-              placeholder="Enter Email"
+              placeholder={t("enter-email")}
               value={email}
               onChangeText={emailHandler}
             ></TextInput>
             {!validateEmail && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Phone Number</Text>
+            <Text style={styles.textLabel}>{t("phone-number")}</Text>
             <TextInput
               style={
                 validatePhone == true ? styles.textInput : styles.textInputWrong
               }
-              placeholder="Enter Phone Number"
+              placeholder={t("enter-phone-number")}
               keyboardType="numeric"
               value={phone}
               onChangeText={phoneHandler}
             ></TextInput>
             {!validatePhone && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Position</Text>
+            <Text style={styles.textLabel}>{t("position")}</Text>
             <View style={[styles.dropDownStyle, { zIndex: 10000 }]}>
               <DropDownPicker
                 items={items}
@@ -347,16 +351,16 @@ export default function AddStaff({ navigation }) {
                 setValue={(val) => setCurrentValue(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Position"
+                placeholder={t("select-position")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validatePosition && (
-              <Text style={styles.validateText}>Please choose position</Text>
+              <Text style={styles.validateText}>{t("please-choose-position")}</Text>
             )}
-            <Text style={styles.textLabel}>Gender</Text>
+            <Text style={styles.textLabel}>{t("gender")}</Text>
             <View style={[styles.dropDownStyle, { zIndex: 100 }]}>
               <DropDownPicker
                 items={itemsGender}
@@ -366,63 +370,63 @@ export default function AddStaff({ navigation }) {
                 setValue={(val) => setCurrentValueGender(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Gender"
+                placeholder={t("select-gender")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateGender && (
-              <Text style={styles.validateText}>Please choose gender</Text>
+              <Text style={styles.validateText}>{t("please-choose-gender")}</Text>
             )}
           </View>
           <Text style={[styles.titleText, { zIndex: -1 }]}>
             Account Information
           </Text>
           <View style={{ zIndex: -1 }}>
-            <Text style={styles.textLabel}>Username</Text>
+            <Text style={styles.textLabel}>{t("username")}</Text>
             <TextInput
               style={
                 validateUsername == true
                   ? styles.textInput
                   : styles.textInputWrong
               }
-              placeholder="Enter Username"
+              placeholder={t("enter-username")}
               value={username}
               onChangeText={usernameHandler}
             ></TextInput>
             {!validateUsername && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Password</Text>
+            <Text style={styles.textLabel}>{t("password")}</Text>
             <TextInput
               style={
                 validatePassword == true
                   ? styles.textInput
                   : styles.textInputWrong
               }
-              placeholder="Enter Password"
+              placeholder={t("enter-password")}
               secureTextEntry={true}
               value={password}
               onChangeText={passwordHandler}
             ></TextInput>
             {!validatePassword && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Repeat Password</Text>
+            <Text style={styles.textLabel}>{t("re-password")}</Text>
             <TextInput
               style={
                 validateRePassword == true
                   ? styles.textInput
                   : styles.textInputWrong
               }
-              placeholder="Re-Enter Password"
+              placeholder={t("re-enter-password")}
               secureTextEntry={true}
               value={repassword}
               onChangeText={repasswordHandler}
             ></TextInput>
             {!validateRePassword && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
           </View>
           <Pressable
@@ -432,7 +436,7 @@ export default function AddStaff({ navigation }) {
             ]}
             onPress={saveHadler}
           >
-            <Text style={styles.saveText}>SAVE</Text>
+            <Text style={styles.saveText}>{t("save-button")}</Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>

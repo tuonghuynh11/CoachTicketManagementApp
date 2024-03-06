@@ -20,8 +20,11 @@ import { Ionicons } from "@expo/vector-icons";
 import RouteCard from "./RouteCard";
 import { getAllRoutes } from "../../util/routeService";
 import { useIsFocused } from "@react-navigation/native";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function ManageRoute({navigation}) {
+  const { t } = useTranslation();
   const pressAddHandler = () => {
     navigation.navigate("AddRoute");
   };
@@ -105,7 +108,7 @@ export default function ManageRoute({navigation}) {
             <Entypo name="menu" size={30} color="#283663" />
           </Pressable>
 
-          <Text style={styles.headerText}>List Of Routes</Text>
+          <Text style={styles.headerText}>{t("list-route")}</Text>
           <Pressable style={({ pressed }) => [
               styles.addIconStyle,
               pressed && { opacity: 0.85 },
@@ -125,7 +128,7 @@ export default function ManageRoute({navigation}) {
             <View style={styles.bodySearch}>
               <TextInput
                 style={styles.textInputSearch}
-                placeholder="Search for route"
+                placeholder={t("search-for-route")}
                 placeholderTextColor="#FFFFFF"
                 onChangeText={textHandler}
                 value={searchText}

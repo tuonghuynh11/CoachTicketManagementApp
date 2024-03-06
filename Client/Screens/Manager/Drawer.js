@@ -18,10 +18,13 @@ import StatisticsScreen from "../User/Admin/StatisticsScreen";
 import ManageDiscount from "../User/Admin/ManageDiscount";
 import ManageUser from "../User/Admin/ManageUser";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
+  const { t } = useTranslation();
   return (
     <Drawer.Navigator
       initialRouteName="ManageCoach"
@@ -36,7 +39,7 @@ function MyDrawer() {
       drawerContent={(props) => <CustomDrawer {...props} />}
     >
       <Drawer.Screen
-        name="Manage Coach"
+        name={t("manage-coach")}
         component={CoachStackNavigate}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -54,7 +57,7 @@ function MyDrawer() {
         )
       }}/> */}
       <Drawer.Screen
-        name="Manage User Ticket"
+        name={t("manage-user-ticket")}
         component={UserTicketStackNavigate}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -67,7 +70,7 @@ function MyDrawer() {
         }}
       />
       <Drawer.Screen
-        name="Manage Staff"
+        name={t("manage-staff")}
         component={StaffStackNavigate}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -80,7 +83,7 @@ function MyDrawer() {
         }}
       />
       <Drawer.Screen
-        name="Manage Route"
+        name={t("manage-route")}
         component={RouteStackNavigate}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -94,7 +97,7 @@ function MyDrawer() {
       />
 
       <Drawer.Screen
-        name="Manage discount"
+        name={t("manage-discount")}
         component={ManageDiscount}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -107,7 +110,7 @@ function MyDrawer() {
         }}
       />
       <Drawer.Screen
-        name="Statistics"
+        name={t("statistics")}
         component={StatisticsScreen}
         options={{
           // headerShown: true,
@@ -122,7 +125,7 @@ function MyDrawer() {
         }}
       />
       <Drawer.Screen
-        name="Manage User"
+        name={t("manage-user")}
         component={ManageUser}
         options={{
           // headerShown: true,

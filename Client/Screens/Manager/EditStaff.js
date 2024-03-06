@@ -27,12 +27,16 @@ import ChooseImageModal from "./Popup/ChooseImageModal";
 import ModalConfirm from "./Popup/ModalConfirm";
 import ModalSuccess from "./Popup/ModalSuccess";
 import ModalFail from "./Popup/ModalFail";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 DropDownPicker.setListMode("SCROLLVIEW");
 
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabs({ data }) {
+  const { t } = useTranslation();
+
   return (
     <Tab.Navigator
       initialRouteName="StaffInfo"
@@ -50,13 +54,13 @@ function MyTabs({ data }) {
       <Tab.Screen
         name="StaffInfo"
         component={EditStaffInfo}
-        options={{ tabBarLabel: "Information" }}
+        options={{ tabBarLabel: t("information") }}
         initialParams={data}
       />
       <Tab.Screen
         name="StaffAccount"
         component={EditStaffAccount}
-        options={{ tabBarLabel: "Account" }}
+        options={{ tabBarLabel: t("account") }}
         initialParams={data}
       />
     </Tab.Navigator>
@@ -64,6 +68,8 @@ function MyTabs({ data }) {
 }
 
 export default function EditStaff({ navigation, route }) {
+  const { t } = useTranslation();
+
   const [visible, setVisible] = useState(false);
   const show = () => {
     setVisible(true);
@@ -87,7 +93,7 @@ export default function EditStaff({ navigation, route }) {
     setVisibleC(false);
   };
 
-  const content = "Are you sure to ban this staff?";
+  const content = t("are-you-sure-to-ban");
 
   const [visibleSuccess, setVisibleSuccess] = useState(false);
   const showSuccess = () => {
@@ -105,8 +111,8 @@ export default function EditStaff({ navigation, route }) {
     setVisibleFail(false);
   };
 
-  const contentS = "Ban Staff Successfully!";
-  const [contentF, setContentF] = useState("Ban Staff Fail!");
+  const contentS = t("ban-success");
+  const [contentF, setContentF] = useState(t("ban-fail"));
 
   const confirm = () => {
     try {
@@ -199,7 +205,7 @@ export default function EditStaff({ navigation, route }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>Edit Staff</Text>
+          <Text style={styles.headerText}>{t("edit-staff")}</Text>
           <Pressable
             style={({ pressed }) => [
               styles.resetIconStyle,

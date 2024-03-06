@@ -15,12 +15,15 @@ import {
   } from "react-native";
   import React, { useState } from "react";
   import { MaterialIcons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
   
   export default function ModalFilterSchedule({
     visible,
     hide,
     handlerSort
   }) {
+  const { t } = useTranslation();
+    
     const [flag, setFlag] = useState(0);
     const [flagCapa, setFlagCapa] = useState(0);
     return (
@@ -40,7 +43,7 @@ import {
             }}
           >
             {/* <MaterialIcons name="edit" size={35} color="#72C6A1" /> */}
-            <Text style={styles.text}>Price: Low - High</Text>
+            <Text style={styles.text}>{t("price-low-high")}</Text>
           </Pressable>
           <Pressable
             style={flag == 2 ? styles.pressedButton : styles.choose}
@@ -49,7 +52,7 @@ import {
             }}
           >
             {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-            <Text style={styles.text}>Price: High - Low</Text>
+            <Text style={styles.text}>{t("price-high-low")}</Text>
           </Pressable>
           
           <Pressable
@@ -59,7 +62,7 @@ import {
             }}
           >
             {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-            <Text style={styles.text}>Default</Text>
+            <Text style={styles.text}>{t("default")}</Text>
           </Pressable>
         </View>
       </Modal>

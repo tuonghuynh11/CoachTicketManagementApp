@@ -20,6 +20,8 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import TicketCurrentList from "./TicketCurrentList";
 import TicketHistoryList from "./TicketHistoryList";
 import { useIsFocused } from "@react-navigation/native";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -31,6 +33,8 @@ function Tab2() {
 }
 
 function MyTabs({ id }) {
+  const { t } = useTranslation();
+
   return (
     <Tab.Navigator
       initialRouteName="Current"
@@ -49,13 +53,13 @@ function MyTabs({ id }) {
       <Tab.Screen
         name="Current"
         component={TicketCurrentList}
-        options={{ tabBarLabel: "Current" }}
+        options={{ tabBarLabel: t("current") }}
         initialParams={{ id }}
       />
       <Tab.Screen
         name="History"
         component={TicketHistoryList}
-        options={{ tabBarLabel: "History" }}
+        options={{ tabBarLabel: t("history") }}
         initialParams={{ id }}
       />
     </Tab.Navigator>
@@ -63,6 +67,8 @@ function MyTabs({ id }) {
 }
 
 export default function TicketConfirmList({ route, navigation }) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.goBack();
   };
@@ -108,7 +114,7 @@ export default function TicketConfirmList({ route, navigation }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>List Of Tickets</Text>
+          <Text style={styles.headerText}>{t("list-ticket")}</Text>
         </View>
         <View style={styles.body}>
           <MyTabs id={id} />

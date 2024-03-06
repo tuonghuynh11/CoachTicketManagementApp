@@ -11,6 +11,7 @@ import { useContext, useEffect, useState } from "react";
 import { LogBox } from "react-native";
 import { AuthContext } from "../../Store/authContex";
 import { BookingContext } from "../../Store/bookingContext";
+import { useTranslation } from "react-i18next";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
@@ -20,6 +21,7 @@ function TripDetailScreen({ navigation, route }) {
   const [tripInfo, setTripInfo] = useState({});
   const bookingCtx = useContext(BookingContext);
 
+  const { t } = useTranslation();
   useEffect(() => {
     if (route?.params?.isReview) {
       navigation.setOptions({
@@ -192,7 +194,7 @@ function TripDetailScreen({ navigation, route }) {
                   fontWeight: "bold",
                 }}
               >
-                COACH {tripInfo.coachId}
+                {t("s-coach")} {tripInfo.coachId}
               </Text>
             </View>
 
@@ -296,15 +298,18 @@ function TripDetailScreen({ navigation, route }) {
               </View>
             </View>
             <View style={styles.footer}>
-              <Text style={styles.title}>Coach Information</Text>
+              <Text style={styles.title}>{t("coach-information")}</Text>
 
               <View style={styles.textContainer}>
-                <Text style={styles.text}>Capacity:</Text>
-                <Text style={styles.text}> {tripInfo.capacity} seats</Text>
+                <Text style={styles.text}>{t("capacity")}:</Text>
+                <Text style={styles.text}>
+                  {" "}
+                  {tripInfo.capacity} {t("seats")}
+                </Text>
               </View>
 
               <View style={styles.textContainer}>
-                <Text style={styles.text}>Type:</Text>
+                <Text style={styles.text}>{t("coach-type")}:</Text>
                 <Text style={styles.text}> {tripInfo.coachType}</Text>
               </View>
 
@@ -312,11 +317,11 @@ function TripDetailScreen({ navigation, route }) {
                 Available Seats
               </Text>
               <Text style={styles.text}>
-                {tripInfo.numberOfAvailableSeat} seats
+                {tripInfo.numberOfAvailableSeat} {t("seats")}
               </Text>
 
               <View style={styles.subFooter}>
-                <Text style={styles.title}>Utilities</Text>
+                <Text style={styles.title}>{t("utilities")}</Text>
                 <ScrollView
                   bounces="false"
                   showsHorizontalScrollIndicator="false"
@@ -349,7 +354,7 @@ function TripDetailScreen({ navigation, route }) {
               marginTop: 8,
             }}
           >
-            /seat
+            /{t("seat")}
           </Text>
         </View>
         <View style={{ flex: 1 }}>
@@ -358,7 +363,7 @@ function TripDetailScreen({ navigation, route }) {
             onPress={selectTripHandler}
             disabled={route?.params?.isReview}
           >
-            Select
+            {t("select")}
           </CustomButton>
         </View>
       </View>

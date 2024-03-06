@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 export default function ModalFilterUser({
   visible,
@@ -22,6 +23,8 @@ export default function ModalFilterUser({
   handlerSort,
   handlerSortPoint,
 }) {
+  const { t } = useTranslation();
+
   const [flag, setFlag] = useState(0);
   const [flagCapa, setFlagCapa] = useState(0);
   return (
@@ -34,7 +37,7 @@ export default function ModalFilterUser({
       <Pressable style={styles.upper} onPress={hide}></Pressable>
       <View style={styles.lower}>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.title}>Name Of User</Text>
+          <Text style={styles.title}>{t("name-of-user")}</Text>
         </View>
         <Pressable
           style={flag == 1 ? styles.pressedButton : styles.choose}
@@ -43,7 +46,7 @@ export default function ModalFilterUser({
           }}
         >
           {/* <MaterialIcons name="edit" size={35} color="#72C6A1" /> */}
-          <Text style={styles.text}>A - Z</Text>
+          <Text style={styles.text}>{t("name-az")}</Text>
         </Pressable>
         <Pressable
           style={flag == 2 ? styles.pressedButton : styles.choose}
@@ -52,7 +55,7 @@ export default function ModalFilterUser({
           }}
         >
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>Z - A</Text>
+          <Text style={styles.text}>{t("name-za")}</Text>
         </Pressable>
         <Pressable
           style={flag == 0 ? styles.pressedButton : styles.choose}
@@ -61,10 +64,10 @@ export default function ModalFilterUser({
           }}
         >
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>All</Text>
+          <Text style={styles.text}>{t("all")}</Text>
         </Pressable>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.title}>Reward Point</Text>
+          <Text style={styles.title}>{t("reward-point")}</Text>
         </View>
         <Pressable
           style={flagCapa == 1 ? styles.pressedButton : styles.choose}
@@ -73,7 +76,7 @@ export default function ModalFilterUser({
           }}
         >
           {/* <MaterialIcons name="edit" size={35} color="#72C6A1" /> */}
-          <Text style={styles.text}>High - Low</Text>
+          <Text style={styles.text}>{t("high-low")}</Text>
         </Pressable>
         <Pressable
           style={flagCapa == 2 ? styles.pressedButton : styles.choose}
@@ -82,7 +85,7 @@ export default function ModalFilterUser({
           }}
         >
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>Low - High</Text>
+          <Text style={styles.text}>{t("low-high")}</Text>
         </Pressable>
         
         <Pressable
@@ -92,7 +95,7 @@ export default function ModalFilterUser({
           }}
         >
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>All</Text>
+          <Text style={styles.text}>{t("all")}</Text>
         </Pressable>
       </View>
     </Modal>

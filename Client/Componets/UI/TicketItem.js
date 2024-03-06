@@ -21,6 +21,7 @@ import { Ionicons } from "@expo/vector-icons";
 import FlatButton from "../UI/FlatButton";
 import * as ImagePicker from "expo-image-picker";
 import { Pressable } from "react-native";
+import { useTranslation } from "react-i18next";
 function TicketItem({
   tripInfo,
   ticket,
@@ -28,6 +29,7 @@ function TicketItem({
   paddingClose,
   shuttleHandler,
 }) {
+  const { t } = useTranslation();
   const captureRefHandler = useRef();
   const [galleryPermissionInformation, requestPermission] =
     ImagePicker.useMediaLibraryPermissions();
@@ -45,8 +47,8 @@ function TicketItem({
       ImagePicker.PermissionStatus.DENIED
     ) {
       Alert.alert(
-        "Insuficient Permission!",
-        "You need to grant gallery permissions to change avatar"
+        `${`1 ${t("insufficient-permission")}`}!`,
+        t("grant-gallery-permissions-to-change-avatar")
       );
 
       return false;
@@ -353,7 +355,7 @@ function TicketItem({
             ]}
           >
             <Text style={[styles.statusTitle]}>
-              {ticket.status === 0 ? "Unpaid" : "Paid"}
+              {ticket.status === 0 ? t("unpaid") : t("paid")}
             </Text>
           </View>
           <View>
@@ -369,25 +371,25 @@ function TicketItem({
             }}
           >
             <SubBody
-              title1={"ID Number"}
+              title1={t("id-number")}
               subTitle1={ticket.reservationId}
-              title2={"Full Name"}
+              title2={t("full-name")}
               subTitle2={ticket.fullName}
             />
             <SubBody
-              title1={"Seat"}
+              title1={t("s-seat")}
               subTitle1={ticket.seatNumber}
-              title2={"Coach Type"}
+              title2={t("coach-type")}
               subTitle2={ticket.coachType}
             />
             <View>
               <SubBody
-                title2={"Shuttle"}
-                title1={"Round-Trip"}
+                title2={t("shuttle")}
+                title1={t("s-round-trip")}
                 subTitle1={
                   tripInfo?.roundTripDate
                     ? getDate(tripInfo?.roundTripDate)
-                    : "None"
+                    : t("none")
                 }
               />
               {tripInfo?.shuttleRoute && (
@@ -411,7 +413,7 @@ function TicketItem({
                   >
                     {tripInfo?.shuttleRoute
                       ? tripInfo?.shuttleRoute.departurePlace
-                      : "None"}
+                      : t("none")}
                   </Text>
                 </Pressable>
               )}
@@ -436,7 +438,7 @@ function TicketItem({
                   >
                     {tripInfo?.shuttleRoute
                       ? tripInfo?.shuttleRoute.departurePlace
-                      : "None"}
+                      : t("none")}
                   </Text>
                 </Pressable>
               )}
@@ -477,7 +479,7 @@ function TicketItem({
                 fontWeight: "bold",
               }}
             >
-              Download Ticket
+              {t("download-ticket")}
             </Text>
           </CustomButton>
         </View>

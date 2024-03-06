@@ -15,12 +15,15 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 export default function ModalFilterStaff({
   visible,
   hide,
   handlerSort
 }) {
+  const { t } = useTranslation();
+
   const [flag, setFlag] = useState(0);
   const [flagCapa, setFlagCapa] = useState(0);
   return (
@@ -40,7 +43,7 @@ export default function ModalFilterStaff({
           }}
         >
           {/* <MaterialIcons name="edit" size={35} color="#72C6A1" /> */}
-          <Text style={styles.text}>Name: A - Z</Text>
+          <Text style={styles.text}>{t("name-az")}</Text>
         </Pressable>
         <Pressable
           style={flag == 2 ? styles.pressedButton : styles.choose}
@@ -49,7 +52,7 @@ export default function ModalFilterStaff({
           }}
         >
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>Name: Z - A</Text>
+          <Text style={styles.text}>{t("name-za")}</Text>
         </Pressable>
         
         <Pressable
@@ -59,7 +62,7 @@ export default function ModalFilterStaff({
           }}
         >
           {/* <MaterialIcons name="edit" size={35} color="#72C6A1" /> */}
-          <Text style={styles.text}>Postion: Driver</Text>
+          <Text style={styles.text}>{t("position-driver")}</Text>
         </Pressable>
         <Pressable
           style={flag == 4 ? styles.pressedButton : styles.choose}
@@ -69,7 +72,7 @@ export default function ModalFilterStaff({
         >
           
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>Postion: Assistant</Text>
+          <Text style={styles.text}>{t("position-assistant")}</Text>
         </Pressable>
         <Pressable
           style={flag == 5 ? styles.pressedButton : styles.choose}
@@ -77,7 +80,7 @@ export default function ModalFilterStaff({
             handlerSort("5"), setFlag(5);
           }}
         >
-          <Text style={styles.text}>Postion: Manager</Text>
+          <Text style={styles.text}>{t("position-manager")}</Text>
         </Pressable>
         <Pressable
           style={flag == 0 ? styles.pressedButton : styles.choose}
@@ -86,7 +89,7 @@ export default function ModalFilterStaff({
           }}
         >
           {/* <MaterialIcons name="delete" size={35} color="#EB3223" /> */}
-          <Text style={styles.text}>All</Text>
+          <Text style={styles.text}>{t("all")}</Text>
         </Pressable>
       </View>
     </Modal>

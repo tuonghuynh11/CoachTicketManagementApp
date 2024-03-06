@@ -20,8 +20,11 @@ import { Ionicons } from "@expo/vector-icons";
 import ModalFilterStaff from "./Popup/ModalFilterStaff";
 import { useIsFocused } from "@react-navigation/native";
 import { getAllStaffs } from "../../util/staffService";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function ManageStaff({navigation}) {
+  const { t } = useTranslation();
 
   const openMenu = () => {
     navigation.openDrawer()
@@ -120,7 +123,7 @@ export default function ManageStaff({navigation}) {
         <Pressable style={styles.menuIcon} onPress={openMenu}>
             <Entypo name="menu" size={30} color="#283663" />
           </Pressable>
-          <Text style={styles.headerText}>List Of Staff</Text>
+          <Text style={styles.headerText}>{t("list-staff")}</Text>
           <Pressable style={({ pressed }) => [
               styles.addIconStyle,
               pressed && { opacity: 0.85 },
@@ -139,7 +142,7 @@ export default function ManageStaff({navigation}) {
             <View style={styles.bodySearch}>
               <TextInput
                 style={styles.textInputSearch}
-                placeholder="Search for staff"
+                placeholder={t("search-for-staff")}
                 placeholderTextColor="#FFFFFF"
                 onChangeText={textHandler}
                 value={searchText}

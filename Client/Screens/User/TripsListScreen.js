@@ -23,7 +23,9 @@ import { useIsFocused } from "@react-navigation/native";
 import Loading from "../../Componets/UI/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BookingContext } from "../../Store/bookingContext";
+import { useTranslation } from "react-i18next";
 function TripListsScreen({ navigation, route }) {
+  const { t } = useTranslation();
   const authCtx = useContext(AuthContext);
   const bookingCtx = useContext(BookingContext);
   const [listOfTrips, setListOfTrips] = useState([]);
@@ -43,10 +45,10 @@ function TripListsScreen({ navigation, route }) {
   const isFocused = useIsFocused();
   //Sort
   const sortOptions = [
-    { id: 0, value: "Ticket prices increase" },
-    { id: 1, value: "Earliest departure time" },
-    { id: 2, value: "Latest departure time" },
-    { id: 3, value: "Ticket prices decrease" },
+    { id: 0, value: t("ticket-prices-increase") },
+    { id: 1, value: t("earliest-departure-time") },
+    { id: 2, value: t("latest-departure-time") },
+    { id: 3, value: t("ticket-prices-decrease") },
   ];
   const [isSortVisible, setIsSortVisible] = useState(false);
 
@@ -83,7 +85,7 @@ function TripListsScreen({ navigation, route }) {
         route?.params?.info.arrivalPlace
       );
       if (res === null) {
-        Alert.alert("Error", "Something went wrong");
+        Alert.alert(t("error"), t("something-was-wrong"));
         setIsLoading((curr) => !curr);
 
         return;
@@ -566,7 +568,9 @@ function TripListsScreen({ navigation, route }) {
                 paddingBottom: 10,
               }}
             >
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>Sort By</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                {t("sort-by")}
+              </Text>
               <TouchableOpacity
                 style={{
                   alignSelf: "flex-end",
@@ -641,12 +645,12 @@ function TripListsScreen({ navigation, route }) {
       >
         <MaterialCommunityIcons name="sort-variant" size={24} color="white" />
         <Text style={{ color: "white", fontWeight: "600", fontSize: 17 }}>
-          Sort
+          {t("sort")}
         </Text>
       </TouchableOpacity>
       <View style={styles.root}>
         {isSearchEmpty ? (
-          <EmptyTrip />
+          <EmptyTrip title={t("no-trips")} message={t("choose-another-trip")} />
         ) : (
           <FlatList
             style={styles.list}
@@ -662,7 +666,7 @@ function TripListsScreen({ navigation, route }) {
             <Text
               style={{ paddingLeft: 20, marginBottom: -25, color: "#8C8D89" }}
             >
-              Boarding location
+              {t("boarding-location")}
             </Text>
 
             <SelectList
@@ -691,7 +695,7 @@ function TripListsScreen({ navigation, route }) {
             <Text
               style={{ paddingLeft: 20, marginBottom: -25, color: "#8C8D89" }}
             >
-              Drop off location
+              {t("drop-off-location")}
             </Text>
             <SelectList
               boxStyles={styles.selectList1}
