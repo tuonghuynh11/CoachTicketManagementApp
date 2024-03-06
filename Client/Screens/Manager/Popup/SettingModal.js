@@ -16,7 +16,6 @@ import {
   import React, { useState } from "react";
   import { MaterialIcons } from "@expo/vector-icons";
 import { deleteCoach } from "../../../util/coachService";
-import i18next from "../../Services/i18next";
 import { useTranslation } from "react-i18next";
 
   export default function FilterModal({ visible, hide, navigation, navigateScreen, item, deleteCoach}){
