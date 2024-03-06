@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from "@expo/vector-icons";
 
 import {
   StyleSheet,
@@ -28,7 +28,12 @@ import CheckBox from "expo-checkbox";
 import DropDownPicker from "react-native-dropdown-picker";
 import { AuthContext } from "../../../Store/authContex";
 import { Entypo, Ionicons } from "@expo/vector-icons";
-
+import Vietnamese from "../../../locales/vi.json";
+import English from "../../../locales/en.json";
+import i18next from "i18next";
+import { LngContext } from "../../../Store/languageContext";
+import LngContextProvider from "../../../Store/languageContext";
+import { useTranslation } from "react-i18next";
 const config = {
   headers: {
     Authorization: "Bearer " + images.adminToken,
@@ -42,6 +47,8 @@ LogBox.ignoreLogs([
 
 let currentID = "SE107";
 function Screen({ navigation }) {
+  const { t, i18n } = useTranslation();
+
   let axiosUsers = [];
   const [allUsers, setAllUsers] = useState([]);
   const [users, setUsers] = useState([]);
@@ -126,8 +133,8 @@ function Screen({ navigation }) {
     }
   };
   const getRoleName = function (roleId) {
-    if (roleId == 1) return "Customer";
-    return "Staff";
+    if (roleId == 1) return t("customer");
+    return t("staff");
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -144,7 +151,7 @@ function Screen({ navigation }) {
           <Entypo name="menu" size={30} color="#283663" />
         </Pressable>
 
-        <Text style={styles.headerText}>Manage User</Text>
+        <Text style={styles.headerText}>{t("manage-user")}</Text>
       </View>
       <View
         style={{
@@ -209,7 +216,16 @@ function Screen({ navigation }) {
                     { justifyContent: "space-between" },
                   ]}
                 >
-                <Text style={{ marginBottom: 10, color: '#72C6A1' , fontSize: 20, marginRight: 5}}>{item.userId}</Text>
+                  <Text
+                    style={{
+                      marginBottom: 10,
+                      color: "#72C6A1",
+                      fontSize: 20,
+                      marginRight: 5,
+                    }}
+                  >
+                    {item.userId}
+                  </Text>
 
                   <View>
                     <Image
@@ -217,22 +233,28 @@ function Screen({ navigation }) {
                       style={styles.avatar}
                     ></Image>
                   </View>
-                  <View style={{ flex: 7, paddingRight: 15 , marginLeft: 15}}>
+                  <View style={{ flex: 7, paddingRight: 15, marginLeft: 15 }}>
                     <Text style={styles.text2}>
                       {" "}
-                      Name:{" "}
-                      <Text style={{ fontWeight: "bold", fontSize: 15, color: '#283663' }}>
+                      {t("name")}:{" "}
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: 15,
+                          color: "#283663",
+                        }}
+                      >
                         {item.fullName}
                       </Text>
                     </Text>
                     <Text style={styles.text2}>
                       {" "}
-                      Phone number: {item.phoneNumber}
+                      {t("phone-number")}: {item.phoneNumber}
                     </Text>
                     <Text style={styles.text2}> Email: {item.email}</Text>
                     <Text style={styles.text2}>
                       {" "}
-                      Role: {getRoleName(item.UserAccountData.roleId)}
+                      {t("role")}: {getRoleName(item.UserAccountData.roleId)}
                     </Text>
                   </View>
                   <View
@@ -241,45 +263,41 @@ function Screen({ navigation }) {
                     {item.UserAccountData.roleId == 1 && (
                       <MaterialIcons
                         onPress={() => {
-                          Alert.alert(
-                            "ALERT",
-                            "Do you want to delete this user?",
-                            [
-                              {
-                                text: "No",
-                                onPress: () => {},
+                          Alert.alert(t("alert-capital"), t("delete-user"), [
+                            {
+                              text: "No",
+                              onPress: () => {},
+                            },
+                            {
+                              text: "Yes",
+                              onPress: () => {
+                                console.log(item.userId);
+                                const config = {
+                                  headers: {
+                                    Authorization: authCtx.token,
+                                  },
+                                };
+                                axios
+                                  .delete(
+                                    `${images.apiLink}users/${item.userId}`,
+                                    config
+                                  )
+                                  .then((response) => {
+                                    setUsers(
+                                      users.filter(
+                                        (user) => user.userId != item.userId
+                                      )
+                                    );
+                                  })
+                                  .catch((error) => {
+                                    if (error.request)
+                                      console.log(error.request);
+                                    else if (error.response)
+                                      console.log(error.response);
+                                  });
                               },
-                              {
-                                text: "Yes",
-                                onPress: () => {
-                                  console.log(item.userId);
-                                  const config = {
-                                    headers: {
-                                      Authorization: authCtx.token,
-                                    },
-                                  };
-                                  axios
-                                    .delete(
-                                      `${images.apiLink}users/${item.userId}`,
-                                      config
-                                    )
-                                    .then((response) => {
-                                      setUsers(
-                                        users.filter(
-                                          (user) => user.userId != item.userId
-                                        )
-                                      );
-                                    })
-                                    .catch((error) => {
-                                      if (error.request)
-                                        console.log(error.request);
-                                      else if (error.response)
-                                        console.log(error.response);
-                                    });
-                                },
-                              },
-                            ]
-                          );
+                            },
+                          ]);
                         }}
                         size={30}
                         name="delete"
@@ -300,6 +318,7 @@ function Screen({ navigation }) {
   );
 }
 function ProfileScreen({ navigation }) {
+  const { t } = useTranslation();
   const route = useRoute();
   console.log(route.params);
   const { data_mini } = route.params;
@@ -318,8 +337,8 @@ function ProfileScreen({ navigation }) {
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState(data_mini.UserAccountData.roleId);
   const [items, setItems] = useState([
-    { label: "Customer", value: "1" },
-    { label: "Staff", value: "2" },
+    { label: t("customer"), value: "1" },
+    { label: t("staff"), value: "2" },
   ]);
   const [roleDisabled, setRoleDisabled] = useState(true);
   const onDriverChange = () => {
@@ -360,7 +379,10 @@ function ProfileScreen({ navigation }) {
           <Text style={styles.text}>{data_mini.UserAccountData.userName}</Text>
         </View>
         <View style={styles.userInfo}>
-          <Text style={styles.label}>{"\n"}Full Name</Text>
+          <Text style={styles.label}>
+            {"\n"}
+            {t("full-name")}
+          </Text>
           <TextInput
             editable={inputEditable}
             selectTextOnFocus={inputEditable}
@@ -369,7 +391,10 @@ function ProfileScreen({ navigation }) {
           >
             {data_mini.fullName}
           </TextInput>
-          <Text style={styles.label}>{"\n"}Username</Text>
+          <Text style={styles.label}>
+            {"\n"}
+            {t("username")}
+          </Text>
           <TextInput
             editable={inputEditable}
             selectTextOnFocus={inputEditable}
@@ -387,7 +412,10 @@ function ProfileScreen({ navigation }) {
           >
             {data_mini.email}
           </TextInput>
-          <Text style={styles.label}>{"\n"}Phone:</Text>
+          <Text style={styles.label}>
+            {"\n"}
+            {t("phone")}:
+          </Text>
           <TextInput
             editable={inputEditable}
             selectTextOnFocus={inputEditable}
@@ -396,7 +424,7 @@ function ProfileScreen({ navigation }) {
           >
             {data_mini.phoneNumber}
           </TextInput>
-          <Text style={{ margin: 5 }}>Grant permission to: </Text>
+          <Text style={{ margin: 5 }}>{t("role")}: </Text>
           <View>
             <DropDownPicker
               style={styles.input}
@@ -449,7 +477,7 @@ function ProfileScreen({ navigation }) {
                       }
                       if (error.response) {
                         console.log(error.response);
-                        Alert.alert("Unable to update this user");
+                        Alert.alert(t("cant-update-user"));
                       }
                     });
                 }
@@ -487,7 +515,7 @@ const AddUser = function (name, email, phone, addNewUsers) {
 function AddUserScreen({ navigation }) {
   const route = useRoute();
   const addNewUsers = route.params.addNewUsers;
-
+  const { t } = useTranslation();
   const [name, onChangeName] = React.useState("");
   const [email, onCHangeEmail] = React.useState("");
   const [phone, onChangePhone] = React.useState("");
@@ -502,9 +530,12 @@ function AddUserScreen({ navigation }) {
         ></Image>
       </View>
       <View style={styles.userInfo}>
-        <Text style={styles.label}>{"\n"}Name</Text>
+        <Text style={styles.label}>
+          {"\n"}
+          {t("name")}
+        </Text>
         <TextInput
-          placeholder="Name"
+          placeholder={t("name")}
           onChangeText={onChangeName}
           style={styles.input}
         >
@@ -519,11 +550,14 @@ function AddUserScreen({ navigation }) {
         >
           {"\n"}
         </TextInput>
-        <Text style={styles.label}>{"\n"}Phone:</Text>
+        <Text style={styles.label}>
+          {"\n"}
+          {t("phone")}:
+        </Text>
         <TextInput
           onChangeText={onChangePhone}
           keyboardType="phone-pad"
-          placeholder="Phone"
+          placeholder={t(phone)}
           style={styles.input}
         >
           {"\n"}
@@ -537,7 +571,9 @@ function AddUserScreen({ navigation }) {
             AddUser(name, email, phone, addNewUsers), navigation.goBack();
           }}
         >
-          <Text style={{ color: "#ffffff", fontWeight: "900" }}>Add</Text>
+          <Text style={{ color: "#ffffff", fontWeight: "900" }}>
+            {t("add")}
+          </Text>
         </TouchableOpacity>
         <Switch
           trackColor={{ false: "#ff5733", true: "#4a90e2" }}
@@ -551,6 +587,7 @@ function AddUserScreen({ navigation }) {
 }
 
 function EditProfileScreen({ navigation }) {
+  const { t } = useTranslation();
   const route = useRoute();
   console.log(route);
   const { data_mini, updateData } = route.params;
@@ -586,12 +623,18 @@ function EditProfileScreen({ navigation }) {
           <Text style={styles.text}>{data_mini.Name}</Text>
         </View>
         <View style={styles.userInfo}>
-          <Text style={styles.label}>{"\n"}Name</Text>
+          <Text style={styles.label}>
+            {"\n"}
+            {t("name")}
+          </Text>
           <TextInput onChangeText={onChangeName} style={styles.input}>
             {"\n"}
             {data_mini.Name}
           </TextInput>
-          <Text style={styles.label}>{"\n"}Name</Text>
+          <Text style={styles.label}>
+            {"\n"}
+            {t("name")}
+          </Text>
           <TextInput onChangeText={onChangeName} style={styles.input}>
             {"\n"}
             {data_mini.Name}
@@ -605,7 +648,10 @@ function EditProfileScreen({ navigation }) {
             {"\n"}
             {data_mini.email}
           </TextInput>
-          <Text style={styles.label}>{"\n"}Phone:</Text>
+          <Text style={styles.label}>
+            {"\n"}
+            {t("phone")}:
+          </Text>
           <TextInput
             onChangeText={onChangePhone}
             style={styles.input}
@@ -615,14 +661,14 @@ function EditProfileScreen({ navigation }) {
             {data_mini.phone}
             {"\n"}
           </TextInput>
-          <Text style={{ margin: 5 }}>Grant permission to: </Text>
+          <Text style={{ margin: 5 }}>{t("role")}: </Text>
           <View style={styles.section}>
             <CheckBox
               style={{ margin: 5 }}
               value={isEnabled}
               onValueChange={onDriverChange}
             ></CheckBox>
-            <Text>Driver</Text>
+            <Text>{t("driver-name")}</Text>
           </View>
           <View style={styles.section}>
             <CheckBox
@@ -630,7 +676,7 @@ function EditProfileScreen({ navigation }) {
               value={isAssistantEnabled}
               onValueChange={onAssistantChange}
             ></CheckBox>
-            <Text>Coach Assistant</Text>
+            <Text>{t("assistant-name")}</Text>
           </View>
         </View>
         <View style={{ alignItems: "center" }}>
@@ -692,17 +738,22 @@ function ManageUser({ navigation }) {
         <Text style={styles.headerText}>Manage User</Text>
       </View> */}
       {/* <NavigationContainer independent={true}> */}
-        <Stack.Navigator initialRouteName="ManageUser" screenOptions={{headerStyle: {
-                    backgroundColor: "white",
-                  }}}>
-          <Stack.Screen
-            name="ManageUser"
-            component={Screen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-          <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-        </Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="ManageUser"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "white",
+          },
+        }}
+      >
+        <Stack.Screen
+          name="ManageUser"
+          component={Screen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
+      </Stack.Navigator>
       {/* </NavigationContainer> */}
     </>
   );
@@ -723,8 +774,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 300,
     marginVertical: 10,
-    borderColor: '#283663',
-    color: '#283663'
+    borderColor: "#283663",
+    color: "#283663",
   },
   input2: {
     padding: 10,
@@ -734,10 +785,10 @@ const styles = StyleSheet.create({
     // marginVertical: 10,
     flex: 1,
     marginEnd: "10%",
-    backgroundColor: '#283663',
-    color: 'white',
-    borderColor: '#283663',
-    marginBottom: -20
+    backgroundColor: "#283663",
+    color: "white",
+    borderColor: "#283663",
+    marginBottom: -20,
   },
   banner: {
     display: "flex",
@@ -781,9 +832,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center",
-    color: '#283663'
+    color: "#283663",
   },
-  text2: { flex: 1, flexWrap: "wrap" ,fontSize: 15, color: '#283663'},
+  text2: { flex: 1, flexWrap: "wrap", fontSize: 15, color: "#283663" },
   dumbass: {
     marginTop: 20,
     backgroundColor: "#6875B7",
@@ -795,7 +846,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginTop: 30,
     padding: 10,
-    marginBottom: 30
+    marginBottom: 30,
   },
   dumbass2: {
     height: "100%",
