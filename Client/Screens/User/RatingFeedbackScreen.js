@@ -18,6 +18,7 @@ import GlobalColors from "../../Color/colors";
 import { TouchableWithoutFeedback } from "react-native";
 import { Alert } from "react-native";
 import { sendRatingEmail } from "../../util/apiServices";
+import { useTranslation } from "react-i18next";
 function RatingFeedbackScreen({
   isVisible,
   isRating,
@@ -29,6 +30,7 @@ function RatingFeedbackScreen({
   coachNumber,
   userName,
 }) {
+  const { t } = useTranslation();
   const [ratingValue, setRatingValue] = useState(3);
   const [content, setContent] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
@@ -83,7 +85,7 @@ function RatingFeedbackScreen({
           userName,
           typeOfRating
         );
-        Alert.alert("Success", "Send rating successfully");
+        Alert.alert(t("successful"), t("send-rating-successfully"));
       } catch (error) {
         Alert.alert(error);
       } finally {
@@ -104,7 +106,7 @@ function RatingFeedbackScreen({
           userName,
           "Staff Attitude"
         );
-        Alert.alert("Success", "Send report successfully");
+        Alert.alert(t("successful"), t("send-report-successfully"));
       } catch (error) {
         Alert.alert(error);
       } finally {
@@ -145,7 +147,7 @@ function RatingFeedbackScreen({
                 { color: GlobalColors.headerColor, fontSize: 25 },
               ]}
             >
-              {isRating ? "Rating" : "Report"}
+              {isRating ? t("rating") : t("report")}
             </Text>
           </View>
           <Image style={styles.image} source={{ uri: image }} />
@@ -194,7 +196,7 @@ function RatingFeedbackScreen({
                 onChangeText={(value) => setContent(value)}
               />
               {isInvalid && (
-                <Text style={styles.invalidLabel}>*{"Field is required"}</Text>
+                <Text style={styles.invalidLabel}>*{t("field-required")}</Text>
               )}
             </View>
 
@@ -210,7 +212,7 @@ function RatingFeedbackScreen({
                   { backgroundColor: "#f1aca9", flex: 1 },
                 ]}
               >
-                <Text style={styles.closeButtonText}>Cancel</Text>
+                <Text style={styles.closeButtonText}>{t("cancel")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 // onPress={callback}
@@ -220,7 +222,7 @@ function RatingFeedbackScreen({
                 ]}
                 onPress={submitHandler}
               >
-                <Text style={styles.closeButtonText}>Submit</Text>
+                <Text style={styles.closeButtonText}>{t("send")}</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -7,8 +7,11 @@ import HistoryScreen from "../Screens/User/HistoryScreen";
 import ProfileScreen from "../Screens/User/ProfileScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 const BottomTab = createBottomTabNavigator();
 function HomeNavigation() {
+  const { t } = useTranslation();
+
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -33,6 +36,7 @@ function HomeNavigation() {
         name="Home"
         component={HomeScreen}
         options={{
+          title: t("home"),
           tabBarIcon: ({ color }) => (
             <Ionicons name="ios-home-outline" size={24} color={color} />
           ),
@@ -46,7 +50,7 @@ function HomeNavigation() {
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="history" size={24} color={color} />
           ),
-          title: "My Bookings",
+          title: t("my-bookings"),
           headerStyle: {
             backgroundColor: GlobalColors.headerColor,
           },
@@ -61,6 +65,7 @@ function HomeNavigation() {
         name="Profile"
         component={ProfileScreen}
         options={{
+          title: t("profile"),
           tabBarIcon: ({ color }) => (
             <Ionicons name="person-circle-outline" size={24} color={color} />
           ),

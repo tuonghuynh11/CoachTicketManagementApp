@@ -46,7 +46,9 @@ import {
 import { convertVietnameseToNormal } from "../../Helper/Validation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 function HomeScreen({ navigation }) {
+  const { t } = useTranslation();
   const authCtx = useContext(AuthContext);
 
   const [popularRoutes, setPopularRoutes] = useState([]);
@@ -71,7 +73,7 @@ function HomeScreen({ navigation }) {
   const [dateOfRoundTrip, setDateOfRoundTrip] = useState("");
 
   const [selectedSeat, setSelectedSeat] = useState();
-  const [selectedSeatText, setSelectedSeatText] = useState("1 seat");
+  const [selectedSeatText, setSelectedSeatText] = useState(`1 ${t("seat")}`);
 
   const [isSelectSeat, setIsSelectSeat] = useState(false);
 
@@ -88,10 +90,10 @@ function HomeScreen({ navigation }) {
 
   const isFocused = useIsFocused();
   const data = [
-    { key: "1", value: "1 seat" },
-    { key: "2", value: "2 seats" },
-    { key: "3", value: "3 seats" },
-    { key: "4", value: "4 seats" },
+    { key: "1", value: `1 ${t("seat")}` },
+    { key: "2", value: `2 ${t("seats")}` },
+    { key: "3", value: `3 ${t("seats")}` },
+    { key: "4", value: `4 ${t("seats")}` },
   ];
   useEffect(() => {
     if (checkTokenExpiration(authCtx.token.split(" ")[1])) {
@@ -156,6 +158,7 @@ function HomeScreen({ navigation }) {
     if (isFocused) {
       getRecentSearchTrip();
       getSuggestTrip();
+      setSelectedSeatText(`1 ${t("seat")}`);
     }
   }, [isFocused]);
   useEffect(() => {
@@ -403,14 +406,12 @@ function HomeScreen({ navigation }) {
     console.log("to", arrivalPlace);
     console.log("date", date);
     if (!departurePlace || !arrivalPlace || !dateOfTrip || !selectedSeatText) {
-      setWarningMessage("Some fields are empty. Please fill it.");
+      setWarningMessage(t("some-fields-empty"));
       setIsWarning((curr) => !curr);
       return;
     }
     if (isRoundTrip && !dateOfRoundTrip) {
-      setWarningMessage(
-        "Round trip option was selected. Please select round trip date"
-      );
+      setWarningMessage(t("request-select-round-trip-date"));
       setIsWarning((curr) => !curr);
       return;
     }
@@ -418,7 +419,7 @@ function HomeScreen({ navigation }) {
       convertVietnameseToNormal(departurePlace.trim()) ===
       convertVietnameseToNormal(arrivalPlace.trim())
     ) {
-      setWarningMessage("Departure place and Arrival place must be different");
+      setWarningMessage(t("departure-and-arrival-must-be-different"));
       setIsWarning((curr) => !curr);
       return;
     }
@@ -535,7 +536,7 @@ function HomeScreen({ navigation }) {
             opacity: 0.5,
           }}
         >
-          All Pick Up Places in {itemData.item.placeName}
+          {t("all-pick-up-places")} {itemData.item.placeName}
         </Text>
       </Pressable>
     );
@@ -568,10 +569,7 @@ function HomeScreen({ navigation }) {
   async function getMyLocation() {
     let { status } = await requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert(
-        "Warning",
-        "Location Permission was denied. Please grant access in Settings"
-      );
+      Alert.alert(t("warning"), t("location-permission-was-denied"));
       return;
     }
 
@@ -689,9 +687,9 @@ function HomeScreen({ navigation }) {
       <PopUp
         type={"Warning"}
         isVisible={isTokenExpire}
-        title={"Your session has been expired"}
-        textBody={"Please login again!"}
-        textBtn={"Ok"}
+        title={t("session-expired")}
+        textBody={t("login-again")}
+        textBtn={t("ok")}
         callback={async () => {
           setIsTokenExpire((curr) => !curr);
           authCtx.logout();
@@ -700,9 +698,9 @@ function HomeScreen({ navigation }) {
       <PopUp
         type={"Warning"}
         isVisible={isWarning}
-        title={"Warning"}
+        title={t("warning")}
         textBody={warningMessage}
-        textBtn={"Ok"}
+        textBtn={t("ok")}
         callback={async () => {
           setIsWarning((curr) => !curr);
         }}
@@ -752,7 +750,9 @@ function HomeScreen({ navigation }) {
                 color={GlobalColors.button}
                 onPress={() => setIsShowSearchLocations((curr) => !curr)}
               >
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cancel</Text>
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                  {t("cancel")}
+                </Text>
               </FlatButton>
             </View>
             <View>
@@ -786,7 +786,7 @@ function HomeScreen({ navigation }) {
                       fontWeight: "600",
                     }}
                   >
-                    Your current location
+                    {t("your-current-location")}
                   </Text>
                 </Pressable>
               </View>
@@ -807,7 +807,7 @@ function HomeScreen({ navigation }) {
                       marginBottom: 10,
                     }}
                   >
-                    Popular locations
+                    {t("popular-locations")}
                   </Text>
                   <FlatList
                     data={locations}
@@ -832,7 +832,7 @@ function HomeScreen({ navigation }) {
             <View style={styles.headerContainer}>
               <View>
                 <Text style={styles.text}>Faster</Text>
-                <Text style={styles.subText}>Book a trip now</Text>
+                <Text style={styles.subText}>{t("book-trip-now")}</Text>
               </View>
               <View style={styles.iconContainer}>
                 <IconButton
@@ -866,7 +866,7 @@ function HomeScreen({ navigation }) {
                     }}
                     onChangeText={onChangeTextHandler.bind(this, "from")}
                     // style={styles.textInput}
-                    placeholder="from"
+                    placeholder={t("from")}
                     style={{ color: "black" }}
                     value={departurePlace}
                     autoCorrect={false}
@@ -919,7 +919,7 @@ function HomeScreen({ navigation }) {
                       setIsShowSearchLocations((curr) => !curr);
                     }}
                     onChangeText={onChangeTextHandler.bind(this, "to")}
-                    placeholder="to"
+                    placeholder={t("to")}
                     style={{ color: "black" }}
                     value={arrivalPlace}
                     autoCorrect={false}
@@ -956,7 +956,7 @@ function HomeScreen({ navigation }) {
                   >
                     <TextInput
                       style={[styles.textInput, { width: "100%" }]}
-                      placeholder="Departure Time"
+                      placeholder={t("departure-time")}
                       editable={false}
                       value={dateOfTrip}
                       onPressIn={toggleDatePicker}
@@ -974,7 +974,7 @@ function HomeScreen({ navigation }) {
                         marginBottom: 2,
                       }}
                     >
-                      Round Trip?
+                      {t("s-round-trip")}?
                     </Text>
                     <Switch
                       trackColor={{ false: "purple", true: "#2877df" }}
@@ -1007,7 +1007,7 @@ function HomeScreen({ navigation }) {
                   >
                     <TextInput
                       style={[styles.textInput, { width: "100%" }]}
-                      placeholder="Round Time"
+                      placeholder={t("round-time")}
                       editable={false}
                       value={dateOfRoundTrip}
                       onPressIn={toggleRoundTripDatePicker}
@@ -1043,7 +1043,7 @@ function HomeScreen({ navigation }) {
                     ]}
                   >
                     <Text style={[styles.buttonDateText, { color: "#075985" }]}>
-                      Cancel
+                      {t("cancel")}
                     </Text>
                   </TouchableOpacity>
 
@@ -1051,7 +1051,7 @@ function HomeScreen({ navigation }) {
                     onPress={confirmIOSDate}
                     style={[styles.dateButton, styles.pickerButton]}
                   >
-                    <Text style={[styles.buttonDateText]}>Confirm</Text>
+                    <Text style={[styles.buttonDateText]}>{t("confirm")}</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -1091,7 +1091,7 @@ function HomeScreen({ navigation }) {
                     ]}
                   >
                     <Text style={[styles.buttonDateText, { color: "#075985" }]}>
-                      Cancel
+                      {t("cancel")}
                     </Text>
                   </TouchableOpacity>
 
@@ -1099,7 +1099,7 @@ function HomeScreen({ navigation }) {
                     onPress={confirmIOSRoundTripDate}
                     style={[styles.dateButton, styles.pickerButton]}
                   >
-                    <Text style={[styles.buttonDateText]}>Confirm</Text>
+                    <Text style={[styles.buttonDateText]}> {t("confirm")}</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -1227,7 +1227,7 @@ function HomeScreen({ navigation }) {
                           onPress={() => setIsSelectSeat(false)}
                         >
                           {" "}
-                          Cancel
+                          {t("cancel")}
                         </CustomButton>
                       </View>
                       <View style={{ flex: 1 }}>
@@ -1236,14 +1236,16 @@ function HomeScreen({ navigation }) {
                           onPress={() => {
                             console.log(selectedSeat);
                             if (selectedSeat === "1") {
-                              setSelectedSeatText(selectedSeat + " seat");
+                              setSelectedSeatText(
+                                selectedSeat + ` ${t("seat")}`
+                              );
                             } else {
                               setSelectedSeatText(selectedSeat);
                             }
                             setIsSelectSeat(false);
                           }}
                         >
-                          Submit
+                          {t("s-submit")}
                         </CustomButton>
                       </View>
                     </View>
@@ -1259,13 +1261,13 @@ function HomeScreen({ navigation }) {
                 onPress={onSearchTripHandler}
               >
                 <View>
-                  <Text style={styles.buttonText}>Search Trip</Text>
+                  <Text style={styles.buttonText}>{t("search-trip")}</Text>
                 </View>
               </Pressable>
             </View>
 
             <View style={styles.routeList}>
-              <Text style={styles.listTitle}> Popular Routes</Text>
+              <Text style={styles.listTitle}> {t("popular-routes")}</Text>
               <FlatList
                 horizontal
                 data={popularRoutes}
@@ -1275,7 +1277,7 @@ function HomeScreen({ navigation }) {
               />
             </View>
             <View style={styles.routeList}>
-              <Text style={styles.listTitle}> Recent Searches</Text>
+              <Text style={styles.listTitle}> {t("recent-searches")}</Text>
               <FlatList
                 horizontal
                 keyExtractor={(item, index) => item.id}
@@ -1285,7 +1287,7 @@ function HomeScreen({ navigation }) {
               />
             </View>
             <View style={styles.routeList}>
-              <Text style={styles.listTitle}> Suggest For You</Text>
+              <Text style={styles.listTitle}> {t("suggest-for-you")}</Text>
               <FlatList
                 horizontal
                 keyExtractor={(item, index) => item.id}

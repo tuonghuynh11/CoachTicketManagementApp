@@ -13,6 +13,7 @@ import MyModal from "../../Componets/UI/MyModal";
 import GlobalColors from "../../Color/colors";
 import { getLocationInfo } from "../../util/apiServices";
 import { Image } from "react-native";
+import { useTranslation } from "react-i18next";
 function TrackingScreen({ navigation, route }) {
   const [directionsData, setDirectionsData] = useState();
   const [startLocation, setStartLocation] = useState(null);
@@ -28,6 +29,8 @@ function TrackingScreen({ navigation, route }) {
 
   const [selectedMaker, setSelectedMarker] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+
+  const { t } = useTranslation();
   useEffect(() => {
     async function getPosition() {
       const location = await getCurrentPositionAsync();
@@ -159,7 +162,7 @@ function TrackingScreen({ navigation, route }) {
   }, [isSimulator]);
   useEffect(() => {
     if (directionsData && positionIndex === 1) {
-      Alert.alert("Finished");
+      Alert.alert(t("finished"));
       setMyPosition({
         latitude: endLocation?.point?.coordinates[0],
         longitude: endLocation?.point?.coordinates[1],
@@ -238,7 +241,7 @@ function TrackingScreen({ navigation, route }) {
               latitude: startLocation?.point?.coordinates[0],
               longitude: startLocation?.point?.coordinates[1],
             }}
-            title="Start"
+            title={t("start")}
             description={route?.params?.startPlace}
             onPress={(event) => {
               event.stopPropagation();
@@ -257,7 +260,7 @@ function TrackingScreen({ navigation, route }) {
               latitude: endLocation?.point?.coordinates[0],
               longitude: endLocation?.point?.coordinates[1],
             }}
-            title="Destination"
+            title={t("destination")}
             description={route?.params?.arrivalPlace}
             onPress={(event) => {
               event.stopPropagation();
@@ -273,7 +276,7 @@ function TrackingScreen({ navigation, route }) {
           />
           <Marker
             coordinate={myPosition}
-            title="My Position"
+            title={t("my-position")}
             description={myPositionInfo?.name}
             icon={require("../../../icon/busSchool.png")}
             image={require("../../../icon/myLocation.png")}
@@ -290,7 +293,7 @@ function TrackingScreen({ navigation, route }) {
           />
           <Marker
             coordinate={coach}
-            title="Coach"
+            title={t("coach")}
             image={require("../../../icon/busSchool.png")}
             onPress={(event) => {
               event.stopPropagation();
@@ -539,7 +542,7 @@ function TrackingScreen({ navigation, route }) {
                         },
                       ]}
                     >
-                      {route?.params?.trackingInfo?.coachCapacity} seats
+                      {route?.params?.trackingInfo?.coachCapacity} {t("seats")}
                     </Text>
                   </View>
                 </View>
@@ -557,7 +560,7 @@ function TrackingScreen({ navigation, route }) {
                   marginBottom: 10,
                 }}
               >
-                {"Location: "}
+                {`${t("location")}: `}
                 <Text
                   style={{
                     fontSize: 18,
@@ -578,7 +581,8 @@ function TrackingScreen({ navigation, route }) {
                     marginRight: 10,
                   }}
                 >
-                  {"Distance: "}
+                  {`${t("distance")}: `}
+
                   <Text
                     style={{
                       fontSize: 15,
@@ -602,7 +606,8 @@ function TrackingScreen({ navigation, route }) {
                     marginVertical: 10,
                   }}
                 >
-                  {"Duration: "}
+                  {`${t("duration")}: `}
+
                   <Text
                     style={{
                       fontSize: 15,
@@ -648,7 +653,7 @@ function TrackingScreen({ navigation, route }) {
             color: "white",
           }}
         >
-          {"Distance: "}
+          {`${t("distance")}: `}
           <Text
             style={{
               fontSize: 13,
@@ -666,7 +671,7 @@ function TrackingScreen({ navigation, route }) {
             color: "white",
           }}
         >
-          {"Duration: "}
+          {`${t("duration")}: `}
           <Text
             style={{
               fontSize: 13,
@@ -674,7 +679,7 @@ function TrackingScreen({ navigation, route }) {
               color: "orange",
             }}
           >
-            {duration} hours
+            {duration} {t("hours")}
           </Text>
         </Text>
       </View>

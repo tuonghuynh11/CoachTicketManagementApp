@@ -4,7 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import IconButton from "./IconButton";
 import { useEffect, useState } from "react";
 import { Pressable } from "react-native";
+import { useTranslation } from "react-i18next";
 function SearchBox({ searchFunc, initValue = "", onChangeTextFunc }) {
+  const { t } = useTranslation();
   const [textInput, setTextInput] = useState(initValue);
   useEffect(() => {
     setTextInput(initValue);
@@ -45,7 +47,7 @@ function SearchBox({ searchFunc, initValue = "", onChangeTextFunc }) {
       </View>
       <TextInput
         style={styles.searchBox}
-        placeholder="Enter an movie name"
+        placeholder={t("enter-location-name")}
         keyboardType="default"
         placeholderTextColor="#c8c0c0"
         onChangeText={onTextHandler}

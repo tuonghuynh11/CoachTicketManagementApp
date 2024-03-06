@@ -34,8 +34,10 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import TicketItemNew from "../../Componets/UI/TicketItemNew";
 import YesNoPopUp from "../../Componets/UI/YesNoPopUp";
 import { cancelTicketWhenFinishedConfirm } from "../../util/databaseAPI";
+import { useTranslation } from "react-i18next";
 const Tab = createMaterialTopTabNavigator();
 function TicketDetailScreen({ navigation, route }) {
+  const { t } = useTranslation();
   const authCtx = useContext(AuthContext);
   const [idTrip, setIdTrip] = useState();
   const [isHistory, setIsHistory] = useState(false);
@@ -76,8 +78,8 @@ function TicketDetailScreen({ navigation, route }) {
     }
     if (status === PermissionStatus.DENIED) {
       Alert.alert(
-        "Insufficient Permission!",
-        "You need to grant location permissions to tracking"
+        `${t("insufficient-permission")}!`,
+        t("require-location-permission")
       );
 
       return false;
@@ -183,7 +185,7 @@ function TicketDetailScreen({ navigation, route }) {
                   fontWeight: "700",
                 }}
               >
-                Tracking
+                {t("tracking")}
               </Text>
             </TouchableOpacity>
           );
@@ -1011,17 +1013,17 @@ function TicketDetailScreen({ navigation, route }) {
     console.log("Cancel body: ", body);
     const res = await cancelTicketWhenFinishedConfirm(authCtx.token, body);
     if (!res) {
-      Alert.alert("Connection Error", "Please check your internet connection");
+      Alert.alert(t("connection-error"), t("check-internet-connection"));
       return;
     }
-    Alert.alert("Success", "Your reservation has been cancelled successfully");
+    Alert.alert(t("successful"), t("reservation-cancelled-successfully"));
     navigation.pop();
   }
   return (
     <>
       <YesNoPopUp
-        title={"Are you Sure"}
-        textBody={"This action will cancel your reservations"}
+        title={t("are-you-sure")}
+        textBody={t("action-will-cancel-your-reservations")}
         isVisible={isShowCancel}
         NoHandler={() => setIsShowCancel((curr) => !curr)}
         YesHandler={onCancelTicketHandler}
@@ -1042,7 +1044,7 @@ function TicketDetailScreen({ navigation, route }) {
       )}
       <View style={[styles.root]}>
         <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
-          <Tab.Screen name="Main Trip">
+          <Tab.Screen name={t("main-trip")}>
             {(props) => (
               <View
                 style={{
@@ -1186,7 +1188,7 @@ function TicketDetailScreen({ navigation, route }) {
                                   },
                                 ]}
                               >
-                                {tripInfo?.coachCapacity} seats
+                                {tripInfo?.coachCapacity} {t("seats")}
                               </Text>
                             </View>
                           </View>
@@ -1225,7 +1227,7 @@ function TicketDetailScreen({ navigation, route }) {
                               >
                                 {"(" +
                                   addDotsToNumber(tripInfo?.singlePrice) +
-                                  " VNĐ / seat)"}
+                                  ` VNĐ / ${t("seat")})`}
                               </Text>
                             </Text>
                           </View>
@@ -1278,7 +1280,8 @@ function TicketDetailScreen({ navigation, route }) {
                                   ]}
                                   numberOfLines={1}
                                 >
-                                  Gate {tripInfo?.gate ? tripInfo.gate : 0}
+                                  {t("gate")}{" "}
+                                  {tripInfo?.gate ? tripInfo.gate : 0}
                                 </Text>
                               </Pressable>
                             </View>
@@ -1328,12 +1331,12 @@ function TicketDetailScreen({ navigation, route }) {
                                   numberOfLines={1}
                                 >
                                   {tripInfo?.status == 0
-                                    ? "Unready"
+                                    ? t("unready")
                                     : tripInfo?.status == 1
-                                    ? "Ready"
+                                    ? t("ready")
                                     : tripInfo?.status == 2
-                                    ? "Arriving"
-                                    : "Finished"}{" "}
+                                    ? t("arriving")
+                                    : t("finished")}{" "}
                                 </Text>
                               </Pressable>
                             </View>
@@ -1360,7 +1363,7 @@ function TicketDetailScreen({ navigation, route }) {
                           },
                         ]}
                       >
-                        <Text style={styles.name}>Process</Text>
+                        <Text style={styles.name}>{t("process")}</Text>
                         <View
                           style={{
                             flexDirection: "row",
@@ -1512,7 +1515,7 @@ function TicketDetailScreen({ navigation, route }) {
                             color: GlobalColors.validate,
                           }}
                         >
-                          Tickets
+                          {t("tickets")}
                         </Text>
 
                         <View
@@ -1559,7 +1562,7 @@ function TicketDetailScreen({ navigation, route }) {
           {/* Round Trip */}
           {/* route?.params?.ticketInfo?.isRoundTrip */}
           {roundTripInfo && (
-            <Tab.Screen name="Round Trip">
+            <Tab.Screen name={t("round-trip")}>
               {(props) => (
                 <View
                   style={{
@@ -1706,7 +1709,7 @@ function TicketDetailScreen({ navigation, route }) {
                                     },
                                   ]}
                                 >
-                                  {roundTripInfo?.coachCapacity} seats
+                                  {roundTripInfo?.coachCapacity} {t("seats")}
                                 </Text>
                               </View>
                             </View>
@@ -1750,7 +1753,7 @@ function TicketDetailScreen({ navigation, route }) {
                                     addDotsToNumber(
                                       roundTripInfo?.singlePrice
                                     ) +
-                                    " VNĐ / seat)"}
+                                    ` VNĐ / ${t("seat")})`}
                                 </Text>
                               </Text>
                             </View>
@@ -1802,7 +1805,7 @@ function TicketDetailScreen({ navigation, route }) {
                                     ]}
                                     numberOfLines={1}
                                   >
-                                    Gate{" "}
+                                    {t("gate")}{" "}
                                     {roundTripInfo?.gate
                                       ? roundTripInfo.gate
                                       : 0}
@@ -1854,12 +1857,12 @@ function TicketDetailScreen({ navigation, route }) {
                                     numberOfLines={1}
                                   >
                                     {roundTripInfo?.status == 0
-                                      ? "Unready"
+                                      ? t("unready")
                                       : roundTripInfo?.status == 1
-                                      ? "Ready"
+                                      ? t("ready")
                                       : roundTripInfo?.status == 2
-                                      ? "Arriving"
-                                      : "Finished"}{" "}
+                                      ? t("arriving")
+                                      : t("finished")}{" "}
                                   </Text>
                                 </Pressable>
                               </View>
@@ -1886,7 +1889,7 @@ function TicketDetailScreen({ navigation, route }) {
                             },
                           ]}
                         >
-                          <Text style={styles.name}>Process</Text>
+                          <Text style={styles.name}>{t("process")}</Text>
                           <View
                             style={{
                               flexDirection: "row",
@@ -2038,7 +2041,7 @@ function TicketDetailScreen({ navigation, route }) {
                               color: GlobalColors.validate,
                             }}
                           >
-                            Tickets
+                            {t("tickets")}
                           </Text>
                           <View
                             style={{
@@ -2425,7 +2428,7 @@ function TicketDetailScreen({ navigation, route }) {
                       fontWeight: "bold",
                     }}
                   >
-                    Rating
+                    {t("rating")}
                   </Text>
                 </CustomButton>
               </View>
@@ -2447,7 +2450,7 @@ function TicketDetailScreen({ navigation, route }) {
                       fontWeight: "bold",
                     }}
                   >
-                    Cancel
+                    {t("cancel")}
                   </Text>
                 </CustomButton>
               </View>
@@ -2476,7 +2479,7 @@ function TicketDetailScreen({ navigation, route }) {
                     fontWeight: "bold",
                   }}
                 >
-                  Report
+                  {t("report")}
                 </Text>
               </CustomButton>
             </View>
