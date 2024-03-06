@@ -23,8 +23,12 @@ import ModalSuccess from "./Popup/ModalSuccess";
 import ModalFail from "./Popup/ModalFail";
 import ModalConfirm from "./Popup/ModalConfirm";
 import ModalFilter from "./Popup/ModalFilter";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function ManageCoach({ navigation }) {
+  const { t } = useTranslation();
+
   const pressHandler = (item) => {
     navigation.navigate("Tracking", item);
   };
@@ -129,8 +133,8 @@ export default function ManageCoach({ navigation }) {
     setVisibleFail(false);
   };
 
-  const contentSuccess = "Delete coach successfully!";
-  const contentFail = "Delete coach Fail!";
+  const contentSuccess = t("delete-coach-success");
+  const contentFail = t("delete-coach-fail");
   const [indicator, setIndicator] = useState(false);
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -157,7 +161,7 @@ export default function ManageCoach({ navigation }) {
             <Entypo name="menu" size={30} color="#283663" />
           </Pressable>
 
-          <Text style={styles.headerText}>List Of Coaches</Text>
+          <Text style={styles.headerText}>{t("list-coach")}</Text>
           <Pressable
             style={({ pressed }) => [
               styles.addIconStyle,
@@ -173,7 +177,7 @@ export default function ManageCoach({ navigation }) {
             <View style={styles.bodySearch}>
               <TextInput
                 style={styles.textInputSearch}
-                placeholder="Search for coach"
+                placeholder={t("search-for-coach")}
                 placeholderTextColor="#FFFFFF"
                 onChangeText={textHandler}
                 value={searchText}

@@ -14,19 +14,23 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function StaffWorkingCard({ item }) {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <View style={styles.contentView}>
         <View style={styles.info}>
           {/**coachnum, type */}
-          <Text style={styles.text}>From: {item.RouteData.departurePlace}</Text>
-          <Text style={styles.text}>To: {item.RouteData.arrivalPlace}</Text>
-          <Text style={styles.text}>Driver: {item.DriverData.fullName}</Text>
-          <Text style={styles.text}>Assistant: {item.CoachAssistantData.fullName}</Text>
-          <Text style={styles.text}>Coach: {item.CoachData.coachNumber}</Text>
-          <Text style={styles.text}>Status: {item.status=="1"?"Done":"Current"}</Text>
+          <Text style={styles.text}>{t("from")}: {item.RouteData.departurePlace}</Text>
+          <Text style={styles.text}>{t("to")}: {item.RouteData.arrivalPlace}</Text>
+          <Text style={styles.text}>{t("driver")}: {item.DriverData.fullName}</Text>
+          <Text style={styles.text}>{t("coach-assistant")}: {item.CoachAssistantData.fullName}</Text>
+          <Text style={styles.text}>{t("coach")}: {item.CoachData.coachNumber}</Text>
+          <Text style={styles.text}>{t("status")}: {item.status=="1"?"Done":"Current"}</Text>
         </View>
         <View style={styles.edit}>
           <MaterialIcons name="arrow-forward-ios" size={30} color="#283663" />

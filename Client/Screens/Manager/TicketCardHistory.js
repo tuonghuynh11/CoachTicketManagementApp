@@ -14,18 +14,22 @@ import {
   } from "react-native";
   import React, { useState } from "react";
   import { MaterialIcons } from '@expo/vector-icons';
+  import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
   export default function TicketCardHistory({ item }) {
+  const { t } = useTranslation();
+
     return (
       <View style={styles.container}>
         <View style={styles.contentView}>
           <View style={styles.info}>
             {/**coachnum, type */}
-            <Text style={styles.text}>From: {item.ScheduleData.RouteData.departurePlace}</Text>
-            <Text style={styles.text}>To: {item.ScheduleData.RouteData.arrivalPlace}</Text>
-            <Text style={styles.text}>Date: {item.reservationDate.substring(0, item.reservationDate.indexOf('T'))}</Text>
-            <Text style={styles.text}>Phone: {item.reservationPhoneNumber}</Text>
-            <Text style={styles.text}>Price: {item.totalPrice}</Text>
+            <Text style={styles.text}>{t("from")}: {item.ScheduleData.RouteData.departurePlace}</Text>
+            <Text style={styles.text}>{t("to")}: {item.ScheduleData.RouteData.arrivalPlace}</Text>
+            <Text style={styles.text}>{t("date")}: {item.reservationDate.substring(0, item.reservationDate.indexOf('T'))}</Text>
+            <Text style={styles.text}>{t("phone-number")}: {item.reservationPhoneNumber}</Text>
+            <Text style={styles.text}>{t("price")}: {item.totalPrice}</Text>
           </View>
           <View style={styles.edit}>
             <MaterialIcons name="arrow-forward-ios" size={30} color="#283663" />

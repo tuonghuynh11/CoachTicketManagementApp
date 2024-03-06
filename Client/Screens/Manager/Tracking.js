@@ -27,7 +27,11 @@ import ModalFail from "./Popup/ModalFail";
 import ModalConfirm from "./Popup/ModalConfirm";
 import { deleteCoach } from "../../util/coachService";
 import * as Progress from "react-native-progress";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 export default function Tracking({ route, navigation }) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.goBack();
   };
@@ -60,7 +64,7 @@ export default function Tracking({ route, navigation }) {
     show();
   };
 
-  const contentC = "Are you sure to delete coach?";
+  const contentC = t("are-you-sure-to-delete");
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -105,8 +109,8 @@ export default function Tracking({ route, navigation }) {
     setVisibleFail(false);
   };
 
-  const contentSuccess = "Delete coach successfully!";
-  const contentFail = "Delete coach fail!";
+  const contentSuccess = t("delete-coach-success");
+  const contentFail = t("delete-coach-fail");
 
   const deleteHandler = async () => {
     showC();
@@ -161,7 +165,7 @@ export default function Tracking({ route, navigation }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>Coach Detail</Text>
+          <Text style={styles.headerText}>{t("coach-detail")}</Text>
           <Pressable style={styles.settingIconStyle} onPress={settingHadler}>
             <Ionicons name="settings" size={32} color="#283663" />
           </Pressable>
@@ -181,14 +185,14 @@ export default function Tracking({ route, navigation }) {
           // decelerationRate={"fast"}
         >
           <View style={styles.infoContainer}>
-            <Text style={styles.text}>Coach Number: {coachNumber}</Text>
-            <Text style={styles.text}>Type: {CoachTypeData.typeName}</Text>
-            <Text style={styles.text}>Capacity: {capacity}</Text>
+            <Text style={styles.text}>{t("coach-number")}: {coachNumber}</Text>
+            <Text style={styles.text}>{t("type")}: {CoachTypeData.typeName}</Text>
+            <Text style={styles.text}>{t("capacity")}: {capacity}</Text>
             <Text style={styles.text}>Lat: {lat}</Text>
             <Text style={styles.text}>Lng: {lng}</Text>
           </View>
           <View>
-            <Text style={styles.title}>Tracking</Text>
+            <Text style={styles.title}>{t("tracking")}</Text>
           </View>
           {/* Process */}
           <View
@@ -363,7 +367,7 @@ export default function Tracking({ route, navigation }) {
             />
           </View> */}
           <View>
-            <Text style={styles.title}>Services</Text>
+            <Text style={styles.title}>{t("services")}</Text>
           </View>
           <View style={styles.listService}>
             <FlatList
@@ -376,7 +380,7 @@ export default function Tracking({ route, navigation }) {
             />
           </View>
           <View>
-            <Text style={styles.title}>Coach</Text>
+            <Text style={styles.title}>{t("coach")}</Text>
           </View>
           <View style={styles.imageContainer}>
             <Image

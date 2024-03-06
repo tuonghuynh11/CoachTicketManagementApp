@@ -23,6 +23,8 @@ import StaffHistorytList from "./StaffHistoryList";
 import StaffWorkingCard from "./StaffWorkingCard";
 import { getAllStaffsWorking } from "../../util/staffService";
 import { useIsFocused } from "@react-navigation/native";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -64,6 +66,8 @@ function MyTabs() {
 }
 
 export default function StaffWorkingList({ navigation, route }) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.goBack();
   };
@@ -118,7 +122,7 @@ export default function StaffWorkingList({ navigation, route }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>Working Information</Text>
+          <Text style={styles.headerText}>{t("working-information")}</Text>
         </View>
         <View style={styles.body}>
           {/* <MyTabs /> */}

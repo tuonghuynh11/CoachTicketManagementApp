@@ -10,8 +10,12 @@ import {
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { CheckBox } from "react-native-elements";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function PassengerCard({ item }) {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <View style={styles.contentView}>
@@ -24,8 +28,8 @@ export default function PassengerCard({ item }) {
 
         <View style={styles.info}>
           {/**coachnum, type */}
-          <Text style={styles.text}>Name: {item.name}</Text>
-          <Text style={styles.text}>Phone Number: {item.phone}</Text>
+          <Text style={styles.text}>{t("full-name")}: {item.name}</Text>
+          <Text style={styles.text}>{t("phone-number")}: {item.phone}</Text>
         </View>
         <View style={styles.edit}>
           {/*icon edit and delete*/}

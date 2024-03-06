@@ -11,19 +11,23 @@ import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import placeholder from "../../../assets/peopleIcon.jpg";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function StaffCard({ item, navigation }) {
+  const { t } = useTranslation();
+
   const pressHandler = () => {
     navigation.navigate("EditStaff", item);
   };
 
   let position = "";
   if (item.positionId == "2") {
-    position = "Driver";
+    position = t("driver");
   } else if (item.positionId == "3") {
-    position = "Coach Assistant";
+    position = t("coach-assistant");
   } else if (item.positionId == "4") {
-    position = "Manager";
+    position = t("manager");
   }
   return (
     <View style={styles.container}>
@@ -34,7 +38,7 @@ export default function StaffCard({ item, navigation }) {
         }}
       >
         <Text style={item.status ? styles.statusText : styles.statusTextArr}>
-          {item.status ? "Ready" : "Arriving"}
+          {item.status ? t("ready") : t("arriving")}
         </Text>
       </View>
       <View style={styles.contentView}>
@@ -51,10 +55,10 @@ export default function StaffCard({ item, navigation }) {
 
         <View style={styles.info}>
           {/**coachnum, type */}
-          <Text style={styles.text}>Full Name: {item.fullName}</Text>
-          <Text style={styles.text}>Phone: {item.phoneNumber}</Text>
-          <Text style={styles.text}>Email: {item.email}</Text>
-          <Text style={styles.text}>Position: {position}</Text>
+          <Text style={styles.text}>{t("full-name")}: {item.fullName}</Text>
+          <Text style={styles.text}>{t("phone-number")}: {item.phoneNumber}</Text>
+          <Text style={styles.text}>{t("email")}: {item.email}</Text>
+          <Text style={styles.text}>{t("position")}: {position}</Text>
         </View>
         <View style={styles.edit}>
           {/*icon edit and delete*/}

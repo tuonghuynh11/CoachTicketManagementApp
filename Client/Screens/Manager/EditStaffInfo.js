@@ -23,10 +23,14 @@ import { MaterialIcons } from "@expo/vector-icons";
 import placeholder from "../../../assets/peopleIcon.jpg";
 import ChooseImageModal from "./Popup/ChooseImageModal";
 import * as ImagePicker from "expo-image-picker";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 DropDownPicker.setListMode("SCROLLVIEW");
 
 export default function EditStaffInfo({ route }) {
+  const { t } = useTranslation();
+
   //const {image} = route.params;
   const { fullName } = route.params;
   const { email } = route.params;
@@ -39,16 +43,16 @@ export default function EditStaffInfo({ route }) {
   const [currentValue, setCurrentValue] = useState(positionId.toString());
   const [validatePosition, setValidatePostion] = useState(true);
   const items = [
-    { label: "Driver", value: "2" },
-    { label: "Coach Assistant", value: "3" },
-    { label: "Manager", value: "4" },
+    { label: t("driver"), value: "2" },
+    { label: t("coach-assistant"), value: "3" },
+    { label: t("manager"), value: "4" },
   ];
 
   const [isOpenGender, setIsOpenGender] = useState(false);
   const [currentValueGender, setCurrentValueGender] = useState(gender);
   const itemsGender = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
+    { label: t("male"), value: "male" },
+    { label: t("female"), value: "female" },
   ];
   const [validateGender, setValidateGender] = useState(true);
 
@@ -68,8 +72,8 @@ export default function EditStaffInfo({ route }) {
     setVisibleFail(false);
   };
 
-  const contentS = "Update Staff Successfully!";
-  const [contentF, setContentF] = useState("Update Staff Fail!");
+  const contentS = t("update-staff-success");
+  const [contentF, setContentF] = useState(t("update-staff-fail"));
   const [validateFullName2, setValidateFullName2] = useState(true);
   const [fullName2, setFullName2] = useState(fullName);
   const fullNameHandler = (val) => {
@@ -237,46 +241,46 @@ export default function EditStaffInfo({ route }) {
             uploadImage={uploadImage}
           />
           <View>
-            <Text style={styles.textLabel}>Full Name</Text>
+            <Text style={styles.textLabel}>{t("full-name")}</Text>
             <TextInput
               style={
                 validateFullName2 == true
                   ? styles.textInput
                   : styles.textInputWrong
               }
-              placeholder="Enter Full Name"
+              placeholder={t("enter-full-name")}
               value={fullName2}
               onChangeText={fullNameHandler}
             ></TextInput>
             {!validateFullName2 && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Email</Text>
+            <Text style={styles.textLabel}>{t("email")}</Text>
             <TextInput
               style={
                 validateEmail == true ? styles.textInput : styles.textInputWrong
               }
-              placeholder="Enter Email"
+              placeholder={t("enter-email")}
               value={email2}
               onChangeText={emailHandler}
             ></TextInput>
             {!validateEmail && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Phone Number</Text>
+            <Text style={styles.textLabel}>{t("phone-number")}</Text>
             <TextInput
               style={
                 validatePhone == true ? styles.textInput : styles.textInputWrong
               }
-              placeholder="Enter Phone Number"
+              placeholder={t("enter-phone-number")}
               keyboardType="numeric"
               value={phone}
               onChangeText={phoneHandler}
             ></TextInput>
             {!validatePhone && (
-              <Text style={styles.validateText}>This field can't be empty</Text>
+              <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>Position</Text>
+            <Text style={styles.textLabel}>{t("position")}</Text>
             <View style={[styles.dropDownStyle, { zIndex: 1 }]}>
               <DropDownPicker
                 items={items}
@@ -286,16 +290,16 @@ export default function EditStaffInfo({ route }) {
                 setValue={(val) => setCurrentValue(val)}
                 maxHeight={80}
                 autoScroll
-                placeholder="Select Position"
+                placeholder={t("select-position")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validatePosition && (
-              <Text style={styles.validateText}>Please choose position</Text>
+              <Text style={styles.validateText}>{t("please-choose-position")}</Text>
             )}
-            <Text style={styles.textLabel}>Gender</Text>
+            <Text style={styles.textLabel}>{t("gender")}</Text>
             <View style={[styles.dropDownStyle]}>
               <DropDownPicker
                 items={itemsGender}
@@ -305,14 +309,14 @@ export default function EditStaffInfo({ route }) {
                 setValue={(val) => setCurrentValueGender(val)}
                 maxHeight={100}
                 autoScroll
-                placeholder="Select Gender"
+                placeholder={t("select-gender")}
                 showTickIcon={true}
                 style={styles.startDropDown}
                 nestedScrollEnabled={true}
               />
             </View>
             {!validateGender && (
-              <Text style={styles.validateText}>Please choose gender</Text>
+              <Text style={styles.validateText}>{t("please-choose-gender")}</Text>
             )}
           </View>
           <Pressable
@@ -323,7 +327,7 @@ export default function EditStaffInfo({ route }) {
             ]}
             onPress={saveHadler}
           >
-            <Text style={styles.saveText}>SAVE</Text>
+            <Text style={styles.saveText}>{t("save-button")}</Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>

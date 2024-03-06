@@ -24,8 +24,12 @@ import { getAllSchedules } from "../../util/scheduleService";
 import ModalFilterSchedule from "./Popup/ModalFilterSchedule";
 import { getAllRoutesId } from "../../util/routeService";
 import { useIsFocused } from "@react-navigation/native";
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function ManageSchedule({ route, navigation }) {
+  const { t } = useTranslation();
+
   const openMenu = () => {
     navigation.openDrawer();
   };
@@ -188,7 +192,7 @@ export default function ManageSchedule({ route, navigation }) {
               color="#283663"
             />
           </Pressable>
-          <Text style={styles.headerText}>List Of Schedules</Text>
+          <Text style={styles.headerText}>{t("list-schedule")}</Text>
           <Pressable
             style={({ pressed }) => [
               styles.addIconStyle,
@@ -210,7 +214,7 @@ export default function ManageSchedule({ route, navigation }) {
                 setValue={(val) => setCurrentValueStart(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select Start Location"
+                placeholder={t("select-start-location")}
                 showTickIcon={true}
                 theme="DARK"
                 style={styles.startDropDown}
@@ -223,7 +227,7 @@ export default function ManageSchedule({ route, navigation }) {
                 setValue={(val) => setCurrentValueEnd(val)}
                 maxHeight={150}
                 autoScroll
-                placeholder="Select End Location"
+                placeholder={t("select-end-location")}
                 showTickIcon={true}
                 theme="DARK"
                 style={styles.startDropDown}

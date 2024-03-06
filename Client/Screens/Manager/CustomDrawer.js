@@ -29,8 +29,12 @@ import Loading from "../../Componets/UI/Loading";
 import { AuthContext } from "../../Store/authContex";
 import { getCurrentUser } from "../../util/databaseAPI";
 const { width } = Dimensions.get("screen");
+import i18next from "../../Services/i18next";
+import { useTranslation } from "react-i18next";
 
 export default function CustomDrawer(props) {
+  const { t } = useTranslation();
+
   const [image, setImage] = useState();
   const [name, setName] = useState("username");
   const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +80,7 @@ export default function CustomDrawer(props) {
             opacity: 0.9,
           }}
         >
-          <Loading message={"Logging out ..."} />
+          <Loading message={t("logging-out") + " ..."} />
         </View>
       )}
       <LogOutPopUp
