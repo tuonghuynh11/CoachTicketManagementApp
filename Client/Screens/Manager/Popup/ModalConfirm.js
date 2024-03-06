@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import i18next from "../../Services/i18next";
 import { useTranslation } from "react-i18next";
 
 export default function ModalConfirm({ visible, hide, content, confirm }) {

@@ -15,7 +15,6 @@ import {
   } from "react-native";
   import React, { useState } from "react";
   import { MaterialIcons } from "@expo/vector-icons";
-  import i18next from "../../Services/i18next";
 import { useTranslation } from "react-i18next";
   
   export default function ModalFilterSchedule({
