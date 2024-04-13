@@ -800,7 +800,7 @@ export default function EditSchedule({ navigation, route }) {
           showsVerticalScrollIndicator={false}
           decelerationRate={"fast"}
         >
-          <Text style={styles.titleText}>{t("driver-coach-assistant")}</Text>
+          <Text style={styles.titleText}>{t("driver-coach-assist")}</Text>
           <View>
             <Text style={styles.textLabel}>Driver</Text>
             <View style={styles.dropDownStyle}>
