@@ -404,12 +404,12 @@ export default function AddSchedule({ navigation, route }) {
         const res = await fecthLocation(location);
 
         const date1DatePart = ShuttleDateData.toISOString().split("T")[0];
-        ShuttleTimeData.setHours(ShuttleTimeData.getHours() + 7);
+        ShuttleTimeData.setHours(ShuttleTimeData.getHours() + 0);
 
         const date2TimePart = ShuttleTimeData.toISOString().split("T")[1];
 
         const combinedDate = new Date(`${date1DatePart}T${date2TimePart}`);
-        ShuttleTimeData.setHours(ShuttleTimeData.getHours() - 7);
+        ShuttleTimeData.setHours(ShuttleTimeData.getHours() - 6);
 
         const newShuttle = {
           id: index,
@@ -545,20 +545,20 @@ export default function AddSchedule({ navigation, route }) {
         );
 
         const date1DatePart = DepDateData.toISOString().split("T")[0];
-        DepTimeData.setHours(DepTimeData.getHours() + 7);
+        DepTimeData.setHours(DepTimeData.getHours() + 0);
 
         const date2TimePart = DepTimeData.toISOString().split("T")[1];
 
         const combinedDate = new Date(`${date1DatePart}T${date2TimePart}`);
-        DepTimeData.setHours(DepTimeData.getHours() - 7);
+        DepTimeData.setHours(DepTimeData.getHours() - 6);
 
         const date1ArrDatePart = ArrDateData.toISOString().split("T")[0];
-        ArrTimeData.setHours(ArrTimeData.getHours() + 7);
+        ArrTimeData.setHours(ArrTimeData.getHours() + 0);
 
         const date2ArrTimePart = ArrTimeData.toISOString().split("T")[1];
 
         const combinedArrDate = new Date(`${date1ArrDatePart}T${date2ArrTimePart}`);
-        ArrTimeData.setHours(ArrTimeData.getHours() - 7);
+        ArrTimeData.setHours(ArrTimeData.getHours() - 6);
 
         const data = {
           shuttles: shuttles,
