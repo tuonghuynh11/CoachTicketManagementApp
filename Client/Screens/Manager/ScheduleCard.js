@@ -112,7 +112,7 @@ export default function ScheduleCard({ item, navigation, deleteHandler }) {
           <Text style={styles.text}>{t("start-time")}: {depTime.toLocaleString()}</Text>
           <Text style={styles.text}>{t("to")}: {item.ArrivalPlaceData.placeName}</Text>
           <Text style={styles.text}>{t("arrival-time")}: {arrTime.toLocaleString()}</Text>
-          <Text style={styles.text}>{t("time")}: {item.price}</Text>
+          <Text style={styles.text}>{t("price")}: {item.price}</Text>
         </View>
         <View style={styles.edit}>
           {/*icon edit and delete*/}
