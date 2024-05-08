@@ -449,5 +449,9 @@
   "ticket-detail": "Thông tin vé",
   "edit-profile": "Chỉnh sửa thông tin",
   "offering": "Ưu đãi",
-  "shuttle-place": "Địa điểm trung chuyển"
+  "shuttle-place": "Địa điểm trung chuyển",
+  "export-csv": "Xuất file excel",
+  "statistic-ticket-sold-by-month": "Vé Đã Bán Theo Tháng",
+  "statistic-ticket-sold-by-trips": "Vé Đã Bán Theo Chuyến",
+  "statistic-revenue-by-years": "Doanh Thu Theo Năm"
 }

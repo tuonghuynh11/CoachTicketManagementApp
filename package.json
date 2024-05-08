@@ -65,7 +65,9 @@
     "react-native-vector-icons": "^10.0.0",
     "react-native-view-shot": "3.7.0",
     "react-native-webview": "13.2.2",
-    "rn-gesture-swipeable-flatlist": "^1.1.14"
+    "rn-gesture-swipeable-flatlist": "^1.1.14",
+    "expo-file-system": "~15.4.5",
+    "expo-sharing": "~11.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

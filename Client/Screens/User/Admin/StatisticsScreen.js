@@ -1,7 +1,8 @@
 import { images } from "../../../../assets/Assets";
 import Icon from "react-native-vector-icons/AntDesign";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { Foundation } from "@expo/vector-icons";
 import {
   LineChart,
   BarChart,
@@ -23,6 +24,7 @@ import {
   useWindowDimensions,
   Dimensions,
   Pressable,
+  Alert,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import GlobalColors from "../../../Color/colors";
@@ -44,7 +46,12 @@ const ticketsSOLD = {
   December: 440,
 };
 import { ScrollView } from "react-native-gesture-handler";
+import ModalExportCSV from "../../Manager/Popup/ModalExportCSV";
+import { AuthContext } from "../../../Store/authContex";
+import { exportStatisticAboutRevenueByYears } from "../../../util/databaseAPI";
 const StatisticsScreen = function ({ navigation }) {
+  const [isExportModalVisible, setIsExportModalVisible] = useState(false);
+  const authCtx = useContext(AuthContext);
   const isFocused = useIsFocused();
   const [coachFalse, setCoachFalse] = useState(0);
   const [coachNum, setCoachNum] = useState(0);
@@ -172,9 +179,54 @@ const StatisticsScreen = function ({ navigation }) {
       marginStart: 20,
     },
   ];
+
+  //Export Excel
+  const handlerText = async (text) => {
+    // if (text) {
+    //   let filteredList = coachListData.filter((coach) =>
+    //     coach.CoachTypeData.typeName.toLowerCase().includes(text.toLowerCase())
+    //   );
+
+    //   setCoachList(filteredList);
+    // } else {
+    //   setCoachList(coachListData);
+    // }
+    try {
+      switch (text) {
+        case "ticket_sold_by_month":
+          await exportStatisticAboutRevenueByYears(
+            authCtx.token,
+            "ticket_sold_by_month"
+          );
+
+          break;
+        case "ticket_sold_by_trips":
+          await exportStatisticAboutRevenueByYears(
+            authCtx.token,
+            "ticket_sold_by_trips"
+          );
+
+          break;
+        case "revenue_by_years":
+          await exportStatisticAboutRevenueByYears(
+            authCtx.token,
+            "revenue_by_years"
+          );
+          break;
+
+        default:
+          break;
+      }
+    } catch (error) {
+      Alert.alert("Error: ", error.message);
+      return;
+    } finally {
+      setIsExportModalVisible(false);
+    }
+  };
   return (
     <>
-      <View style={styles.header}>
+      <View style={[styles.header]}>
         <Pressable
           style={({ pressed }) => [
             styles.menuIcon,
@@ -188,8 +240,25 @@ const StatisticsScreen = function ({ navigation }) {
         </Pressable>
 
         <Text style={styles.headerText}>Statistics</Text>
+        <Pressable
+          onPress={() => setIsExportModalVisible(true)}
+          style={({ pressed }) => [
+            {
+              right: 16,
+              position: "absolute",
+              top: 50,
+            },
+            pressed && { opacity: 0.85 },
+          ]}
+        >
+          <Foundation name="page-export-csv" size={30} color="#283663" />
+        </Pressable>
       </View>
-
+      <ModalExportCSV
+        hide={() => setIsExportModalVisible(false)}
+        visible={isExportModalVisible}
+        textHandler={handlerText}
+      />
       <ScrollView style={{ opacity: 1 }}>
         {/* <Text style={styles.text}>Statistics</Text> */}
         <View>
@@ -267,8 +336,16 @@ const StatisticsScreen = function ({ navigation }) {
           </View>
         </View>
         <View>
-
-          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18, color: '#283663'}}>Tickets Sold By Months </Text>
+          <Text
+            style={{
+              marginLeft: 10,
+              fontWeight: "bold",
+              fontSize: 18,
+              color: "#283663",
+            }}
+          >
+            Tickets Sold By Months{" "}
+          </Text>
 
           <LineChart
             width={Dimensions.get("window").width}
@@ -334,8 +411,16 @@ const StatisticsScreen = function ({ navigation }) {
           ></LineChart>
         </View>
         <View>
-
-          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18, color: '#283663'}}>Tickets Sold By Trips </Text>
+          <Text
+            style={{
+              marginLeft: 10,
+              fontWeight: "bold",
+              fontSize: 18,
+              color: "#283663",
+            }}
+          >
+            Tickets Sold By Trips{" "}
+          </Text>
           <ScrollView>
             <ScrollView horizontal={true}>
               <BarChart
@@ -364,8 +449,16 @@ const StatisticsScreen = function ({ navigation }) {
           </ScrollView>
         </View>
         <View>
-
-          <Text style={{marginLeft: 10, fontWeight: 'bold', fontSize: 18, color: '#283663'}}>Revenue By Years</Text>
+          <Text
+            style={{
+              marginLeft: 10,
+              fontWeight: "bold",
+              fontSize: 18,
+              color: "#283663",
+            }}
+          >
+            Revenue By Years
+          </Text>
           <View>
             <PieChart
               data={piedata}

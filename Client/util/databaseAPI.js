@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../Store/authContex";
-
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+global.Buffer = require("buffer").Buffer;
 // const BASE_URL = "http://localhost:3000/api";
 
 // const BASE_URL = "http://192.168.0.3:3000/api";
@@ -580,4 +582,113 @@ export async function cancelTicketWhenFinishedConfirm(token, body) {
     });
   // console.log(res.data);
   return res;
+}
+
+////Export Excel file
+async function ensureDirExistsOrCreateNew(gifDir) {
+  const dirInfo = await FileSystem.getInfoAsync(gifDir);
+  if (!dirInfo.exists) {
+    console.log("Gif directory doesn't exist, creating…");
+    await FileSystem.makeDirectoryAsync(gifDir, { intermediates: true });
+    return false;
+  }
+  return true;
+}
+export async function exportStatisticAboutRevenueByYears(token, type) {
+  //   .get(`${BASE_URL}/statistic/revenue/schedule/download`, {
+  //     headers: header,
+  //   })
+  //   .then(async (response) => {
+  //     // console.log(response);
+  //     // console.log(Buffer.from(response.data, "base64"));
+
+  //     let blob = new Blob([response.data], {
+  //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //     });
+
+  //     const bufferArray = response.data; // Buffer array received from API response
+  //     const base64String = bufferArray.toString("base64");
+  //     const directoryPath = FileSystem.documentDirectory;
+  //     await ensureDirExistsOrCreateNew(directoryPath);
+
+  //     const filename = "example.xlsx";
+  //     const filePath = `${directoryPath}${filename}`;
+  //     await FileSystem.writeAsStringAsync(filePath, base64String, {
+  //       encoding: FileSystem.EncodingType.Base64,
+  //     }).then(() => {
+  //       console.log("File saved successfully.");
+  //       return true;
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log("Export Statistic About Revenue By Years err: ", err);
+  //     return null;
+  //   });
+
+  // Make a fetch request with the headers
+  // await fetch(`${BASE_URL}/statistic/revenue/schedule/download`, {
+  //   method: "GET",
+  //   headers: header,
+  // })
+  //   .then(async (response) => {
+  //     // Process the response
+  //     console.log("Response received");
+  //     console.log(response);
+  //     const arrayBuffer = await response.arrayBuffer();
+  //     console.log(arrayBuffer);
+  //     // console.log(response._bodyInit._data["__collector"]);
+  //     // console.log(Buffer.from(response, "binary"));
+  //     // console.log(response.data);
+  //     // console.log(response.arrayBuffer());
+  //   })
+  //   .catch((error) => {
+  //     // Handle any errors
+  //     console.error("Error:", error);
+  //   });
+  // console.log(res.data);
+  const headers = {
+    Authorization: `${token}`,
+    "Content-Type": "text/html",
+    Accept: "*/*",
+    "Accept-Encoding": "gzip, deflate, br",
+  };
+  let statisticURL = "";
+  let filename = "";
+  const timestamp = Date.now().toString();
+  switch (type) {
+    case "ticket_sold_by_month":
+      filename = "ticket_sold_by_month" + timestamp + ".xlsx";
+      statisticURL = "customer/months/download";
+      break;
+    case "ticket_sold_by_trips":
+      filename = "ticket_sold_by_trips" + timestamp + ".xlsx";
+      statisticURL = "customer/schedule/download";
+      break;
+    case "revenue_by_years":
+      filename = "revenue_by_years" + timestamp + ".xlsx";
+      statisticURL = "revenue/schedule/download";
+      break;
+    default:
+      break;
+  }
+  const options = {
+    headers,
+    responseType: "arraybuffer",
+  };
+  const response = await axios.get(
+    `${BASE_URL}/statistic/${statisticURL}`,
+    options
+  );
+  console.log(response);
+  const buff = Buffer.from(response.data, "base64");
+  const bufferArray = buff.toString("base64"); // Buffer array received from API response
+  const directoryPath = FileSystem.documentDirectory;
+  await ensureDirExistsOrCreateNew(directoryPath);
+
+  const filePath = `${directoryPath}${filename}`;
+  await FileSystem.writeAsStringAsync(filePath, bufferArray, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+  await Sharing.shareAsync(filePath);
+  return response;
 }

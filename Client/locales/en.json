@@ -449,5 +449,9 @@
   "ticket-detail": "Ticket Detail",
   "edit-profile": "Edit Profile",
   "offering": "Offering",
-  "shuttle-place": "Shuttle Place"
+  "shuttle-place": "Shuttle Place",
+  "export-csv": "Export to excel",
+  "statistic-ticket-sold-by-month": "Ticket Sold By Months",
+  "statistic-ticket-sold-by-trips": "Ticket Sold By Trips",
+  "statistic-revenue-by-years": "Revenue By Years"
 }
