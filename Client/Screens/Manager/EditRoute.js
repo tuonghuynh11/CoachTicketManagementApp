@@ -11,12 +11,12 @@ import {
   SafeAreaView,
   Keyboard,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 import PlaceCard from "./PlaceCard";
 import * as ImagePicker from "expo-image-picker";
 import placeholder from "../../../assets/routeImage.png";
@@ -37,7 +37,7 @@ import { useTranslation } from "react-i18next";
 
 DropDownPicker.setListMode("SCROLLVIEW");
 
-export default function EditRoute({route, navigation }) {
+export default function EditRoute({ route, navigation }) {
   const { t } = useTranslation();
 
   const [visible, setVisible] = useState(false);
@@ -67,7 +67,7 @@ export default function EditRoute({route, navigation }) {
   const [contentS, setContentS] = useState(t("update-route-success"));
   const [contentF, setContentF] = useState(t("update-route-fail"));
 
-  const contentC = t("are-you-sure-to-delete")
+  const contentC = t("are-you-sure-to-delete");
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -89,28 +89,26 @@ export default function EditRoute({route, navigation }) {
   const confirmDep = () => {
     const updatedArray = depPlace.filter((item) => item.id !== itemid);
     setDepPlace(updatedArray);
-    hideC()
-  }
-
+    hideC();
+  };
 
   const confirmDes = () => {
     const updatedArray = desPlace.filter((item) => item.id !== itemid);
     setDesPlace(updatedArray);
-    hideCDes()
-  }
+    hideCDes();
+  };
 
-  const {routeName} = route.params;
-  const {departurePlace} = route.params;
-  const {arrivalPlace} = route.params;
-  const {PlacesData} = route.params;
-  const {id} = route.params;
+  const { routeName } = route.params;
+  const { departurePlace } = route.params;
+  const { arrivalPlace } = route.params;
+  const { PlacesData } = route.params;
+  const { id } = route.params;
 
   const [isOpenDepProvince, setIsOpenDepProvince] = useState(false);
-  const [currentValueDepProvince, setCurrentValueDepProvince] = useState('');
+  const [currentValueDepProvince, setCurrentValueDepProvince] = useState("");
   const [isOpenDesProvince, setIsOpenDesProvince] = useState(false);
-  const [currentValueDesProvince, setCurrentValueDesProvince] = useState('');
+  const [currentValueDesProvince, setCurrentValueDesProvince] = useState("");
   const [provinceData, setProvinceData] = useState([]);
-  
 
   const fetchProvinces = async () => {
     try {
@@ -118,13 +116,17 @@ export default function EditRoute({route, navigation }) {
       const data = await getAllProvince();
       setProvinceData(data.results);
 
-      const defaultValue = data.results.find((province) => province.province_name === arrivalPlace);
+      const defaultValue = data.results.find(
+        (province) => province.province_name === arrivalPlace
+      );
       if (defaultValue) {
         setCurrentValueDepProvince(defaultValue.province_id);
         fetchDepDistricts(defaultValue.province_id);
       }
 
-      const defaultValueDes = data.results.find((province) => province.province_name === departurePlace);
+      const defaultValueDes = data.results.find(
+        (province) => province.province_name === departurePlace
+      );
       if (defaultValueDes) {
         setCurrentValueDesProvince(defaultValueDes.province_id);
         fetchDesDistricts(defaultValueDes.province_id);
@@ -139,9 +141,6 @@ export default function EditRoute({route, navigation }) {
   useEffect(() => {
     fetchProvinces();
   }, []);
-
-  
-
 
   const itemsDepProvince = provinceData.map(
     ({ province_id, province_name }) => ({
@@ -158,9 +157,9 @@ export default function EditRoute({route, navigation }) {
   );
 
   const [isOpenDepDistrict, setIsOpenDepDistrict] = useState(false);
-  const [currentValueDepDistrict, setCurrentValueDepDistrict] = useState('');
+  const [currentValueDepDistrict, setCurrentValueDepDistrict] = useState("");
   const [isOpenDesDistrict, setIsOpenDesDistrict] = useState(false);
-  const [currentValueDesDistrict, setCurrentValueDesDistrict] = useState('');
+  const [currentValueDesDistrict, setCurrentValueDesDistrict] = useState("");
 
   const [depDistrictData, setDepDistrictData] = useState([]);
   const [desDistrictData, setDesDistrictData] = useState([]);
@@ -209,9 +208,9 @@ export default function EditRoute({route, navigation }) {
   );
 
   const [isOpenDepWard, setIsOpenDepWard] = useState(false);
-  const [currentValueDepWard, setCurrentValueDepWard] = useState('');
+  const [currentValueDepWard, setCurrentValueDepWard] = useState("");
   const [isOpenDesWard, setIsOpenDesWard] = useState(false);
-  const [currentValueDesWard, setCurrentValueDesWard] = useState('');
+  const [currentValueDesWard, setCurrentValueDesWard] = useState("");
   const [depWardData, setDepWardData] = useState([]);
   const [desWardData, setDesWardData] = useState([]);
 
@@ -327,10 +326,9 @@ export default function EditRoute({route, navigation }) {
       //console.log(location);
       const data = await getLocation(location);
       //console.log(data.resourceSets[0].resources[0].geocodePoints[0].coordinates);
-      if(type == 'dep'){
+      if (type == "dep") {
         return data.resourceSets[0].resources[0].geocodePoints[0].coordinates;
-      }
-      else if( type == 'des'){
+      } else if (type == "des") {
         return data.resourceSets[0].resources[0].geocodePoints[0].coordinates;
       }
     } catch (error) {
@@ -384,10 +382,10 @@ export default function EditRoute({route, navigation }) {
 
       const newPlace = {
         id: index,
-        
+
         lat: res[0],
         lng: res[1],
-        placeName: locationPlace
+        placeName: locationPlace,
       };
       setDepPlace([newPlace, ...depPlace]);
       setIndicator(false);
@@ -420,7 +418,7 @@ export default function EditRoute({route, navigation }) {
       setIndicator(true);
       const index = desPlace.length + 1;
       const locationPlace =
-      DestinationPlace +
+        DestinationPlace +
         ", " +
         itemsDesWard.find((item) => item.value === currentValueDesWard).label +
         ", " +
@@ -434,10 +432,10 @@ export default function EditRoute({route, navigation }) {
 
       const newPlace = {
         id: index,
-        
+
         lat: res[0],
         lng: res[1],
-        placeName: locationPlace
+        placeName: locationPlace,
       };
       setDesPlace([newPlace, ...desPlace]);
       setIndicator(false);
@@ -469,8 +467,16 @@ export default function EditRoute({route, navigation }) {
         setIndicator(true);
         console.log(1);
         const newPlaceData = {
-          startPlaces: depPlace.map(({lat, lng, placeName}) => ({placeLat: lat, placeLng: lng, placeName})),
-          endPlaces: desPlace.map(({lat, lng, placeName}) => ({placeLat: lat, placeLng: lng, placeName})),
+          startPlaces: depPlace.map(({ lat, lng, placeName }) => ({
+            placeLat: lat,
+            placeLng: lng,
+            placeName,
+          })),
+          endPlaces: desPlace.map(({ lat, lng, placeName }) => ({
+            placeLat: lat,
+            placeLng: lng,
+            placeName,
+          })),
         };
         const newRouteData = {
           routeName: RouteName,
@@ -484,7 +490,7 @@ export default function EditRoute({route, navigation }) {
         };
         console.log(newPlaceData);
         console.log(newRouteData);
-        const newRoute = await patchRoute(id,newRouteData);
+        const newRoute = await patchRoute(id, newRouteData);
         console.log(newRoute);
         console.log("success");
         setIndicator(false);
@@ -504,26 +510,58 @@ export default function EditRoute({route, navigation }) {
     { id: 5, placeName: "abcd" },
   ];
   let index = 0;
-  let index2 = 0
-  const [depPlace, setDepPlace] = useState(PlacesData.startPlaces.map(({placeName, placeLat, placeLng}) => ({id: index++, placeName: placeName, lat: placeLat, lng: placeLng})));
-  const [desPlace, setDesPlace] = useState(PlacesData.arrivalPlaces.map(({placeName, placeLat, placeLng}) => ({id: index2++, placeName: placeName, lat: placeLat, lng: placeLng})));
+  let index2 = 0;
+  const [depPlace, setDepPlace] = useState(
+    PlacesData.startPlaces.map(({ placeName, placeLat, placeLng }) => ({
+      id: index++,
+      placeName: placeName,
+      lat: placeLat,
+      lng: placeLng,
+    }))
+  );
+  const [desPlace, setDesPlace] = useState(
+    PlacesData.arrivalPlaces.map(({ placeName, placeLat, placeLng }) => ({
+      id: index2++,
+      placeName: placeName,
+      lat: placeLat,
+      lng: placeLng,
+    }))
+  );
 
   const reloadHandler = () => {
     setRouteName("");
     setDepPlace([]);
     setDesPlace([]);
-    setDeparturePlace('');
-    setDestinationPlace('');
+    setDeparturePlace("");
+    setDestinationPlace("");
   };
   const [indicator, setIndicator] = useState(false);
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-      <ActivityIndicator style={styles.indicator} size={"large"} animating={indicator}/>
-      <ModalSuccess visible={visibleSuccess} hide={hideSuccess} content={contentS}/>
+        <ActivityIndicator
+          style={styles.indicator}
+          size={"large"}
+          animating={indicator}
+        />
+        <ModalSuccess
+          visible={visibleSuccess}
+          hide={hideSuccess}
+          content={contentS}
+        />
         <ModalFail visible={visibleFail} hide={hideFail} content={contentF} />
-        <ModalConfirm visible={visibleC} hide={hideC} content={contentC} confirm={confirmDep}/>
-        <ModalConfirm visible={visibleCDes} hide={hideCDes} content={contentC} confirm={confirmDes}/>
+        <ModalConfirm
+          visible={visibleC}
+          hide={hideC}
+          content={contentC}
+          confirm={confirmDep}
+        />
+        <ModalConfirm
+          visible={visibleCDes}
+          hide={hideCDes}
+          content={contentC}
+          confirm={confirmDes}
+        />
         <View style={styles.header}>
           <Pressable
             style={({ pressed }) => [
@@ -590,28 +628,32 @@ export default function EditRoute({route, navigation }) {
             {!validateRouteName && (
               <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>{t("depature-province")}</Text>
+            <Text style={styles.textLabel}>{t("departure-province")}</Text>
             <View style={styles.dropDownStyle}>
-              {<DropDownPicker
-                items={itemsDepProvince}
-                open={isOpenDepProvince}
-                setOpen={() => setIsOpenDepProvince(!isOpenDepProvince)}
-                value={currentValueDepProvince}
-                setValue={(val) => {
-                  setCurrentValueDepProvince(val);
-                }}
-                maxHeight={150}
-                autoScroll
-                placeholder={t("select-province")}
-                showTickIcon={true}
-                style={styles.startDropDown}
-                nestedScrollEnabled={true}
-                // onChangeValue={(val) => fetchDistricts(val)}
-                onSelectItem={(val) => fetchDepDistricts(val.value)}
-              />}
+              {
+                <DropDownPicker
+                  items={itemsDepProvince}
+                  open={isOpenDepProvince}
+                  setOpen={() => setIsOpenDepProvince(!isOpenDepProvince)}
+                  value={currentValueDepProvince}
+                  setValue={(val) => {
+                    setCurrentValueDepProvince(val);
+                  }}
+                  maxHeight={150}
+                  autoScroll
+                  placeholder={t("select-province")}
+                  showTickIcon={true}
+                  style={styles.startDropDown}
+                  nestedScrollEnabled={true}
+                  // onChangeValue={(val) => fetchDistricts(val)}
+                  onSelectItem={(val) => fetchDepDistricts(val.value)}
+                />
+              }
             </View>
             {!validateDepProvince && (
-              <Text style={styles.validateText}>{t("please-choose-province")}</Text>
+              <Text style={styles.validateText}>
+                {t("please-choose-province")}
+              </Text>
             )}
             <Text style={styles.textLabel}>{t("destination-province")}</Text>
             <View style={styles.dropDownStyle}>
@@ -631,7 +673,9 @@ export default function EditRoute({route, navigation }) {
               />
             </View>
             {!validateDesProvince && (
-              <Text style={styles.validateText}>{t("please-choose-province")}</Text>
+              <Text style={styles.validateText}>
+                {t("please-choose-province")}
+              </Text>
             )}
             <Text style={styles.titleText}>{t("departure-places")}</Text>
             <View>
@@ -657,7 +701,9 @@ export default function EditRoute({route, navigation }) {
                 />
               </View>
               {!validateDepDistrict && (
-                <Text style={styles.validateText}>{t("please-choose-district")}</Text>
+                <Text style={styles.validateText}>
+                  {t("please-choose-district")}
+                </Text>
               )}
               <Text style={styles.textLabel}>{t("departure-ward")}</Text>
               <View style={styles.dropDownStyle}>
@@ -680,7 +726,9 @@ export default function EditRoute({route, navigation }) {
                 />
               </View>
               {!validateDepWard && (
-                <Text style={styles.validateText}>{t("please-choose-ward")}</Text>
+                <Text style={styles.validateText}>
+                  {t("please-choose-ward")}
+                </Text>
               )}
               <Text style={styles.textLabel}>{t("departure-place")}</Text>
               <TextInput
@@ -694,9 +742,7 @@ export default function EditRoute({route, navigation }) {
                 onChangeText={DeparturePlaceHandler}
               ></TextInput>
               {!validateDeparturePlace && (
-                <Text style={styles.validateText}>
-                  {t("non-empty-field")}
-                </Text>
+                <Text style={styles.validateText}>{t("non-empty-field")}</Text>
               )}
             </View>
             <Pressable
@@ -714,13 +760,16 @@ export default function EditRoute({route, navigation }) {
                 nestedScrollEnabled={true}
                 horizontal={true}
                 data={depPlace}
-                renderItem={({ item }) => <Pressable onLongPress={() => {
-                  showC();
-                  setItemid(item.id);
-                }}>
-
-                  <PlaceCard item={item} />
-                </Pressable>}
+                renderItem={({ item }) => (
+                  <Pressable
+                    onLongPress={() => {
+                      showC();
+                      setItemid(item.id);
+                    }}
+                  >
+                    <PlaceCard item={item} />
+                  </Pressable>
+                )}
                 keyExtractor={(item, index) => index}
               />
             </View>
@@ -748,7 +797,9 @@ export default function EditRoute({route, navigation }) {
                 />
               </View>
               {!validateDesDistrict && (
-                <Text style={styles.validateText}>{t("please-choose-district")}</Text>
+                <Text style={styles.validateText}>
+                  {t("please-choose-district")}
+                </Text>
               )}
               <Text style={styles.textLabel}>{t("destination-ward")}</Text>
               <View style={styles.dropDownStyle}>
@@ -771,7 +822,9 @@ export default function EditRoute({route, navigation }) {
                 />
               </View>
               {!validateDesWard && (
-                <Text style={styles.validateText}>{t("please-choose-ward")}</Text>
+                <Text style={styles.validateText}>
+                  {t("please-choose-ward")}
+                </Text>
               )}
               <Text style={styles.textLabel}>{t("destination-place")}</Text>
               <TextInput
@@ -785,9 +838,7 @@ export default function EditRoute({route, navigation }) {
                 onChangeText={DestinationPlaceHandler}
               ></TextInput>
               {!validateDestinationPlace && (
-                <Text style={styles.validateText}>
-                  {t("non-empty-field")}
-                </Text>
+                <Text style={styles.validateText}>{t("non-empty-field")}</Text>
               )}
             </View>
             <Pressable
@@ -805,13 +856,16 @@ export default function EditRoute({route, navigation }) {
                 nestedScrollEnabled={true}
                 horizontal={true}
                 data={desPlace}
-                renderItem={({ item }) => <Pressable onLongPress={() => {
-                  showCDes();
-                  setItemid(item.id);
-                }}>
-
-                  <PlaceCard item={item} />
-                </Pressable>}
+                renderItem={({ item }) => (
+                  <Pressable
+                    onLongPress={() => {
+                      showCDes();
+                      setItemid(item.id);
+                    }}
+                  >
+                    <PlaceCard item={item} />
+                  </Pressable>
+                )}
                 keyExtractor={(item, index) => index}
               />
             </View>
@@ -1004,7 +1058,7 @@ const styles = StyleSheet.create({
   indicator: {
     position: "absolute",
     zIndex: 1000,
-    right: '46%',
-    top: "50%"
-  }
+    right: "46%",
+    top: "50%",
+  },
 });

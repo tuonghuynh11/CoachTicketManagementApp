@@ -611,8 +611,8 @@ const User = function ({ navigation }) {
   const [systemDiscountValue, setSystemDiscountValue] = useState(null);
   const [discountopen, setdiscountopen] = useState(false);
   const [discountItems, setDiscountItems] = useState(systemDiscountItems);
-  const [discountedUser, setdiscountedUser] = React.useState(axiosOtherUsers);
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const [discountedUser, setdiscountedUser] = useState(axiosOtherUsers);
+  const [modalVisible, setModalVisible] = useState(false);
   const isFocused = useIsFocused();
   const [addDiscountFlag, setAddDiscountFlag] = useState(false);
   const reload = async () => {
@@ -1459,173 +1459,7 @@ const User = function ({ navigation }) {
 const getColor = (item) => {
   return item.color;
 };
-const renderDiscountItem = ({ item, navigation, discount, setDiscount }) => {
-  const { t } = useTranslation();
-  return (
-    <Swipeable
-      renderRightActions={(item2) => (
-        <TouchableOpacity
-          onPress={() => {
-            deleteDiscount(discount, item, setDiscount);
-          }}
-          style={{ backgroundColor: "transparent", padding: 20 }}
-        >
-          <Text style={{ color: "red" }}>{t("delete")}</Text>
-        </TouchableOpacity>
-      )}
-    >
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Edit Discount", item);
-        }}
-        key={item.key}
-        style={[
-          styles.discountitem,
-          {
-            backgroundColor: getColor(item),
-            padding: 20,
-            margin: 20,
-            borderTopLeftRadius: 10,
-            borderBottomRightRadius: 10,
-          },
-          item.quantity <= 2
-            ? { backgroundColor: "red" }
-            : { backgroundColor: "green" },
-        ]}
-      >
-        <View>
-          <Text
-            style={{
-              fontWeight: 600,
-              fontSize: 25,
-              maxWidth: 220,
-              marginBottom: 10,
-              color: "white",
-            }}
-          >
-            {item.title}
-          </Text>
-          <Text
-            style={{
-              color: "white",
-            }}
-          >
-            {item.value * 100}% discount
-          </Text>
-        </View>
-        <View style={{ flex: 1, justifyContent: "center" }}>
-          <Text
-            style={[
-              { textAlign: "right" },
-              item.quantity <= 2 ? { color: "yellow" } : { color: "#0cdd74" },
-            ]}
-          >
-            {item.quantity} {t("remaining")}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </Swipeable>
-  );
-};
 
-const renderUserDiscountItem = ({
-  item,
-  discount,
-  setDiscount,
-  color,
-  userId,
-}) => {
-  const { t } = useTranslation();
-  return (
-    <Swipeable
-      renderRightActions={() => (
-        <TouchableOpacity
-          onPress={async () => {
-            const c = {
-              id: [`${item.id}`],
-            };
-            const token = await AsyncStorage.getItem("token");
-
-            const standardConfig2 = {
-              headers: {
-                Authorization: token,
-              },
-              data: c,
-            };
-            axios
-              .delete(
-                `${images.apiLink}userDiscounts/${userId}`,
-                standardConfig2
-              )
-              .then(() => {
-                const updatedUserDiscount = discount.filter(
-                  (dc) => dc.id != item.id
-                );
-                setDiscount(updatedUserDiscount);
-                Alert.alert(t("delete-success"));
-              })
-              .catch((error) => {
-                if (error.request) {
-                  console.log(error.request);
-                }
-                if (error.response) {
-                  console.log(error.response);
-                }
-              });
-          }}
-          style={{
-            backgroundColor: "transparent",
-            padding: 50,
-            borderRadius: 20,
-          }}
-        >
-          <Text style={{ color: "red" }}>{t("delete")}</Text>
-        </TouchableOpacity>
-      )}
-    >
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <TouchableOpacity
-          key={item.key}
-          style={[
-            styles.discountitem,
-            {
-              backgroundColor: color,
-              padding: 20,
-              margin: 20,
-              borderTopLeftRadius: 10,
-              borderBottomRightRadius: 10,
-            },
-            item.quantity <= 2
-              ? { backgroundColor: "red" }
-              : { backgroundColor: "green" },
-          ]}
-          onPress={() => {
-            console.log("Hello");
-          }}
-        >
-          <View style={{ gap: 5 }}>
-            <Text style={{ fontWeight: 600, fontSize: 20, color: "white" }}>
-              {item.title}
-            </Text>
-            <Text style={{ color: "white", fontWeight: "500" }}>
-              {item.value * 100}% discount
-            </Text>
-          </View>
-          <View style={{ flex: 1, justifyContent: "center" }}>
-            <Text
-              style={[
-                { textAlign: "right", fontWeight: "500" },
-                item.quantity <= 2 ? { color: "yellow" } : { color: "#0cdd74" },
-              ]}
-            >
-              {item.quantity} {t("remaining")}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </Swipeable>
-  );
-};
 const UsersDiscount = function ({ navigation }) {
   const { t } = useTranslation();
   const route = useRoute();
@@ -1651,6 +1485,105 @@ const UsersDiscount = function ({ navigation }) {
     labelFrom1To50.push({ label: `${i}`, value: i });
   }
   const [quantityItem, setQuantityItems] = useState(labelFrom1To50);
+  const renderUserDiscountItem = ({
+    item,
+    discount,
+    setDiscount,
+    color,
+    userId,
+  }) => {
+    return (
+      <Swipeable
+        renderRightActions={() => (
+          <TouchableOpacity
+            onPress={async () => {
+              const c = {
+                id: [`${item.id}`],
+              };
+              const token = await AsyncStorage.getItem("token");
+
+              const standardConfig2 = {
+                headers: {
+                  Authorization: token,
+                },
+                data: c,
+              };
+              axios
+                .delete(
+                  `${images.apiLink}userDiscounts/${userId}`,
+                  standardConfig2
+                )
+                .then(() => {
+                  const updatedUserDiscount = discount.filter(
+                    (dc) => dc.id != item.id
+                  );
+                  setDiscount(updatedUserDiscount);
+                  Alert.alert(t("delete-success"));
+                })
+                .catch((error) => {
+                  if (error.request) {
+                    console.log(error.request);
+                  }
+                  if (error.response) {
+                    console.log(error.response);
+                  }
+                });
+            }}
+            style={{
+              backgroundColor: "transparent",
+              padding: 50,
+              borderRadius: 20,
+            }}
+          >
+            <Text style={{ color: "red" }}>{t("delete")}</Text>
+          </TouchableOpacity>
+        )}
+      >
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <TouchableOpacity
+            key={item.key}
+            style={[
+              styles.discountitem,
+              {
+                backgroundColor: color,
+                padding: 20,
+                margin: 20,
+                borderTopLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+              item.quantity <= 2
+                ? { backgroundColor: "red" }
+                : { backgroundColor: "green" },
+            ]}
+            onPress={() => {
+              console.log("Hello");
+            }}
+          >
+            <View style={{ gap: 5 }}>
+              <Text style={{ fontWeight: 600, fontSize: 20, color: "white" }}>
+                {item.title}
+              </Text>
+              <Text style={{ color: "white", fontWeight: "500" }}>
+                {item.value * 100}% discount
+              </Text>
+            </View>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text
+                style={[
+                  { textAlign: "right", fontWeight: "500" },
+                  item.quantity <= 2
+                    ? { color: "yellow" }
+                    : { color: "#0cdd74" },
+                ]}
+              >
+                {item.quantity} {t("remaining")}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </Swipeable>
+    );
+  };
   return (
     <View>
       <Modal
@@ -1804,7 +1737,74 @@ const System = function () {
   });
   const [currID, setCurrID] = useState(4);
   const navigation = useNavigation();
-
+  const renderDiscountItem = ({ item, navigation, discount, setDiscount }) => {
+    // const { t } = useTranslation();
+    return (
+      <Swipeable
+        renderRightActions={(item2) => (
+          <TouchableOpacity
+            onPress={() => {
+              deleteDiscount(discount, item, setDiscount);
+            }}
+            style={{ backgroundColor: "transparent", padding: 20 }}
+          >
+            <Text style={{ color: "red" }}>{t("delete")}</Text>
+          </TouchableOpacity>
+        )}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Edit Discount", item);
+          }}
+          key={item.key}
+          style={[
+            styles.discountitem,
+            {
+              backgroundColor: getColor(item),
+              padding: 20,
+              margin: 20,
+              borderTopLeftRadius: 10,
+              borderBottomRightRadius: 10,
+            },
+            item.quantity <= 2
+              ? { backgroundColor: "red" }
+              : { backgroundColor: "green" },
+          ]}
+        >
+          <View>
+            <Text
+              style={{
+                fontWeight: 600,
+                fontSize: 25,
+                maxWidth: 220,
+                marginBottom: 10,
+                color: "white",
+              }}
+            >
+              {item.title}
+            </Text>
+            <Text
+              style={{
+                color: "white",
+              }}
+            >
+              {item.value * 100}% discount
+            </Text>
+          </View>
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <Text
+              style={[
+                { textAlign: "right" },
+                item.quantity <= 2 ? { color: "yellow" } : { color: "#0cdd74" },
+              ]}
+            >
+              {item.quantity} {t("remaining")}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </Swipeable>
+    );
+  };
   return (
     <View>
       <View

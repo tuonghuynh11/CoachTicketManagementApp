@@ -28,14 +28,14 @@ import { deleteSchedule } from "../../util/scheduleService";
 import i18next from "../../Services/i18next";
 import { useTranslation } from "react-i18next";
 
-export default function DetailSchedule({route, navigation}) {
+export default function DetailSchedule({ route, navigation }) {
   const { t } = useTranslation();
 
   const pressHandler = () => {
     navigation.goBack();
-  }
+  };
 
-  const contentC = t("are-you-sure-to-delete")
+  const contentC = t("are-you-sure-to-delete");
   const [visibleC, setVisibleC] = useState(false);
   const showC = () => {
     setVisibleC(true);
@@ -60,29 +60,27 @@ export default function DetailSchedule({route, navigation}) {
     setVisibleFail(false);
   };
 
-
-  const {CoachData, id} = route.params;
-  const {RouteData} = route.params;
-  const {DriverData} = route.params;
-  const {CoachAssistantData} = route.params;
-  const {StartPlaceData} = route.params;
-  const {ArrivalPlaceData} = route.params;
-  const {price} = route.params;
-  const {status} = route.params;
-  const {departureTime} = route.params;
-  const {arrivalTime} = route.params;
+  const { CoachData, id } = route.params;
+  const { RouteData } = route.params;
+  const { DriverData } = route.params;
+  const { CoachAssistantData } = route.params;
+  const { StartPlaceData } = route.params;
+  const { ArrivalPlaceData } = route.params;
+  const { price } = route.params;
+  const { status } = route.params;
+  const { departureTime } = route.params;
+  const { arrivalTime } = route.params;
 
   const depTime = new Date(departureTime);
   const arrTime = new Date(arrivalTime);
 
-  let statusName = '';
-  if(status == '0') statusName = t("unready");
-  if(status == '1') statusName = t("ready");
-  if(status == '2') statusName = t("arriving");
-  if(status == '3') statusName = t("finish");
+  let statusName = "";
+  if (status == "0") statusName = t("unready");
+  if (status == "1") statusName = t("ready");
+  if (status == "2") statusName = t("arriving");
+  if (status == "3") statusName = t("finish");
 
   const [staffList, setStaffList] = useState([DriverData, CoachAssistantData]);
-
 
   const [visible, setVisible] = useState(false);
   const show = () => {
@@ -94,39 +92,44 @@ export default function DetailSchedule({route, navigation}) {
 
   const settingHadler = () => {
     show();
-  }
-  const navigateScreen = 'EditSchedule';
+  };
+  const navigateScreen = "EditSchedule";
 
   const contentSuccess = t("delete-schedule-success");
   const contentFail = t("delete-schedule-fail");
 
   const deleteHandler = async () => {
     showC();
-  }
+  };
 
   const confirm = async () => {
     hideC();
-    hide()
+    hide();
     try {
-      const coachIdToDelete = id; 
-      console.log(coachIdToDelete)
+      const coachIdToDelete = id;
+      console.log(coachIdToDelete);
       const deletedSchedule = await deleteSchedule(coachIdToDelete);
-      console.log('Deleted schedule:', deletedSchedule);
-      showSuccess()
+      console.log("Deleted schedule:", deletedSchedule);
+      showSuccess();
       hide();
       navigation.goBack();
       // Perform other actions
     } catch (error) {
-      showFail()
-      console.log(error)
+      showFail();
+      console.log(error);
     }
-  }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-      <ModalConfirm visible={visibleC} hide={hideC} content={contentC} confirm={confirm}/>
-      <ModalSuccess
+        <ModalConfirm
+          visible={visibleC}
+          hide={hideC}
+          content={contentC}
+          confirm={confirm}
+        />
+        <ModalSuccess
           visible={visibleSuccess}
           hide={hideSuccess}
           content={contentSuccess}
@@ -137,11 +140,13 @@ export default function DetailSchedule({route, navigation}) {
           content={contentFail}
         />
         <View style={styles.header}>
-          <Pressable style={({ pressed }) => [
+          <Pressable
+            style={({ pressed }) => [
               styles.backIcon,
               pressed && { opacity: 0.85 },
-            ]} onPress={pressHandler}>
-
+            ]}
+            onPress={pressHandler}
+          >
             <Ionicons
               name="ios-arrow-back-circle-sharp"
               size={38}
@@ -149,19 +154,24 @@ export default function DetailSchedule({route, navigation}) {
             />
           </Pressable>
           <Text style={styles.headerText}>{t("detail-schedule")}</Text>
-          <Pressable style={({ pressed }) => [
+          <Pressable
+            style={({ pressed }) => [
               styles.settingIconStyle,
               pressed && { opacity: 0.85 },
-            ]} onPress={settingHadler}>
-
-            <Ionicons
-              name="settings"
-              size={32}
-              color="#283663"
-            />
+            ]}
+            onPress={settingHadler}
+          >
+            <Ionicons name="settings" size={32} color="#283663" />
           </Pressable>
         </View>
-        <FilterModal visible={visible} hide={hide} navigation={navigation} navigateScreen={navigateScreen} item={route.params} deleteCoach={deleteHandler}/>
+        <FilterModal
+          visible={visible}
+          hide={hide}
+          navigation={navigation}
+          navigateScreen={navigateScreen}
+          item={route.params}
+          deleteCoach={deleteHandler}
+        />
         <ScrollView
           style={styles.body}
           nestedScrollEnabled={true}
@@ -169,16 +179,31 @@ export default function DetailSchedule({route, navigation}) {
           decelerationRate={"fast"}
         >
           <View style={styles.infoContainer}>
-            <Text style={styles.text}>{t("coach-number")}: {CoachData.coachNumber}</Text>
-            <Text style={styles.text}>{t("from")}: {StartPlaceData.placeName},  {RouteData.departurePlace}</Text>
-            <Text style={styles.text}>{t("to")}: {ArrivalPlaceData.placeName}, {RouteData.arrivalPlace}</Text>
-            <Text style={styles.text}>{t("start-time")}: {depTime.toLocaleString()}</Text>
-            <Text style={styles.text}>{t("arrival-time")}: {arrTime.toLocaleString()}</Text>
-            <Text style={styles.text}>{t("price")}: {price}</Text>
-            <Text style={styles.text}>{t("status")}: {statusName}</Text>
+            <Text style={styles.text}>
+              {t("coach-number")}: {CoachData.coachNumber}
+            </Text>
+            <Text style={styles.text}>
+              {t("from")}: {StartPlaceData.placeName},{" "}
+              {RouteData.departurePlace}
+            </Text>
+            <Text style={styles.text}>
+              {t("to")}: {ArrivalPlaceData.placeName}, {RouteData.arrivalPlace}
+            </Text>
+            <Text style={styles.text}>
+              {t("start-time")}: {depTime.toLocaleString()}
+            </Text>
+            <Text style={styles.text}>
+              {t("arrival-time")}: {arrTime.toLocaleString()}
+            </Text>
+            <Text style={styles.text}>
+              {t("price")}: {price}
+            </Text>
+            <Text style={styles.text}>
+              {t("status")}: {statusName}
+            </Text>
           </View>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{t("driver-coach-assistant")}</Text>
+            <Text style={styles.title}>{t("driver-coach-assist")}</Text>
             {/* <AntDesign
               name="pluscircle"
               size={30}
@@ -217,9 +242,13 @@ export default function DetailSchedule({route, navigation}) {
           <View style={styles.imageContainer}>
             <Image
               style={styles.coachImage}
-              source={(CoachData.image!=undefined)?{uri: CoachData.image}:{
-                uri: "https://upload.wikimedia.org/wikipedia/commons/5/50/Ausden_Clark_Executive_Coach_in_Black_and_Pink_Livery.jpg",
-              }}
+              source={
+                CoachData.image != undefined
+                  ? { uri: CoachData.image }
+                  : {
+                      uri: "https://upload.wikimedia.org/wikipedia/commons/5/50/Ausden_Clark_Executive_Coach_in_Black_and_Pink_Livery.jpg",
+                    }
+              }
             />
           </View>
         </ScrollView>
@@ -291,8 +320,8 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
   },
-  addIconStyle : {
+  addIconStyle: {
     marginLeft: 20,
-    marginTop: 5
-  }
+    marginTop: 5,
+  },
 });
