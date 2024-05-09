@@ -151,7 +151,7 @@
   "please-choose-province": "Vui lòng chọn Tỉnh/Thành",
   "destination-province": "Tỉnh/Thành Đích Đến",
   "departure-places": "Địa Điểm Xuất Phát",
-  "depature-district": "Quận/Huyện Xuất Phát",
+  "departure-district": "Quận/Huyện Xuất Phát",
   "select-district": "Chọn Quận/Huyện",
   "please-choose-district": "Vui lòng chọn Quận/Huyện",
   "departure-ward": "Phường/Xã Xuất Phát",
@@ -453,5 +453,7 @@
   "export-csv": "Xuất file excel",
   "statistic-ticket-sold-by-month": "Vé Đã Bán Theo Tháng",
   "statistic-ticket-sold-by-trips": "Vé Đã Bán Theo Chuyến",
-  "statistic-revenue-by-years": "Doanh Thu Theo Năm"
+  "statistic-revenue-by-years": "Doanh Thu Theo Năm",
+  "delete-discount-success": "Xoá discount thành công!",
+  "delete-discount-failed": "Xoá discount thất bại"
 }

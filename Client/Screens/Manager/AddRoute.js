@@ -565,7 +565,7 @@ export default function AddRoute({ navigation }) {
             {!validateRouteName && (
               <Text style={styles.validateText}>{t("non-empty-field")}</Text>
             )}
-            <Text style={styles.textLabel}>{t("depature-province")}</Text>
+            <Text style={styles.textLabel}>{t("departure-province")}</Text>
             <View style={styles.dropDownStyle}>
               <DropDownPicker
                 items={itemsDepProvince}
