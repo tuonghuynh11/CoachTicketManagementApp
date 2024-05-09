@@ -247,4 +247,4 @@ trải nghiệm của hành khách và cung cấp thông tin quản lý để đ
 
 ## 7. Giảng viên hướng dẫn
 
-* Thầy Huỳnh Hồ Thị Mộng Trinh, giảng viên Khoa Công Nghệ Phần Mềm, trường Đại học Công nghệ Thông tin, Đại học Quốc gia Thành phố Hồ Chí Minh.
+* Cô Huỳnh Hồ Thị Mộng Trinh, giảng viên Khoa Công Nghệ Phần Mềm, trường Đại học Công nghệ Thông tin, Đại học Quốc gia Thành phố Hồ Chí Minh.
