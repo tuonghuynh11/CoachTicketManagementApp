@@ -453,5 +453,7 @@
   "export-csv": "Export to excel",
   "statistic-ticket-sold-by-month": "Ticket Sold By Months",
   "statistic-ticket-sold-by-trips": "Ticket Sold By Trips",
-  "statistic-revenue-by-years": "Revenue By Years"
+  "statistic-revenue-by-years": "Revenue By Years",
+  "delete-discount-success": "Delete discount successfully!",
+  "delete-discount-failed": "Failed to delete discount"
 }

@@ -453,5 +453,7 @@
   "export-csv": "Xuất file excel",
   "statistic-ticket-sold-by-month": "Vé Đã Bán Theo Tháng",
   "statistic-ticket-sold-by-trips": "Vé Đã Bán Theo Chuyến",
-  "statistic-revenue-by-years": "Doanh Thu Theo Năm"
+  "statistic-revenue-by-years": "Doanh Thu Theo Năm",
+  "delete-discount-success": "Xoá discount thành công!",
+  "delete-discount-failed": "Xoá discount thất bại"
 }

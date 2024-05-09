@@ -7,6 +7,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
+import ModalSuccess from "../../Manager/Popup/ModalSuccess";
+import ModalFail from "../../Manager/Popup/ModalFail";
+import ModalConfirm from "../../Manager/Popup/ModalConfirm";
 import {
   useRoute,
   useNavigation,
@@ -566,31 +569,6 @@ const EditDiscount = function ({ navigation }) {
   );
 };
 
-const deleteDiscount = async function (discount, item, setDiscount) {
-  //discount is the list of discounts
-  const token = await AsyncStorage.getItem("token");
-  const { t } = useTranslation();
-
-  const delConfig = {
-    headers: {
-      Authorization: token,
-    },
-  };
-  axios
-    .delete(`${images.apiLink}discounts/${item.id}`, delConfig)
-    .then((response) => {
-      Alert.prompt(t("delete-success"));
-      const updateDiscount = discount.filter((i) => i.id != item.id);
-      setDiscount(updateDiscount);
-    })
-    .catch((error) => {
-      if (error.response) {
-        console.log(error.response.data);
-      } else if (error.request) {
-        console.log(error.request.data);
-      }
-    });
-};
 let allDiscounts = [];
 const User = function ({ navigation }) {
   const { t } = useTranslation();
@@ -615,6 +593,7 @@ const User = function ({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const isFocused = useIsFocused();
   const [addDiscountFlag, setAddDiscountFlag] = useState(false);
+
   const reload = async () => {
     await getData().then(() => {
       allDiscounts = axiosDiscounts;
@@ -748,6 +727,7 @@ const User = function ({ navigation }) {
   const [membershipFlag, setMembershipFlag] = useState(0);
   const [silverAllChecked, setSilverAllChecked] = useState(false);
   const [goldAllChecked, setGoldAllChecked] = useState(false);
+
   return (
     <>
       {modalVisible && (
@@ -1737,6 +1717,49 @@ const System = function () {
   });
   const [currID, setCurrID] = useState(4);
   const navigation = useNavigation();
+  const [visibleSuccess, setVisibleSuccess] = useState(false);
+  const showSuccess = () => {
+    setVisibleSuccess(true);
+  };
+  const hideSuccess = () => {
+    setVisibleSuccess(false);
+  };
+
+  const [visibleFail, setVisibleFail] = useState(false);
+  const showFail = () => {
+    setVisibleFail(true);
+  };
+  const hideFail = () => {
+    setVisibleFail(false);
+  };
+  const contentSuccess = t("delete-discount-success");
+  const contentFail = t("delete-discount-failed");
+  const deleteDiscount = async function (discount, item, setDiscount) {
+    //discount is the list of discounts
+    const token = await AsyncStorage.getItem("token");
+
+    const delConfig = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    axios
+      .delete(`${images.apiLink}discounts/${item.id}`, delConfig)
+      .then((response) => {
+        Alert.prompt(t("delete-success"));
+        const updateDiscount = discount.filter((i) => i.id != item.id);
+        setDiscount(updateDiscount);
+        showSuccess();
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data);
+        } else if (error.request) {
+          console.log(error.request.data);
+        }
+        showFail();
+      });
+  };
   const renderDiscountItem = ({ item, navigation, discount, setDiscount }) => {
     // const { t } = useTranslation();
     return (
@@ -1817,6 +1840,16 @@ const System = function () {
           marginTop: 15,
         }}
       >
+        <ModalSuccess
+          visible={visibleSuccess}
+          hide={hideSuccess}
+          content={contentSuccess}
+        />
+        <ModalFail
+          visible={visibleFail}
+          hide={hideFail}
+          content={contentFail}
+        />
         <Text style={styles.text}>{t("list-of-discounts")}</Text>
         <AntDesign
           style={{}}
