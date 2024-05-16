@@ -228,7 +228,7 @@
   "enter-price": "Enter Price (VND)",
   "price-validation": "Price must equal or greater than 150.000VND",
   "edit-schedule-success": "Edit Schedule Successfully!",
-  "edit-schedule-faile": "Edit Schedule Fail!",
+  "edit-schedule-fail": "Edit Schedule Fail!",
   "edit-schedule": "Edit Schedule",
   "add-staff-success": "Add Staff Successfully!",
   "add-staff-fail": "Add Staff Fail!",
