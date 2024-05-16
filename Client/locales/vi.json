@@ -228,7 +228,7 @@
   "enter-price": "Nhập Giá (VND)",
   "price-validation": "Giá phải bằng hoặc lớn hơn 150.000VND",
   "edit-schedule-success": "Chỉnh Sửa Lịch Trình Thành Công!",
-  "edit-schedule-faile": "Chỉnh Sửa Lịch Trình Thất Bại!",
+  "edit-schedule-fail": "Chỉnh Sửa Lịch Trình Thất Bại!",
   "edit-schedule": "Chỉnh Sửa Lịch",
   "add-staff-success": "Thêm Nhân Viên Thành Công!",
   "add-staff-fail": "Thêm Nhân Viên Thất Bại!",
