@@ -231,11 +231,23 @@ trải nghiệm của hành khách và cung cấp thông tin quản lý để đ
 
 </details>
 
-## 5. Hướng dẫn sử dụng
+## 5. UI
+<img src="https://github.com/user-attachments/assets/cbe6d94b-03c5-4683-b088-67a456f544ed" width="250" height="590">
+<img src="https://github.com/user-attachments/assets/67b7a0e3-3947-41c7-be08-3495821aa8e0" width="250" height="590">
+<img src="https://github.com/user-attachments/assets/bfdffff3-25a3-4dd4-a580-bb54a6ddc873" width="250" height="590">
+<img src="https://github.com/user-attachments/assets/1e049bdf-2d3d-460d-a140-4a008c4e137f" width="250" height="590">
+<img src="https://github.com/user-attachments/assets/e9d29848-1fd6-40c9-b1ce-51e0930d3d55" width="250" height="590">
+<img src="https://github.com/user-attachments/assets/4a129191-c190-4df9-ae5f-9de4f06f4c56" width="250" height="590">
+<img src="https://github.com/user-attachments/assets/02cc561e-bd64-43fd-b5c7-74f573047da1" width="250" height="590">
+<img src="https://github.com/user-attachments/assets/e2c133f6-22cd-42bc-a94d-3eb7c82ef933" width="250" height="590">
+<img src="https://github.com/user-attachments/assets/b7ce49fc-4502-41b5-abce-b1bbc7c86b0a" width="250" height="590">
+<img src="https://github.com/user-attachments/assets/875d4a8a-9bc8-4c00-9b71-b871c06adcca" width="250" height="590">
+
+## 6. Hướng dẫn sử dụng
 
 * Video demo: 
 
-## 6. Tác giả
+## 7. Tác giả
 
 | STT | MSSV     | Họ và tên                                                  | Lớp      | 
 | --- | -------- | ---------------------------------------------------------- | -------- | 
@@ -245,6 +257,6 @@ trải nghiệm của hành khách và cung cấp thông tin quản lý để đ
 | 4   | 21520839| [Nguyễn Thái Công](https://github.com/thai-cong-nguyen)         	  | KTPM2021 |
 * Sinh viên khoa Công nghệ Phần mềm, trường Đại học Công nghệ Thông tin, Đại học Quốc gia thành phố Hồ Chí Minh.
 
-## 7. Giảng viên hướng dẫn
+## 8. Giảng viên hướng dẫn
 
 * Cô Huỳnh Hồ Thị Mộng Trinh, giảng viên Khoa Công Nghệ Phần Mềm, trường Đại học Công nghệ Thông tin, Đại học Quốc gia Thành phố Hồ Chí Minh.
