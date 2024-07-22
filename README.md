@@ -245,7 +245,7 @@ trải nghiệm của hành khách và cung cấp thông tin quản lý để đ
 
 ## 6. Hướng dẫn sử dụng
 
-* Video demo: 
+* Video demo: https://youtu.be/jnT0z1YpIpI
 
 ## 7. Tác giả
 
